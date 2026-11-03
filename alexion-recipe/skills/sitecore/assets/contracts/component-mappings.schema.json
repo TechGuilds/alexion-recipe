@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kajoo.dev/contracts/sitecore/component-mappings.schema.json",
+  "title": "Sitecore component-mappings",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "sourceFingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "targetInventoryFingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/decision"
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "sourceFingerprint",
+    "targetInventoryFingerprint",
+    "decisions"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "phaseId": "content-migration",
+  "phaseTitle": "Content Migration",
+  "tasks": [
+    { "operation": "capture", "id": "content.capture", "title": "Prepare and validate source snapshot", "agent": "sitecore-developer", "inputRoles": ["sourcePreparationInput"], "outputRoles": ["snapshotManifest", "coverageReport"], "entryPoints": ["prepare-source-snapshot.mjs", "capture-source.ps1", "validate-snapshot.mjs"], "procedure": "references/source-snapshot.md" },
+    { "operation": "transform", "id": "content.transform", "title": "Transform mapped content", "agent": "sitecore-developer", "inputRoles": ["transformInput"], "outputRoles": ["itemPlan", "identityMap", "transformReport"], "entryPoints": ["transform-content.mjs"], "procedure": "references/transformation.md" },
+    { "operation": "plan", "id": "content.plan", "title": "Plan content changes and batches", "agent": "sitecore-developer", "inputRoles": ["planInput"], "outputRoles": ["batchPlan", "dryRun"], "entryPoints": ["plan-content.mjs"], "procedure": "references/dry-run.md" },
+    { "operation": "execute", "id": "content.execute", "title": "Apply approved content batches", "agent": "sitecore-developer", "inputRoles": ["executionInput", "checkpoint"], "outputRoles": ["checkpoint"], "optionalOutputRoles": ["executionReview", "executionReceipt"], "entryPoints": ["prepare-execution.mjs", "execute-target.ps1", "record-execution.mjs"], "procedure": "references/target-execution.md" },
+    { "operation": "reference-plan", "id": "content.reference-plan", "title": "Plan reference updates", "agent": "sitecore-developer", "inputRoles": ["referencePlanInput", "checkpoint"], "outputRoles": ["batchPlan", "dryRun", "referenceReport"], "entryPoints": ["plan-references.mjs"], "procedure": "references/reference-resolution.md" },
+    { "operation": "reference-execute", "id": "content.reference-execute", "title": "Apply approved reference updates", "agent": "sitecore-developer", "inputRoles": ["executionInput", "checkpoint"], "outputRoles": ["checkpoint"], "optionalOutputRoles": ["executionReview", "executionReceipt"], "entryPoints": ["prepare-execution.mjs", "execute-target.ps1", "record-execution.mjs"], "procedure": "references/reference-resolution.md" },
+    { "operation": "audit", "id": "content.audit", "title": "Audit target content parity", "agent": "tester", "inputRoles": ["verificationInput", "checkpoint"], "outputRoles": ["verificationReport"], "entryPoints": ["verify-target.mjs", "capture-target.ps1"], "procedure": "references/target-verification.md" },
+    { "operation": "approve", "id": "content.approve", "title": "Review content migration outcome and handoff", "agent": "orchestrator", "inputRoles": ["verificationInput", "verificationReport", "checkpoint"], "outputRoles": ["verificationReport", "phaseDecision"], "entryPoints": ["verify-target.mjs"], "procedure": "references/workflow-integration.md" }
+  ],
+  "mediaTasks": [
+    {
+      "operation": "media-prepare",
+      "id": "content.media-prepare",
+      "title": "Prepare media migration packages",
+      "agent": "sitecore-developer",
+      "inputRoles": [
+        "mediaPreparationInput"
+      ],
+      "outputRoles": [
+        "mediaManifest",
+        "mediaPreparationReport"
+      ],
+      "entryPoints": [
+        "media-migration.mjs",
+        "media-package.ps1"
+      ],
+      "procedure": "references/media-migration.md"
+    },
+    {
+      "operation": "media-install",
+      "id": "content.media-install",
+      "title": "Install and verify media migration packages",
+      "agent": "sitecore-developer",
+      "inputRoles": [
+        "mediaInstallationInput"
+      ],
+      "outputRoles": [
+        "mediaVerificationReport"
+      ],
+      "entryPoints": [
+        "media-migration.mjs",
+        "media-package.ps1"
+      ],
+      "procedure": "references/media-migration.md"
+    }
+  ]
+}

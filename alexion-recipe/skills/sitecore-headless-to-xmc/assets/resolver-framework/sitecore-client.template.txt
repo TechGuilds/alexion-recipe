@@ -1,0 +1,17 @@
+import scConfig from 'sitecore.config';
+import { MockSitecoreClient } from './mock-sitecore-client';
+import { NormalizingSitecoreClient } from './normalizing-sitecore-client';
+
+const useMock = process.env.USE_MOCK_LAYOUT_SERVICE === 'true';
+
+const client = useMock
+  ? new MockSitecoreClient(scConfig)
+  : new NormalizingSitecoreClient(scConfig);
+
+if (useMock) {
+  console.log('✅ [Sitecore Client] Using MockSitecoreClient (universal)');
+} else {
+  console.log('✅ [Sitecore Client] Using NormalizingSitecoreClient (universal)');
+}
+
+export default client;

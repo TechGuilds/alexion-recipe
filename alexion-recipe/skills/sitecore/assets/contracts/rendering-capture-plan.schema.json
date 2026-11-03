@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kajoo.dev/contracts/sitecore/rendering-capture-plan.schema.json",
+  "title": "Sitecore rendering-capture-plan",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "fingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "identity": {
+      "const": "rendering-variant"
+    },
+    "scope": {
+      "enum": [
+        "approved",
+        "discovery-only"
+      ]
+    },
+    "draft": {
+      "type": "boolean"
+    },
+    "sourceDiscoveryFingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "totalSourcePages": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "totalRenderings": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "totalRequirements": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "selectedPages": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/selectedPage"
+      }
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/captureRequirement"
+      }
+    },
+    "optimization": {
+      "type": "object",
+      "properties": {
+        "minimumProven": {
+          "type": "boolean"
+        },
+        "searchStates": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "searchLimit": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "minimumProven",
+        "searchStates",
+        "searchLimit"
+      ],
+      "additionalProperties": false
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "uncoveredRequirementKeys": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "fingerprint",
+    "identity",
+    "scope",
+    "draft",
+    "sourceDiscoveryFingerprint",
+    "totalSourcePages",
+    "totalRenderings",
+    "totalRequirements",
+    "selectedPages",
+    "requirements",
+    "optimization",
+    "warnings",
+    "uncoveredRequirementKeys"
+  ],
+  "additionalProperties": false
+}

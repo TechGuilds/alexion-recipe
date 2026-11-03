@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "version": { "const": 1 },
+    "projectId": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "reconciledAt": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "phases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "workflowPhaseId": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "kajooEpicId": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "tasks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "workflowTaskId": { "type": "string", "minLength": 1, "pattern": "\\S" },
+                "kajooTaskId": { "type": "string", "minLength": 1, "pattern": "\\S" }
+              },
+              "required": ["workflowTaskId", "kajooTaskId"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["workflowPhaseId", "kajooEpicId", "tasks"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["version", "projectId", "reconciledAt", "phases"],
+  "additionalProperties": false
+}

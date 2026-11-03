@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "inputs": { "$ref": "input-files.schema.json" },
+    "inventory": {
+      "$ref": "inventory.schema.json"
+    },
+    "workflow": {
+      "$ref": "workflow.schema.json"
+    },
+    "mappings": {
+      "type": "array",
+      "items": {
+        "$ref": "mapping.schema.json"
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "$ref": "decision.schema.json"
+      }
+    },
+    "sampledRouteIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      },
+      "uniqueItems": true
+    },
+    "validation": {
+      "$ref": "validate-evidence-input.schema.json"
+    }
+  },
+  "required": [
+    "inventory",
+    "workflow",
+    "mappings",
+    "decisions"
+  ],
+  "additionalProperties": false
+}

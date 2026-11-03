@@ -1,0 +1,5 @@
+# Code migration procedure selection
+
+Load the active migration profile from `context.json` and follow its Code Migration procedure. The profile owns platform-specific analyzers, transformation rules and acceptance evidence. This shared entry defines no vendor-specific operation. Use the workflow and executable contracts for shared state and validation rules.
+
+Before dispatching implementation, check whether the active profile requires a runnable preview foundation for its acceptance checks. A process that starts, an HTTP 200, or a configured launch entry does not prove that an agreed route resolves or renders. If the required route, baseline/fixture, or preview integration is absent, make that a visible prerequisite with an owner and evidence; do not report dependent visual checks as passed. Continue only independent work that the approved task can validly verify without that prerequisite, and keep its result partial until required checks pass. Use only the active profile's platform-specific fallback behavior; never invent a generic placeholder or silently downgrade visual acceptance.

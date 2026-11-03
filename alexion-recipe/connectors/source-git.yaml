@@ -1,0 +1,7 @@
+name: source-git
+type: mcp-kajoo-azure-devops
+description: Source code repository containing the Sitecore project (MVC or JSS) to migrate
+alternatives:
+  - name: source-git
+    type: mcp-kajoo-github
+    description: Source code repository containing the Sitecore project (MVC or JSS) to migrate

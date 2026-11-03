@@ -1,0 +1,60 @@
+import type { ResolverAdapter } from './resolver-adapter.types';
+
+/**
+ * Resolver Adapter Registry
+ *
+ * Maintains the list of resolver adapters that enrich page layout data.
+ * Adapters are discovered automatically at build time — drop a
+ * `*.resolver.ts` file into `./resolvers` and it self-registers. There is
+ * no manual registration step and this file never needs editing.
+ */
+
+const adapters: ResolverAdapter[] = [];
+
+export function registerAdapter(adapter: ResolverAdapter): void {
+  adapters.push(adapter);
+}
+
+export function getAdapters(): ReadonlyArray<ResolverAdapter> {
+  return adapters;
+}
+
+// ─── Build-time auto-registration ────────────────────────────────────
+// Every `*.resolver.ts` module under ./resolvers is imported and its
+// adapter export registered automatically. To add an adapter, drop a new
+// file into src/lib/server/resolvers/ — no import and no registerAdapter()
+// call belongs here.
+//
+// NOTE: require.context is a webpack feature. The generated app boots on
+// plain `next dev` / `next build` (webpack), so this works today. It would
+// break under `next dev --turbopack`; if a turbopack boot is ever
+// introduced, this discovery mechanism must be revisited.
+
+function isResolverAdapter(value: unknown): value is ResolverAdapter {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    typeof (value as ResolverAdapter).componentName === 'string' &&
+    typeof (value as ResolverAdapter).matches === 'function' &&
+    typeof (value as ResolverAdapter).enrich === 'function'
+  );
+}
+
+// webpack-only: require.context is injected by the bundler, not Node.
+declare const require: {
+  context(
+    directory: string,
+    useSubdirectories: boolean,
+    regExp: RegExp,
+  ): { keys(): string[]; (id: string): Record<string, unknown> };
+};
+
+const resolverContext = require.context('./resolvers', false, /\.resolver\.ts$/);
+for (const key of resolverContext.keys()) {
+  const mod = resolverContext(key);
+  for (const exported of Object.values(mod)) {
+    if (isResolverAdapter(exported)) {
+      registerAdapter(exported);
+    }
+  }
+}

@@ -1,0 +1,53 @@
+/**
+ * Generate Mock Sites
+ * 
+ * Creates a static sites.json file for disconnected/mock mode.
+ * Uses NEXT_PUBLIC_DEFAULT_SITE_NAME from environment variables.
+ */
+
+import * as fs from 'fs';
+import * as path from 'path';
+
+interface SiteInfo {
+  name: string;
+  hostName: string;
+  language: string;
+  locales?: string[];
+}
+
+/**
+ * Generates .sitecore/sites.json for mock mode
+ * This replaces the SDK's generateSites() which requires a live Sitecore connection
+ * 
+ * Returns a function matching the CLI command signature expected by defineCliConfig
+ */
+export function generateMockSites() {
+  // Return a function that matches the CLI command signature
+  return async () => {
+    const siteName = process.env.NEXT_PUBLIC_DEFAULT_SITE_NAME;
+    
+    if (!siteName) {
+      console.warn('⚠️ [generateMockSites] NEXT_PUBLIC_DEFAULT_SITE_NAME not set, using "mock-site"');
+    }
+
+    const sites: SiteInfo[] = [
+      {
+        name: siteName || 'mock-site',
+        hostName: '*',
+        language: 'en',
+        locales: ['en'],
+      },
+    ];
+
+    const outputDir = path.resolve(process.cwd(), '.sitecore');
+    const outputPath = path.join(outputDir, 'sites.json');
+
+    // Ensure .sitecore directory exists
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
+
+    fs.writeFileSync(outputPath, JSON.stringify(sites, null, 2));
+    console.log(`✅ [generateMockSites] Generated ${outputPath} with site: ${siteName || 'mock-site'}`);
+  };
+}

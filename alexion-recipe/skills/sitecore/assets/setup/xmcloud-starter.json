@@ -1,0 +1,53 @@
+{
+  "repository": "https://github.com/Sitecore/xmcloud-starter-js",
+  "ref": "76c445b3163b8aea48dc4cff46eaabbaf89c69dc",
+  "refNote": "Last commit before the Content SDK 2.0.2 upgrade (upstream PR 442). Do not move the pin without validating the resolver framework and the pair skills against the newer SDK.",
+  "examplePath": "examples/kit-nextjs-skate-park",
+  "removeAfterClone": [
+    ".github/workflows/dmz-validation.yml",
+    ".github/workflows/pr-validation.yml"
+  ],
+  "removeAfterCloneNote": "Sitecore's internal CI workflows. They cause GitHub App permission errors when pushed to a customer repository and serve no purpose outside the starter.",
+  "renderingHost": {
+    "nodeVersion": "20.18.0",
+    "jssDeploymentSecret": "SECRET_FOR_LOCAL_DEV_ONLY",
+    "enabled": true
+  },
+  "gitignore": [
+    "# Dependencies",
+    "node_modules/",
+    ".pnp",
+    ".pnp.js",
+    "",
+    "# Testing",
+    "coverage/",
+    "",
+    "# Next.js",
+    ".next/",
+    "out/",
+    "build/",
+    "dist/",
+    "",
+    "# Misc",
+    ".DS_Store",
+    "*.pem",
+    "",
+    "# Debug",
+    "npm-debug.log*",
+    "yarn-debug.log*",
+    "yarn-error.log*",
+    "",
+    "# Local env files",
+    ".env.local",
+    ".env.development.local",
+    ".env.test.local",
+    ".env.production.local",
+    "",
+    "# Vercel",
+    ".vercel",
+    "",
+    "# Turbo",
+    ".turbo",
+    ""
+  ]
+}

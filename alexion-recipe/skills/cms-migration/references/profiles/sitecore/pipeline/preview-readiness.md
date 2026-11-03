@@ -1,0 +1,24 @@
+# Preview readiness before rendering work
+
+Include one `preview-foundation` task in the approved Code Migration plan whenever rendering work is in scope, for both new and adopted apps. Assign frontend-developer. Every render-dependent task depends on it; analysis-only work does not. Setup prepares/adopts the application and Discovery plans this readiness task. Requested Discovery capture and reviewed local delivery follow [rendering preview flow](../../../../../sitecore/references/discovery/rendering-preview-flow.md) during Discovery; readiness verifies that retained foundation and any separately approved repairs. A missing Discovery delivery requires its explicit deferral/owner or an audit gap, not silent reassignment here. Server/browser checks are not required in Discovery unless explicitly requested.
+
+## Task scope and acceptance
+
+1. Record the confirmed app root/revision, existing package-manager scripts, selected data mode, agreed validation route, route/data prerequisites and owned change scope in the task. The coordinator merges or corrects the launch entry with the dev-server skill before dispatch, preserving other entries and keeping secrets out of it. Use the existing entry when it matches the selected app; app adoption and an entry's presence alone do not prove readiness. A missing launch entry is a coordinator-owned preparation gap, not permission for a worker to invent a server command.
+2. Complete only the prerequisite work the target needs. Reuse Discovery's delivered selected captures, current approved mapping results, explicit examples and hash-bound preview deployment manifest. When the SitecoreAI / XM Cloud Content SDK target needs the existing mock scaffold, plan/apply through its reviewed `--preview-stage-sha256` interface; JSS requires a verified target-specific loader/integration and must not inherit SitecoreAI-only scaffold assumptions. Use conditional shared-styles-shell and the task-owned preview-input manifest contract. For other targets or an equivalent existing foundation, use confirmed runtime/data mode and retained route evidence. Missing fixtures, dependencies or environment requirements have a named owner and scoped repair; preserve unrelated work and existing approval requirements. Do not recrawl sitemap/capture trees, install unselected routes, or synthesize a real-capture claim from an unused example.
+3. Use `preview_list`, then `preview_run` for the stable entry name when it is not running. Reuse a matching running instance. Inspect `preview_logs` for compile/runtime errors, run the existing health/type/build checks required by the task, and use `frontend-migration/scripts/probe-render.mjs` for the agreed route. Load the returned preview URL in a supported browser and verify the agreed route, expected data/layout and applicable unresolved-rendering fallback. A listening port, root URL, static build or HTTP 200 alone does not prove route acceptance. A missing browser capability leaves required visual checks unverified.
+4. Save the entry name, current serverId/port/returned URL, app revision, route, data/fixture provenance and check results in task-owned evidence and the final Technical report. Keep credentials and raw secret-bearing logs out of reports. The owner marks the task done only after its required checks pass; otherwise mark blocked and identify the repair owner. Keep dependent rendering work blocked while readiness is missing. Independent analysis may proceed under its approved scope.
+
+The route must preserve the mock client's exact case/suffix convention, with
+`home/index.json` for root and one language per preview tree. Distinguish captured,
+mapped and synthetic fixture provenance. Keep the removable `public/mock-preview`
+navigation and its single root-layout hook gated by
+`USE_MOCK_LAYOUT_SERVICE === 'true'`; a refreshed index is not permission to prune
+old files. Mapping approval, source capture and navigation availability do not
+prove target implementation or visual verification.
+
+## Changes and resumption
+
+After a restart or resume, check current `preview_list` and the agreed route before render-dependent work; restart only when needed under dev-server ownership rules. Reuse passing evidence while its app/configuration/fixture inputs remain current and the server/route still work. A server stopping does not require rebuilding a proven foundation. When relevant inputs change, invalidate affected readiness checks and reverify them before dependent rendering work. If a running task exposes a missing shared foundation, return a bounded prerequisite gap instead of silently expanding its scope.
+
+Keep launch preparation and readiness visible in the existing approved plan. For an existing plan missing this task, propose and synchronize the bounded revision through the normal approval flow; do not silently rewrite active task scope or treat old application-adoption evidence as a readiness pass.

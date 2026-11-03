@@ -1,0 +1,39 @@
+import type { Page } from '@sitecore-content-sdk/core/client';
+
+/**
+ * Context passed to each resolver adapter during page enrichment.
+ */
+export type EnrichmentContext = {
+  locale: string;
+  site: string;
+  routePath: string;
+  resolverDebug?: boolean;
+};
+
+/**
+ * Represents a rendering node in the layout data tree.
+ */
+export interface RenderingNode {
+  componentName?: string;
+  dataSource?: string;
+  itemId?: string;
+  fields?: Record<string, unknown>;
+  params?: Record<string, unknown>;
+  placeholders?: Record<string, RenderingNode[]>;
+}
+
+/**
+ * Contract for a resolver adapter that enriches a page's layout data
+ * for a specific component. Each adapter replaces the work that a
+ * C# Rendering Contents Resolver performed on Sitecore XP.
+ */
+export interface ResolverAdapter {
+  /** Component name this adapter handles (must match componentName in layout data) */
+  componentName: string;
+
+  /** Check if this adapter should handle the given rendering */
+  matches(rendering: RenderingNode): boolean;
+
+  /** Enrich the page data for the matched rendering */
+  enrich(page: Page, rendering: RenderingNode, context: EnrichmentContext): Promise<Page>;
+}

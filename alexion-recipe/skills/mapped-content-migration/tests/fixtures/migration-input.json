@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "scopeId": "fixture-site",
+  "mappingRevision": "example-1",
+  "mapping": {
+    "path": "sitecore-mapping.json",
+    "sha256": "2aeb274fdb54f153a1125dd8e815a2b8080a4b15a0a8c8c282e14c48b2108700"
+  },
+  "sourceSnapshot": {
+    "path": "source-snapshot.json",
+    "sha256": "c37d3fa104d7967dc5d4f903b883ed438df7de8ed77090921a5995fa9937dfd6"
+  },
+  "targetInventory": {
+    "path": "target-inventory.json",
+    "sha256": "36785e3255bdf020f7e8fa93d571b38f5aabe18167be677657bbf091bb855ad8"
+  },
+  "destinationPlan": {
+    "path": "destination-plan.json",
+    "sha256": "6dbb3840d89af9d92c0f0a157762a85dbbe0e82e251a047fb2c0e292179fea8a"
+  },
+  "itemPlan": {
+    "path": "item-plan.json",
+    "sha256": "85c5f92f8c1d09be023b26f530e31b21ab01545828ffee42affd4b230773cff8"
+  },
+  "identityMap": {
+    "path": "identity-map.json",
+    "sha256": "50a7f68475cc86dc9c130a428d6ac2d1dec0d4a7c67539d501cb16b86dd65587"
+  }
+}

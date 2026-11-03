@@ -1,0 +1,44 @@
+{
+  "commit": "03e00d4c9",
+  "historicalRoot": "packages/kajoo-sitecore/src/code/migrations/xpheadless2sai/templates",
+  "files": [
+    {
+      "target": "src/lib/mock-sitecore-client.ts",
+      "asset": "mock-sitecore-client.template.txt",
+      "sha256": "b2d2e4bee86c3a81434b46c803de87c171eb491f7f070fca88e33e3de541cc6b",
+      "provenance": "v3-exact-preview-routes"
+    },
+    {
+      "target": "src/lib/generate-mock-sites.ts",
+      "asset": "generate-mock-sites.template.txt",
+      "sha256": "1d216ea19eff065ca0692bf873f08049067d0c55fc61f33bd2bf18db0df1088c"
+    },
+    {
+      "target": "sitecore.config.ts",
+      "asset": "sitecore.config.template.txt",
+      "sha256": "63ed20c8f63053353227989a839c076dad94eb7740439742b3bf59b2934ea33e"
+    },
+    {
+      "target": "sitecore.cli.config.ts",
+      "asset": "sitecore.cli.config.template.txt",
+      "sha256": "218244a34d1273ffb3b490b238b91e325b119f173e55d124debcc84d63849211"
+    },
+    {
+      "target": "src/components/content-sdk/RawFieldHtml.tsx",
+      "asset": "raw-field-html.template.txt",
+      "sha256": "2c5ff157b3ca9de7de40f6a90c05e34ec746b791a3e0a63936db4222ed5ba942"
+    },
+    {
+      "target": "public/mock-preview/navigation.js",
+      "asset": "mock-preview-navigation.template.txt",
+      "sha256": "82a0eaeb73b2fe91bd595ddee5e9e2ab2a3a7f9dad9b7db954001cf21eb7ceaf",
+      "provenance": "v3-preview-navigation"
+    },
+    {
+      "target": "public/mock-preview/routes.json",
+      "asset": "mock-preview-routes.template.txt",
+      "sha256": "2ea5b569cda784c30b76c540a1a596208a4bc18aa18592aeecd280409db714f9",
+      "provenance": "v3-preview-navigation"
+    }
+  ]
+}

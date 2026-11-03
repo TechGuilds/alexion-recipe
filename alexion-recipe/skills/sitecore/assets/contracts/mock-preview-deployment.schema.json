@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kajoo.dev/contracts/sitecore/mock-preview-deployment.schema.json",
+  "title": "Sitecore mock-preview-deployment",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "mock-preview-deployment"
+    },
+    "capturePlanFingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "capturePlan": {
+      "$ref": "common.schema.json#/$defs/fileRef"
+    },
+    "captureResultFiles": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/fileRef"
+      }
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/fileRef"
+      }
+    },
+    "mappedLayoutFiles": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/fileRef"
+      }
+    },
+    "componentExamplesFiles": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/fileRef"
+      }
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/fileRef"
+      }
+    },
+    "routes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "captures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "route": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "layoutFile": {
+            "type": "string",
+            "minLength": 1
+          },
+          "captureResultFile": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "captured",
+              "derived-mapped-layout",
+              "synthetic-component-example"
+            ]
+          },
+          "sourceLayout": {
+            "$ref": "common.schema.json#/$defs/fileRef"
+          },
+          "mappingPlan": {
+            "$ref": "common.schema.json#/$defs/fileRef"
+          },
+          "synthetic": {
+            "const": true
+          },
+          "requirementKey": {
+            "type": "string",
+            "minLength": 1
+          },
+          "visualValidation": {
+            "const": "pending"
+          }
+        },
+        "required": [
+          "route",
+          "sha256",
+          "layoutFile",
+          "kind"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "outcomes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "route": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "captured",
+              "failed",
+              "skipped"
+            ]
+          },
+          "captureResultFile": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "route",
+          "status",
+          "captureResultFile"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "excludedExamples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "route": {
+            "type": "string",
+            "minLength": 1
+          },
+          "requirementKey": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "fixture-required",
+              "dependency-required"
+            ]
+          }
+        },
+        "required": [
+          "route",
+          "requirementKey",
+          "status"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "coverage": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "kind",
+    "capturePlanFingerprint",
+    "capturePlan",
+    "captureResultFiles",
+    "inputs",
+    "mappedLayoutFiles",
+    "componentExamplesFiles",
+    "files",
+    "routes",
+    "captures",
+    "outcomes",
+    "excludedExamples",
+    "coverage"
+  ],
+  "additionalProperties": false
+}

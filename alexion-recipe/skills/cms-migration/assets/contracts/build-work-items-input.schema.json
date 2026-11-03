@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "inventory": {
+      "$ref": "inventory.schema.json"
+    },
+    "profile": {
+      "$ref": "profile.schema.json"
+    },
+    "workflow": {
+      "$ref": "workflow.schema.json"
+    },
+    "availableAgents": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "inventory",
+    "profile",
+    "workflow"
+  ],
+  "additionalProperties": false
+}

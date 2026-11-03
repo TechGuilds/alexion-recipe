@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "phases": [
+    {
+      "id": "prepare",
+      "title": "Prepare",
+      "tasks": [
+        { "id": "inventory", "title": "Inventory inputs", "status": "pending", "dependsOn": [] },
+        { "id": "access", "title": "Verify access", "status": "pending", "dependsOn": [] },
+        { "id": "approval", "title": "Ask user to approve the plan", "status": "pending", "dependsOn": ["inventory", "access"] }
+      ]
+    },
+    {
+      "id": "build",
+      "title": "Build",
+      "tasks": [
+        { "id": "convert", "title": "Convert the inputs", "status": "pending", "dependsOn": ["approval"] }
+      ]
+    }
+  ]
+}

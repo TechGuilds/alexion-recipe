@@ -1,0 +1,7 @@
+# Presentation Composition
+
+For an existing Headless SXA target with existing components/templates, use [Presentation Composition](../../../../../presentation-composition/SKILL.md) and its [workflow integration](../../../../../presentation-composition/references/workflow-integration.md). This is separate from SXA Conversion and code migration. Current Setup, source/target Discovery, approved mappings/destination rules, verified content/reference identities and preview foundation are prerequisites.
+
+Propose its canonical tasks through the local proposal builder, then use existing workflow-plan approval, materialization, Kajoo synchronization and separate phase-continuation. Dispatch generated `packet.presentation` operations only. Compose virtually from source intent and target constraints, install target-data previews, navigate the required pages/rendering coverage and obtain actual review before the separately approved target application. Retain backups, checkpoint/receipt recovery evidence and an independent read-back audit. Domain and shared postflight plus human attestations govern completion; workers never advance shared workflow.
+
+Use a separate Verification phase for actual target-site visual and functional acceptance. Missing source baseline, target captures or live compatibility evidence are explicit blockers, never a reason to copy preview evidence into target verification. A target readiness gap returns to its prerequisite owner; do not automatically run conversion/provisioning against the blank site.

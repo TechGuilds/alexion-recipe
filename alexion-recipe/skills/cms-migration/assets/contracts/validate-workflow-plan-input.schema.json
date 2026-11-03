@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "version": { "const": 1 },
+    "scopeId": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "proposal": { "$ref": "file-fingerprint.schema.json" },
+    "evidence": {
+      "type": "array",
+      "items": { "$ref": "file-fingerprint.schema.json" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "decisions": {
+      "type": "array",
+      "items": { "$ref": "decision.schema.json" },
+      "minItems": 1
+    }
+  },
+  "required": ["version", "scopeId", "proposal", "evidence", "decisions"],
+  "additionalProperties": false
+}

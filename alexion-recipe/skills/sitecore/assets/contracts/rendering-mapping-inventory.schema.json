@@ -1,0 +1,310 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kajoo.dev/contracts/sitecore/rendering-mapping-inventory.schema.json",
+  "title": "Sitecore rendering-mapping-inventory",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 2
+    },
+    "requirementsFingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "object",
+          "properties": {
+            "instance": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "sitePath": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "database": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "language": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "instance",
+            "sitePath",
+            "database",
+            "language"
+          ],
+          "additionalProperties": false
+        },
+        "discoveryCompletedAt": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "completeness": {
+          "type": "object",
+          "properties": {
+            "renderingInventory": {
+              "type": "boolean"
+            },
+            "pageUsage": {
+              "type": "boolean"
+            },
+            "templateDefinitions": {
+              "type": "boolean"
+            },
+            "placeholderSettings": {
+              "type": "boolean"
+            },
+            "dynamicPlaceholders": {
+              "type": "boolean"
+            },
+            "variantDefinitions": {
+              "type": "boolean"
+            },
+            "variantAssociations": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "renderingInventory",
+            "pageUsage",
+            "templateDefinitions",
+            "placeholderSettings",
+            "dynamicPlaceholders",
+            "variantDefinitions",
+            "variantAssociations"
+          ],
+          "additionalProperties": false
+        },
+        "configuredRenderingRoots": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "effectiveRenderingRoots": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "excludedContentPaths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "unresolvedReferences": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/unresolvedReference"
+          }
+        },
+        "evidenceFiles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "source",
+        "discoveryCompletedAt",
+        "completeness",
+        "configuredRenderingRoots",
+        "effectiveRenderingRoots",
+        "excludedContentPaths",
+        "unresolvedReferences",
+        "evidenceFiles"
+      ],
+      "additionalProperties": false
+    },
+    "renderings": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/rendering"
+      }
+    },
+    "templates": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/template"
+      }
+    },
+    "placeholders": {
+      "type": "object",
+      "properties": {
+        "settings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "settingsId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "path": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "allowedRenderings": {
+                "type": "array",
+                "items": {
+                  "$ref": "common.schema.json#/$defs/renderingRef"
+                }
+              },
+              "editable": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "settingsId",
+              "key",
+              "name",
+              "path",
+              "allowedRenderings",
+              "editable"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "dynamic": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "isDynamic": {
+                "type": "boolean"
+              },
+              "settingsId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "settingsPath": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "segmentPattern": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "usedInTemplateIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "parentRenderings": {
+                "type": "array",
+                "items": {
+                  "$ref": "common.schema.json#/$defs/renderingRef"
+                }
+              }
+            },
+            "required": [
+              "key",
+              "isDynamic",
+              "settingsId",
+              "settingsPath",
+              "segmentPattern",
+              "usedInTemplateIds",
+              "parentRenderings"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "settings",
+        "dynamic"
+      ],
+      "additionalProperties": false
+    },
+    "variants": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/variant"
+      }
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/requirement"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "generatedAt": {
+      "type": "string"
+    },
+    "fingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "requirementsFingerprint",
+    "metadata",
+    "renderings",
+    "templates",
+    "placeholders",
+    "variants",
+    "requirements",
+    "warnings",
+    "generatedAt",
+    "fingerprint"
+  ],
+  "additionalProperties": false
+}

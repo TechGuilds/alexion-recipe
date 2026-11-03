@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kajoo.dev/contracts/sitecore/capture-result.schema.json",
+  "title": "Sitecore capture-result",
+  "type": "object",
+  "properties": {
+    "selection": {
+      "const": "discovery-plan"
+    },
+    "capturePlanFingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "outputDir": {
+      "type": "string",
+      "minLength": 1
+    },
+    "siteName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "language": {
+      "type": "string",
+      "minLength": 1
+    },
+    "outcomes": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/outcome"
+      }
+    },
+    "totalUrls": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "discoveredUrlCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "attemptedUrls": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "successCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "errorCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "skippedCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "maxUrlsApplied": {
+      "type": "boolean"
+    },
+    "maxUrls": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "totalMaxUrls": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "previousCaptureResultFiles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "durationMs": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "discoverySource": {
+      "const": "discovery-plan"
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unattemptedRoutes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rawHashesVerified": {
+      "type": "boolean"
+    },
+    "captureResultFile": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "selection",
+    "capturePlanFingerprint",
+    "outputDir",
+    "outcomes",
+    "totalUrls",
+    "attemptedUrls",
+    "successCount",
+    "errorCount",
+    "skippedCount",
+    "maxUrls",
+    "totalMaxUrls",
+    "previousCaptureResultFiles"
+  ],
+  "additionalProperties": false
+}

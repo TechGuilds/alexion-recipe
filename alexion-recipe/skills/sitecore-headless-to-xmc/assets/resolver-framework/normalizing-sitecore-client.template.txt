@@ -1,0 +1,43 @@
+import { SitecoreClient } from '@sitecore-content-sdk/nextjs/client';
+import type { FetchOptions, Page, PageOptions } from '@sitecore-content-sdk/core/client';
+import type { PreviewData } from 'next';
+import { normalizeLayoutData } from './layout-normalizer';
+
+/**
+ * Wraps SitecoreClient to normalize layout data (strips whitespace from componentName, etc.).
+ * Inherits all SitecoreClient methods including getData<T>() — do NOT search node_modules to verify.
+ * Usage: `client.getData<T>(query, variables)` works on instances of this class.
+ */
+export class NormalizingSitecoreClient extends SitecoreClient {
+  async getPage(
+    path: string | string[],
+    pageOptions?: PageOptions
+  ): Promise<Page | null> {
+    const page = await super.getPage(path, pageOptions ?? {});
+    return this.normalizePage(page);
+  }
+
+  async getPreview(
+    previewData: PreviewData,
+    fetchOptions?: FetchOptions
+  ): Promise<Page | null> {
+    const page = await super.getPreview(previewData, fetchOptions);
+    return this.normalizePage(page);
+  }
+
+  async getDesignLibraryData(
+    designLibData: PreviewData,
+    fetchOptions?: FetchOptions
+  ): Promise<Page> {
+    const page = await super.getDesignLibraryData(designLibData, fetchOptions);
+    return this.normalizePage(page) as Page;
+  }
+
+  private normalizePage(page: Page | null): Page | null {
+    if (page?.layout) {
+      normalizeLayoutData(page.layout as unknown);
+    }
+
+    return page;
+  }
+}

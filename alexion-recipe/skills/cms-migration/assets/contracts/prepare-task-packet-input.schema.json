@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "inventory": {
+      "$ref": "inventory.schema.json"
+    },
+    "workflow": {
+      "$ref": "workflow.schema.json"
+    },
+    "mappings": {
+      "type": "array",
+      "items": {
+        "$ref": "mapping.schema.json"
+      }
+    },
+    "scopeId": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "taskId": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "targetRoot": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "attemptRoot": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "inputs": {
+      "$ref": "input-files.schema.json"
+    },
+    "acceptance": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "validation": {
+      "type": "object",
+      "properties": {
+        "valid": {
+          "type": "boolean"
+        },
+        "inputs": {
+          "$ref": "input-files.schema.json"
+        },
+        "inputFingerprint": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "entityAttestations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "entityId": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "taskId": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "status": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "fingerprint": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "entityId",
+              "taskId",
+              "status",
+              "fingerprint"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "valid",
+        "inputs",
+        "inputFingerprint",
+        "entityAttestations"
+      ],
+      "additionalProperties": false
+    },
+    "proceedWithoutHost": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      },
+      "uniqueItems": true
+    },
+    "mappedContentInputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "mapped-content-input.schema.json"
+      }
+    },
+    "contentMigrationDecision": {
+      "$ref": "decision.schema.json"
+    },
+    "priorTaskAttempts": {
+      "$ref": "input-files.schema.json"
+    },
+    "presentationInputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "presentation-input.schema.json"
+      }
+    }
+  },
+  "required": [
+    "inventory",
+    "workflow",
+    "mappings",
+    "scopeId",
+    "taskId",
+    "targetRoot",
+    "attemptRoot",
+    "inputs",
+    "acceptance"
+  ],
+  "additionalProperties": false
+}

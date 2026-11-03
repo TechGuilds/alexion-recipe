@@ -1,0 +1,7 @@
+name: target-git
+type: mcp-kajoo-azure-devops
+description: Target code repository the migrated application is committed to
+alternatives:
+  - name: target-git
+    type: mcp-kajoo-github
+    description: Target code repository the migrated application is committed to

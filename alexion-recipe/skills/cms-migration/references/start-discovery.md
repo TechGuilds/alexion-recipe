@@ -1,0 +1,10 @@
+# Start the prepared Discovery plan
+
+Require the existing migration artifact, verified successful `setup.audit` and `setup.prepare-discovery`, complete context, reconciled Discovery bindings and a current explicit `phase-continuation` decision for the displayed Discovery scope. A pause or missing answer leaves the visible plan unstarted. If the plan is missing or partially synchronized, return to [Discovery planning](prepare-discovery.md), not artifact creation or a new Setup phase.
+
+1. Resolve this artifact's bound Discovery phase and task IDs; preserve existing statuses, evidence, decisions and pending runs. Do not create a second Discovery phase or rematch a phase by name. Keep all five Setup tasks and every linked phase in the workflow and bindings.
+2. Validate the continuation against the current plan and scope. A new-chat choice records the handoff and leaves execution for that chat. Planning completion is not execution permission and never authorizes target mutations.
+3. Read `reports/discovery-plan.json` and resolve required missing inputs for the tasks being started. A draft task is not runnable. Once its actual input/scope is verified, update that task's details and promote it from draft to todo, and its workflow state from blocked to pending. Mere predecessor outputs do not require description rewrites. Do not fabricate source-code availability, approvals or excluded surfaces; do not repeat completed Setup work.
+4. Read back tasks, bindings and artifact links and validate the active workflow. Record the scoped execution authorization in the plan report. Dispatch only ready work reachable from `setup.prepare-discovery` under the active domain profile. A blocked code task does not authorize running dependent synthesis prematurely; preserve the profile's terminal-result and coverage rules.
+
+Discovery's later evidence-led workflow proposal, approval, materialization and synchronization gates remain unchanged. Include existing Setup and Discovery structure in that proposal; never drop artifact-owned Setup from bindings or the artifact.

@@ -1,0 +1,63 @@
+'use client';
+
+import { useEffect, useRef } from 'react';
+
+/**
+ * RawFieldHtml — universal renderer for Sitecore fields whose value is raw HTML.
+ *
+ * Why this exists: a `<script>` inserted through `dangerouslySetInnerHTML` is
+ * flagged "already started" by the HTML parser and is NEVER executed by the
+ * browser. Components that inject a raw field (CSS, JavaScript / embed scripts,
+ * head markup, mixed content) need the contained scripts to actually run. This
+ * renderer writes the raw value, then revives every contained `<script>` by
+ * recreating it as a live element so the browser executes it — preserving source
+ * order. Plain markup and `<style>` / `<link>` fields pass straight through (the
+ * revive loop no-ops when there is no `<script>`).
+ *
+ * Scaffolded once at migration-init. Component wrappers IMPORT this component and
+ * pass their own source-derived field value. Never inline the revive logic and
+ * never wrap a `<script>` in plain `dangerouslySetInnerHTML`.
+ */
+export interface RawFieldHtmlProps {
+  /** Raw HTML string from the Sitecore field value. */
+  html: string;
+}
+
+export function RawFieldHtml({ html }: RawFieldHtmlProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Scripts written via innerHTML are inert ("already started"). Recreate each
+    // as a live element so the browser executes it, replacing in place to keep
+    // source order. Track the revived nodes so we can remove them on cleanup.
+    const inertScripts = Array.from(container.querySelectorAll('script'));
+    const revived: HTMLScriptElement[] = [];
+
+    for (const inert of inertScripts) {
+      const script = document.createElement('script');
+      for (const attr of Array.from(inert.attributes)) {
+        script.setAttribute(attr.name, attr.value);
+      }
+      script.text = inert.textContent ?? '';
+      inert.replaceWith(script);
+      revived.push(script);
+    }
+
+    return () => {
+      for (const script of revived) {
+        script.remove();
+      }
+    };
+  }, [html]);
+
+  return (
+    <div
+      ref={containerRef}
+      suppressHydrationWarning
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+}

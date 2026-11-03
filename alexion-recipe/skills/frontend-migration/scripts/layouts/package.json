@@ -1,0 +1,11 @@
+{
+  "name": "sitecore-migration-layout-analysis",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test core.test.mjs parser.test.mjs" },
+  "dependencies": {
+    "@babel/parser": "7.28.6",
+    "@babel/traverse": "7.29.7",
+    "@babel/types": "7.29.7"
+  }
+}

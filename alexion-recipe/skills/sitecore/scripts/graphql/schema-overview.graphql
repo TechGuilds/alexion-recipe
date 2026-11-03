@@ -1,0 +1,8 @@
+query SchemaOverview {
+  __schema {
+    queryType { name }
+    mutationType { name }
+    subscriptionType { name }
+    types { name kind }
+  }
+}

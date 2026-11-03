@@ -1,0 +1,122 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "validation": {
+      "type": "object",
+      "properties": {
+        "valid": {
+          "type": "boolean"
+        },
+        "inputs": {
+          "$ref": "input-files.schema.json"
+        },
+        "inputFingerprint": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "entityAttestations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "entityId": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "taskId": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "status": {
+                "enum": [
+                  "attested",
+                  "verified",
+                  "not-verified",
+                  "paused",
+                  "unattested",
+                  "stale",
+                  "ambiguous"
+                ]
+              },
+              "fingerprint": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "entityId",
+              "taskId",
+              "status",
+              "fingerprint"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "verifiedTaskIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "uniqueItems": true
+        },
+        "verifiedEntityMappings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "entityId": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "taskId": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              }
+            },
+            "required": [
+              "entityId",
+              "taskId"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        },
+        "summary": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "required": [
+        "valid",
+        "inputs",
+        "inputFingerprint",
+        "entityAttestations"
+      ],
+      "additionalProperties": false
+    },
+    "taskId": {
+      "minLength": 1,
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "required": [
+    "taskId",
+    "validation"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

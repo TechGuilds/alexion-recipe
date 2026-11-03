@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "phases": [
+    {
+      "id": "setup",
+      "title": "Setup",
+      "tasks": [
+        {
+          "id": "setup.source",
+          "title": "Set up source platform",
+          "agent": "sitecore-developer",
+          "status": "pending",
+          "dependsOn": []
+        },
+        {
+          "id": "setup.target",
+          "title": "Set up target platform",
+          "agent": "sitecore-developer",
+          "status": "pending",
+          "dependsOn": [
+            "setup.source"
+          ]
+        },
+        {
+          "id": "setup.cms",
+          "title": "Complete CMS-specific setup",
+          "agent": "sitecore-developer",
+          "status": "pending",
+          "dependsOn": [
+            "setup.source",
+            "setup.target"
+          ]
+        },
+        {
+          "id": "setup.audit",
+          "title": "Audit Setup evidence",
+          "agent": "tester",
+          "status": "pending",
+          "dependsOn": [
+            "setup.cms"
+          ]
+        },
+        {
+          "id": "setup.prepare-discovery",
+          "title": "Prepare Discovery plan",
+          "agent": "orchestrator",
+          "status": "pending",
+          "dependsOn": [
+            "setup.audit"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "discovery",
+      "title": "1 \u2014 Discovery",
+      "tasks": [
+        {
+          "id": "discovery.code",
+          "title": "Analyze in-scope code",
+          "agent": "frontend-developer",
+          "status": "pending",
+          "dependsOn": [
+            "setup.prepare-discovery"
+          ]
+        },
+        {
+          "id": "discovery.content",
+          "title": "Analyze in-scope content",
+          "agent": "sitecore-developer",
+          "status": "pending",
+          "dependsOn": [
+            "setup.prepare-discovery"
+          ]
+        },
+        {
+          "id": "discovery.synthesize",
+          "title": "Synthesize Discovery inventory and coverage",
+          "status": "pending",
+          "dependsOn": [
+            "discovery.content"
+          ],
+          "optionalDependsOn": [
+            "discovery.code"
+          ]
+        },
+        {
+          "id": "discovery.audit",
+          "title": "Audit Discovery coverage",
+          "agent": "tester",
+          "status": "pending",
+          "dependsOn": [
+            "discovery.synthesize"
+          ]
+        },
+        {
+          "id": "discovery.plan-workflow",
+          "title": "Prepare evidence-led workflow proposal",
+          "status": "pending",
+          "dependsOn": [
+            "discovery.audit"
+          ]
+        }
+      ]
+    }
+  ]
+}

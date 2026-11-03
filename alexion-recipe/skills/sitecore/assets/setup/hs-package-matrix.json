@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "packages": [
+    {
+      "hsVersion": "22.0.11",
+      "xpKernelMin": "10.3.0",
+      "xpKernelMax": "10.4.99",
+      "topology": "xp",
+      "displayName": "Sitecore Headless Services Server XP 22.0.11",
+      "fileName": "Sitecore Headless Services Server XP 22.0.11.zip",
+      "url": "https://sakajoostage.blob.core.windows.net/sitecore-modules/Sitecore%20Headless%20Services%20Server%20XP%2022.0.11.zip?sp=r&st=2026-04-30T16:57:48Z&se=2029-05-01T01:12:48Z&spr=https&sv=2025-11-05&sr=b&sig=1N8oFYv8PCSmgonV0fIlz3LGIJfSwbUY%2FU7UVcxq1n4%3D",
+      "sha256": "1fdfa6e070ae75208da38f1f4fe47bd138b73a5030a487ca568fa8c3d2834b86"
+    },
+    {
+      "hsVersion": "22.0.11",
+      "xpKernelMin": "10.3.0",
+      "xpKernelMax": "10.4.99",
+      "topology": "xm",
+      "displayName": "Sitecore Headless Services Server XM 22.0.11",
+      "fileName": "Sitecore Headless Services Server XM 22.0.11.zip",
+      "url": "https://sakajoostage.blob.core.windows.net/sitecore-modules/Sitecore%20Headless%20Services%20Server%20XM%2022.0.11.zip?sp=r&st=2026-04-30T16:55:32Z&se=2029-05-02T01:10:32Z&spr=https&sv=2025-11-05&sr=b&sig=ZCt94Ksbcm2k%2BWCKx8lD%2FY5YeN%2BNPMIYNaKIj3Lhvfu8%3D",
+      "sha256": "992a8e1a3a868e30fb392f0dab17ea448e9a9dc413dd1152cf97b38bda7d919c"
+    }
+  ]
+}

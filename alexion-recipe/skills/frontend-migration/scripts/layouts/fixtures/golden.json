@@ -1,0 +1,483 @@
+{
+  "jss": {
+    "entryPoints": [
+      {
+        "type": "app-entry",
+        "path": "./src/index.jsx",
+        "description": "Application entry point"
+      },
+      {
+        "type": "root-component",
+        "path": "./src/AppRoot.jsx",
+        "description": "Root application component with providers"
+      },
+      {
+        "type": "route-handler",
+        "path": "./src/RouteHandler.jsx",
+        "description": "Route handler component"
+      },
+      {
+        "type": "layout-factory",
+        "path": "./src/LayoutFactory.js",
+        "description": "Sitecore JSS Layout factory for routing"
+      }
+    ],
+    "layoutFactory": {
+      "path": "./src/LayoutFactory.js",
+      "mappings": [
+        {
+          "layoutId": "main-id",
+          "componentName": "MainLayout",
+          "filePath": "./src/layouts/MainLayout.jsx"
+        },
+        {
+          "layoutId": "default",
+          "componentName": "DefaultLayout",
+          "filePath": "./src/layouts/DefaultLayout.jsx"
+        }
+      ],
+      "defaultLayout": "DefaultLayout"
+    },
+    "layouts": [
+      {
+        "path": "./src/layouts/MainLayout.jsx",
+        "name": "MainLayout",
+        "placeholders": [
+          {
+            "name": "main",
+            "props": {
+              "name": "main",
+              "rendering": "{route}",
+              "editor": false
+            },
+            "path": "route"
+          }
+        ],
+        "structuralElements": [
+          {
+            "type": "div",
+            "className": "shell",
+            "id": "main",
+            "props": {
+              "id": "main",
+              "className": "shell"
+            }
+          },
+          {
+            "type": "component",
+            "name": "Header",
+            "props": {}
+          },
+          {
+            "type": "component",
+            "name": "VisitorIdentification",
+            "props": {}
+          },
+          {
+            "type": "component",
+            "name": "Placeholder",
+            "props": {
+              "name": "main",
+              "rendering": "{route}",
+              "editor": false
+            }
+          },
+          {
+            "type": "component",
+            "name": "Footer",
+            "props": {}
+          }
+        ],
+        "dataFields": [],
+        "jsxStructure": {
+          "type": "div",
+          "props": {
+            "id": "main",
+            "className": "shell"
+          },
+          "children": [
+            {
+              "type": "Header",
+              "props": {}
+            },
+            {
+              "type": "VisitorIdentification",
+              "props": {}
+            },
+            {
+              "type": "Placeholder",
+              "props": {
+                "name": "main"
+              }
+            },
+            {
+              "type": "Footer",
+              "props": {}
+            }
+          ]
+        },
+        "routeFields": [
+          {
+            "fieldPath": "route.fields['Title']",
+            "fieldName": "Title",
+            "usage": "read",
+            "category": "route.fields"
+          },
+          {
+            "fieldPath": "route.fields",
+            "fieldName": "fields",
+            "usage": "read",
+            "category": "route.fields"
+          },
+          {
+            "fieldPath": "route.fields['Sub Title']",
+            "fieldName": "Sub Title",
+            "usage": "read",
+            "category": "route.fields"
+          },
+          {
+            "fieldPath": "route.itemId",
+            "fieldName": "itemId",
+            "usage": "read",
+            "category": "route"
+          },
+          {
+            "fieldPath": "context.language",
+            "fieldName": "language",
+            "usage": "read",
+            "category": "context"
+          }
+        ],
+        "layoutId": "main-id"
+      },
+      {
+        "path": "./src/layouts/DefaultLayout.jsx",
+        "name": "DefaultLayout",
+        "placeholders": [
+          {
+            "name": "fallback",
+            "props": {
+              "name": "fallback",
+              "rendering": "{route}"
+            },
+            "path": "route"
+          }
+        ],
+        "structuralElements": [
+          {
+            "type": "div",
+            "className": "default",
+            "props": {
+              "className": "default"
+            }
+          },
+          {
+            "type": "component",
+            "name": "Placeholder",
+            "props": {
+              "name": "fallback",
+              "rendering": "{route}"
+            }
+          }
+        ],
+        "dataFields": [],
+        "jsxStructure": {
+          "type": "div",
+          "props": {
+            "className": "default"
+          },
+          "children": [
+            {
+              "type": "Placeholder",
+              "props": {
+                "name": "fallback"
+              }
+            }
+          ]
+        },
+        "routeFields": [],
+        "layoutId": "default"
+      }
+    ],
+    "allPlaceholders": [
+      "fallback",
+      "main"
+    ],
+    "allDataFields": [],
+    "allRouteFields": [
+      "context.language",
+      "route.fields",
+      "route.fields['Sub Title']",
+      "route.fields['Title']",
+      "route.itemId"
+    ],
+    "jssPatterns": {
+      "usesLayoutService": true,
+      "usesVisitorIdentification": true,
+      "usesWithSitecoreContext": true
+    },
+    "seoPatterns": {
+      "usesHelmet": true,
+      "hasCanonicalUrl": true,
+      "hasOpenGraphTags": true,
+      "hasStructuredData": true,
+      "hasRobotsMeta": true
+    }
+  },
+  "contentSdk": {
+    "framework": "content-sdk",
+    "entryPoints": [
+      {
+        "type": "root-component",
+        "path": "./src/Layout.tsx",
+        "description": "Sitecore layout wrapper component"
+      },
+      {
+        "type": "app-entry",
+        "path": "./src/app/layout.tsx",
+        "description": "Next.js root layout"
+      },
+      {
+        "type": "app-entry",
+        "path": "./src/app/[site]/layout.tsx",
+        "description": "Site-specific layout"
+      },
+      {
+        "type": "route-handler",
+        "path": "./src/app/[site]/[locale]/[[...path]]/page.tsx",
+        "description": "Dynamic page renderer"
+      },
+      {
+        "type": "root-component",
+        "path": "./src/Bootstrap.tsx",
+        "description": "Bootstrap/initialization component"
+      }
+    ],
+    "layouts": [
+      {
+        "path": "./src/Layout.tsx",
+        "name": "Layout",
+        "placeholders": [
+          {
+            "name": "main",
+            "props": {
+              "name": "main"
+            }
+          }
+        ],
+        "structuralElements": [
+          {
+            "type": "div",
+            "className": "shell",
+            "props": {
+              "className": "shell"
+            }
+          },
+          {
+            "type": "component",
+            "name": "Header",
+            "props": {}
+          }
+        ],
+        "dataFields": [
+          {
+            "fieldPath": "route.fields.Title",
+            "fieldName": "Title",
+            "usage": "read"
+          }
+        ],
+        "jsxStructure": {
+          "type": "div",
+          "props": {
+            "className": "shell"
+          },
+          "children": [
+            {
+              "type": "AppPlaceholder",
+              "props": {
+                "name": "main"
+              }
+            },
+            {
+              "type": "Header",
+              "props": {}
+            }
+          ]
+        }
+      },
+      {
+        "path": "./src/app/layout.tsx",
+        "name": "layout",
+        "placeholders": [],
+        "structuralElements": [],
+        "dataFields": [],
+        "jsxStructure": {
+          "type": "html",
+          "props": {},
+          "children": [
+            {
+              "type": "body",
+              "props": {}
+            }
+          ]
+        }
+      },
+      {
+        "path": "./src/app/[site]/layout.tsx",
+        "name": "layout",
+        "placeholders": [],
+        "structuralElements": [
+          {
+            "type": "div",
+            "id": "site",
+            "props": {
+              "id": "site"
+            }
+          }
+        ],
+        "dataFields": [],
+        "jsxStructure": {
+          "type": "div",
+          "props": {
+            "id": "site"
+          }
+        }
+      },
+      {
+        "path": "./src/app/[site]/[locale]/[[...path]]/page.tsx",
+        "name": "page",
+        "placeholders": [],
+        "structuralElements": [],
+        "dataFields": [],
+        "jsxStructure": {
+          "type": "main",
+          "props": {}
+        }
+      },
+      {
+        "path": "./src/Bootstrap.tsx",
+        "name": "Bootstrap",
+        "placeholders": [],
+        "structuralElements": [],
+        "dataFields": [],
+        "jsxStructure": {
+          "type": "div",
+          "props": {}
+        }
+      },
+      {
+        "path": "./src/Custom.tsx",
+        "name": "Custom",
+        "placeholders": [
+          {
+            "name": "custom",
+            "props": {
+              "name": "custom"
+            }
+          }
+        ],
+        "structuralElements": [],
+        "dataFields": [],
+        "jsxStructure": {
+          "type": "Placeholder",
+          "props": {
+            "name": "custom"
+          }
+        }
+      }
+    ],
+    "componentMaps": {
+      "serverMap": "./.sitecore/component-map.ts",
+      "clientMap": "./.sitecore/component-map.client.ts",
+      "registrationPattern": "auto"
+    },
+    "componentPropsPath": "lib/component-props",
+    "pathAliases": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "contentSdkPatterns": {
+      "fieldHelpersUsed": [
+        "AppPlaceholder",
+        "Placeholder",
+        "RichText",
+        "Text"
+      ],
+      "usesWithDatasourceCheck": true,
+      "contentSdkVersion": "^1.0.0"
+    },
+    "allPlaceholders": [
+      "custom",
+      "main"
+    ],
+    "allDataFields": [],
+    "seoPatterns": {
+      "usesHelmet": false,
+      "hasCanonicalUrl": true,
+      "hasOpenGraphTags": true,
+      "hasStructuredData": true,
+      "hasRobotsMeta": true,
+      "contentSdk": {
+        "usesGenerateMetadata": true,
+        "usesMetadataApi": true,
+        "usesNextHead": true
+      }
+    }
+  },
+  "emptyJss": {
+    "entryPoints": [],
+    "layoutFactory": {
+      "path": null,
+      "mappings": [],
+      "defaultLayout": null
+    },
+    "layouts": [],
+    "allPlaceholders": [],
+    "allDataFields": [],
+    "allRouteFields": [],
+    "jssPatterns": {
+      "usesLayoutService": false,
+      "usesVisitorIdentification": false,
+      "usesWithSitecoreContext": false
+    },
+    "seoPatterns": {
+      "usesHelmet": false,
+      "hasCanonicalUrl": false,
+      "hasOpenGraphTags": false,
+      "hasStructuredData": false,
+      "hasRobotsMeta": false
+    }
+  },
+  "emptyContentSdk": {
+    "framework": "content-sdk",
+    "entryPoints": [],
+    "layouts": [],
+    "componentMaps": {
+      "serverMap": null,
+      "clientMap": null,
+      "registrationPattern": "auto"
+    },
+    "componentPropsPath": null,
+    "pathAliases": {},
+    "contentSdkPatterns": {
+      "fieldHelpersUsed": [],
+      "usesWithDatasourceCheck": false,
+      "contentSdkVersion": null
+    },
+    "allPlaceholders": [],
+    "allDataFields": [],
+    "seoPatterns": {
+      "usesHelmet": false,
+      "hasCanonicalUrl": false,
+      "hasOpenGraphTags": false,
+      "hasStructuredData": false,
+      "hasRobotsMeta": false,
+      "contentSdk": {
+        "usesGenerateMetadata": false,
+        "usesMetadataApi": false,
+        "usesNextHead": false
+      }
+    }
+  }
+}

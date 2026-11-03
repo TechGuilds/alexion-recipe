@@ -1,0 +1,5137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kajoo:mapped-content:definitions:v1",
+  "$defs": {
+    "mappedOutcomeInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "packet", "outputs"],
+      "properties": {
+        "version": { "const": 1 },
+        "packet": { "$ref": "#/$defs/file" },
+        "outputs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["role", "path", "sha256"],
+            "properties": {
+              "role": { "$ref": "#/$defs/text" },
+              "path": { "$ref": "#/$defs/text" },
+              "sha256": { "$ref": "#/$defs/hash" }
+            }
+          }
+        }
+      }
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "guid": {
+      "type": "string",
+      "pattern": "^\\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\\}$"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "path": {
+      "type": "string",
+      "pattern": "^/sitecore(?:/[^/\\\\\\u0000-\\u001f]+)*$"
+    },
+    "versionNumber": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/text"
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    },
+    "baseTemplate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseTemplateId",
+        "baseTemplateName"
+      ],
+      "properties": {
+        "baseTemplateId": {
+          "$ref": "#/$defs/guid"
+        },
+        "baseTemplateName": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "templateRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "templateId",
+        "templateName",
+        "path",
+        "baseTemplates"
+      ],
+      "properties": {
+        "templateId": {
+          "$ref": "#/$defs/guid"
+        },
+        "templateName": {
+          "$ref": "#/$defs/text"
+        },
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "baseTemplates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/baseTemplate"
+          }
+        }
+      }
+    },
+    "warning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "message"
+      ],
+      "properties": {
+        "field": {
+          "$ref": "#/$defs/text"
+        },
+        "message": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "fieldMapping": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "action",
+            "sfid",
+            "from",
+            "tfid",
+            "to",
+            "targetTemplate",
+            "targetTemplateId"
+          ],
+          "properties": {
+            "action": {
+              "const": "map"
+            },
+            "sfid": {
+              "$ref": "#/$defs/guid"
+            },
+            "from": {
+              "$ref": "#/$defs/text"
+            },
+            "tfid": {
+              "$ref": "#/$defs/guid"
+            },
+            "to": {
+              "$ref": "#/$defs/text"
+            },
+            "targetTemplate": {
+              "$ref": "#/$defs/text"
+            },
+            "targetTemplateId": {
+              "$ref": "#/$defs/guid"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "action",
+            "tfid",
+            "to",
+            "value",
+            "targetTemplate",
+            "targetTemplateId"
+          ],
+          "properties": {
+            "action": {
+              "const": "set"
+            },
+            "tfid": {
+              "$ref": "#/$defs/guid"
+            },
+            "to": {
+              "$ref": "#/$defs/text"
+            },
+            "value": {
+              "type": "string"
+            },
+            "targetTemplate": {
+              "$ref": "#/$defs/text"
+            },
+            "targetTemplateId": {
+              "$ref": "#/$defs/guid"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "action",
+            "sfid",
+            "from"
+          ],
+          "properties": {
+            "action": {
+              "const": "remove"
+            },
+            "sfid": {
+              "$ref": "#/$defs/guid"
+            },
+            "from": {
+              "$ref": "#/$defs/text"
+            }
+          }
+        }
+      ]
+    },
+    "renderingRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "renderingId",
+        "renderingName",
+        "path"
+      ],
+      "properties": {
+        "renderingId": {
+          "$ref": "#/$defs/guid"
+        },
+        "renderingName": {
+          "$ref": "#/$defs/text"
+        },
+        "path": {
+          "$ref": "#/$defs/path"
+        }
+      }
+    },
+    "placeholderRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "key"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/guid"
+        },
+        "key": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "mapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "templates",
+        "renderings",
+        "placeholders"
+      ],
+      "properties": {
+        "templates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "source",
+              "target",
+              "fields",
+              "warnings"
+            ],
+            "properties": {
+              "source": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/templateRef"
+                }
+              },
+              "target": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/templateRef"
+                }
+              },
+              "fields": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/fieldMapping"
+                }
+              },
+              "warnings": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/warning"
+                }
+              }
+            }
+          }
+        },
+        "renderings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "source",
+              "target",
+              "warnings"
+            ],
+            "properties": {
+              "source": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/renderingRef"
+                }
+              },
+              "target": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/renderingRef"
+                }
+              },
+              "warnings": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/warning"
+                }
+              }
+            }
+          }
+        },
+        "placeholders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "source",
+              "target"
+            ],
+            "properties": {
+              "source": {
+                "$ref": "#/$defs/placeholderRef"
+              },
+              "target": {
+                "$ref": "#/$defs/placeholderRef"
+              }
+            }
+          }
+        }
+      }
+    },
+    "fieldValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fieldId",
+        "value",
+        "storage"
+      ],
+      "properties": {
+        "fieldId": {
+          "$ref": "#/$defs/guid"
+        },
+        "value": {
+          "type": "string"
+        },
+        "storage": {
+          "enum": [
+            "shared",
+            "unversioned",
+            "versioned"
+          ]
+        },
+        "language": {
+          "$ref": "#/$defs/text"
+        },
+        "version": {
+          "$ref": "#/$defs/versionNumber"
+        },
+        "fieldType": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fieldId",
+        "targetSourceIds",
+        "kind"
+      ],
+      "properties": {
+        "fieldId": {
+          "$ref": "#/$defs/guid"
+        },
+        "targetSourceIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/guid"
+          }
+        },
+        "kind": {
+          "enum": [
+            "link",
+            "list",
+            "media",
+            "datasource"
+          ]
+        },
+        "language": {
+          "$ref": "#/$defs/text"
+        },
+        "version": {
+          "$ref": "#/$defs/versionNumber"
+        }
+      }
+    },
+    "sourceSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scopeId",
+        "instanceId",
+        "database",
+        "capturedAt",
+        "rootPaths",
+        "languages",
+        "items",
+        "renderingInstances"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "instanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "database": {
+          "$ref": "#/$defs/text"
+        },
+        "capturedAt": {
+          "$ref": "#/$defs/text"
+        },
+        "rootPaths": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/path"
+          }
+        },
+        "languages": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        },
+        "items": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "parentId",
+              "templateId",
+              "name",
+              "path",
+              "versions",
+              "fields",
+              "references"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/guid"
+              },
+              "parentId": {
+                "$ref": "#/$defs/guid"
+              },
+              "templateId": {
+                "$ref": "#/$defs/guid"
+              },
+              "name": {
+                "$ref": "#/$defs/text"
+              },
+              "path": {
+                "$ref": "#/$defs/path"
+              },
+              "versions": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "language",
+                    "version"
+                  ],
+                  "properties": {
+                    "language": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "version": {
+                      "$ref": "#/$defs/versionNumber"
+                    }
+                  }
+                }
+              },
+              "fields": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/fieldValue"
+                }
+              },
+              "references": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/reference"
+                }
+              }
+            }
+          }
+        },
+        "renderingInstances": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "instanceId",
+              "pageId",
+              "renderingId",
+              "language",
+              "version",
+              "deviceId",
+              "parameters"
+            ],
+            "properties": {
+              "instanceId": {
+                "$ref": "#/$defs/guid"
+              },
+              "pageId": {
+                "$ref": "#/$defs/guid"
+              },
+              "renderingId": {
+                "$ref": "#/$defs/guid"
+              },
+              "language": {
+                "$ref": "#/$defs/text"
+              },
+              "version": {
+                "$ref": "#/$defs/versionNumber"
+              },
+              "deviceId": {
+                "$ref": "#/$defs/guid"
+              },
+              "datasourceId": {
+                "$ref": "#/$defs/guid"
+              },
+              "parameterTemplateId": {
+                "$ref": "#/$defs/guid"
+              },
+              "parameters": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/fieldValue"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "targetField": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "declaringTemplateId",
+        "type",
+        "storage"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/guid"
+        },
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "declaringTemplateId": {
+          "$ref": "#/$defs/guid"
+        },
+        "type": {
+          "$ref": "#/$defs/text"
+        },
+        "storage": {
+          "enum": [
+            "shared",
+            "unversioned",
+            "versioned"
+          ]
+        }
+      }
+    },
+    "targetInventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scopeId",
+        "instanceId",
+        "database",
+        "capturedAt",
+        "rootPaths",
+        "templates",
+        "items",
+        "renderings",
+        "placeholders"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "instanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "database": {
+          "$ref": "#/$defs/text"
+        },
+        "capturedAt": {
+          "$ref": "#/$defs/text"
+        },
+        "rootPaths": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/path"
+          }
+        },
+        "templates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "path",
+              "kind",
+              "baseTemplateIds",
+              "fields"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/guid"
+              },
+              "name": {
+                "$ref": "#/$defs/text"
+              },
+              "path": {
+                "$ref": "#/$defs/path"
+              },
+              "kind": {
+                "enum": [
+                  "content",
+                  "datasource",
+                  "parameters",
+                  "folder",
+                  "branch"
+                ]
+              },
+              "baseTemplateIds": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "$ref": "#/$defs/guid"
+                }
+              },
+              "fields": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/targetField"
+                }
+              }
+            }
+          }
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "templateId",
+              "path"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/guid"
+              },
+              "templateId": {
+                "$ref": "#/$defs/guid"
+              },
+              "path": {
+                "$ref": "#/$defs/path"
+              }
+            }
+          }
+        },
+        "renderings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "path"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/guid"
+              },
+              "name": {
+                "$ref": "#/$defs/text"
+              },
+              "path": {
+                "$ref": "#/$defs/path"
+              },
+              "datasourceTemplateId": {
+                "$ref": "#/$defs/guid"
+              },
+              "parameterTemplateId": {
+                "$ref": "#/$defs/guid"
+              }
+            }
+          }
+        },
+        "placeholders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/placeholderRef"
+          }
+        }
+      }
+    },
+    "destinationRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceTemplateId",
+        "targetTemplateId",
+        "outputKey",
+        "kind",
+        "scope",
+        "identity",
+        "existingItem",
+        "collision"
+      ],
+      "properties": {
+        "sourceTemplateId": {
+          "$ref": "#/$defs/guid"
+        },
+        "targetTemplateId": {
+          "$ref": "#/$defs/guid"
+        },
+        "outputKey": {
+          "$ref": "#/$defs/text"
+        },
+        "kind": {
+          "enum": [
+            "page",
+            "datasource",
+            "folder",
+            "parameters"
+          ]
+        },
+        "scope": {
+          "enum": [
+            "page",
+            "page-local",
+            "global",
+            "rendering-instance"
+          ]
+        },
+        "identity": {
+          "enum": [
+            "source-item",
+            "source-item-and-page",
+            "rendering-instance"
+          ]
+        },
+        "pathPattern": {
+          "$ref": "#/$defs/text"
+        },
+        "folderRuleKey": {
+          "$ref": "#/$defs/text"
+        },
+        "branchId": {
+          "$ref": "#/$defs/guid"
+        },
+        "existingItem": {
+          "enum": [
+            "create-only",
+            "reuse",
+            "update"
+          ]
+        },
+        "collision": {
+          "const": "block"
+        }
+      }
+    },
+    "destinationPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scopeId",
+        "targetRootPath",
+        "rules",
+        "folders",
+        "referenceRules",
+        "exclusions"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "targetRootPath": {
+          "$ref": "#/$defs/path"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/destinationRule"
+          }
+        },
+        "folders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "key",
+              "segments"
+            ],
+            "properties": {
+              "key": {
+                "$ref": "#/$defs/text"
+              },
+              "segments": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "name",
+                    "templateId"
+                  ],
+                  "properties": {
+                    "name": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "templateId": {
+                      "$ref": "#/$defs/guid"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "referenceRules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sourceTemplateId",
+              "sourceFieldId",
+              "targetOutputKey"
+            ],
+            "properties": {
+              "sourceTemplateId": {
+                "$ref": "#/$defs/guid"
+              },
+              "sourceFieldId": {
+                "$ref": "#/$defs/guid"
+              },
+              "targetOutputKey": {
+                "$ref": "#/$defs/text"
+              }
+            }
+          }
+        },
+        "exclusions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sourceItemId",
+              "reason"
+            ],
+            "properties": {
+              "sourceItemId": {
+                "$ref": "#/$defs/guid"
+              },
+              "reason": {
+                "$ref": "#/$defs/text"
+              }
+            }
+          }
+        },
+        "fieldCompatibility": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sourceTemplateId",
+              "sourceFieldId",
+              "targetTemplateId",
+              "targetFieldId",
+              "sourceType",
+              "targetType",
+              "decision",
+              "reason"
+            ],
+            "properties": {
+              "sourceTemplateId": {
+                "$ref": "#/$defs/guid"
+              },
+              "sourceFieldId": {
+                "$ref": "#/$defs/guid"
+              },
+              "targetTemplateId": {
+                "$ref": "#/$defs/guid"
+              },
+              "targetFieldId": {
+                "$ref": "#/$defs/guid"
+              },
+              "sourceType": {
+                "$ref": "#/$defs/text"
+              },
+              "targetType": {
+                "$ref": "#/$defs/text"
+              },
+              "decision": {
+                "const": "raw-compatible"
+              },
+              "reason": {
+                "$ref": "#/$defs/text"
+              }
+            }
+          }
+        },
+        "ownershipRules": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "sourceItemId",
+                  "via",
+                  "ancestorItemId"
+                ],
+                "properties": {
+                  "sourceItemId": {
+                    "$ref": "#/$defs/guid"
+                  },
+                  "via": {
+                    "const": "source-ancestor"
+                  },
+                  "ancestorItemId": {
+                    "$ref": "#/$defs/guid"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "sourceItemId",
+                  "via",
+                  "ownerItemId",
+                  "fieldId"
+                ],
+                "properties": {
+                  "sourceItemId": {
+                    "$ref": "#/$defs/guid"
+                  },
+                  "via": {
+                    "const": "source-reference"
+                  },
+                  "ownerItemId": {
+                    "$ref": "#/$defs/guid"
+                  },
+                  "fieldId": {
+                    "$ref": "#/$defs/guid"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "sourceItemId",
+                  "via",
+                  "pageIds"
+                ],
+                "properties": {
+                  "sourceItemId": {
+                    "$ref": "#/$defs/guid"
+                  },
+                  "via": {
+                    "const": "explicit-pages"
+                  },
+                  "pageIds": {
+                    "type": "array",
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": {
+                      "$ref": "#/$defs/guid"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "existingReferenceTargets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/existingReferenceTarget"
+          }
+        }
+      }
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mapping",
+        "sourceSnapshot",
+        "targetInventory",
+        "destinationPlan"
+      ],
+      "properties": {
+        "mapping": {
+          "$ref": "#/$defs/hash"
+        },
+        "sourceSnapshot": {
+          "$ref": "#/$defs/hash"
+        },
+        "targetInventory": {
+          "$ref": "#/$defs/hash"
+        },
+        "destinationPlan": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceItemId",
+        "outputKey",
+        "targetItemId",
+        "targetPath"
+      ],
+      "properties": {
+        "sourceItemId": {
+          "$ref": "#/$defs/guid"
+        },
+        "outputKey": {
+          "$ref": "#/$defs/text"
+        },
+        "targetItemId": {
+          "$ref": "#/$defs/guid"
+        },
+        "targetPath": {
+          "$ref": "#/$defs/path"
+        },
+        "pageId": {
+          "$ref": "#/$defs/guid"
+        },
+        "renderingInstanceId": {
+          "$ref": "#/$defs/guid"
+        },
+        "deviceId": {
+          "$ref": "#/$defs/guid"
+        },
+        "language": {
+          "$ref": "#/$defs/text"
+        },
+        "version": {
+          "$ref": "#/$defs/versionNumber"
+        }
+      }
+    },
+    "identityMap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scopeId",
+        "mappingRevision",
+        "sourceInstanceId",
+        "targetInstanceId",
+        "entries"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "mappingRevision": {
+          "$ref": "#/$defs/text"
+        },
+        "sourceInstanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "targetInstanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identity"
+          }
+        }
+      }
+    },
+    "itemPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scopeId",
+        "mappingRevision",
+        "inputs",
+        "items",
+        "issues"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "mappingRevision": {
+          "$ref": "#/$defs/text"
+        },
+        "inputs": {
+          "$ref": "#/$defs/binding"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "identity",
+              "templateId",
+              "action",
+              "fields",
+              "relationships"
+            ],
+            "properties": {
+              "identity": {
+                "$ref": "#/$defs/identity"
+              },
+              "templateId": {
+                "$ref": "#/$defs/guid"
+              },
+              "action": {
+                "enum": [
+                  "create",
+                  "update",
+                  "reuse",
+                  "exclude",
+                  "conflict"
+                ]
+              },
+              "fields": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/fieldValue"
+                }
+              },
+              "relationships": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "fieldId",
+                    "targets"
+                  ],
+                  "properties": {
+                    "fieldId": {
+                      "$ref": "#/$defs/guid"
+                    },
+                    "language": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "version": {
+                      "$ref": "#/$defs/versionNumber"
+                    },
+                    "targets": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/identity"
+                      }
+                    }
+                  }
+                }
+              },
+              "versions": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "language",
+                    "version"
+                  ],
+                  "properties": {
+                    "language": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "version": {
+                      "$ref": "#/$defs/versionNumber"
+                    }
+                  }
+                }
+              },
+              "parentPath": {
+                "$ref": "#/$defs/path"
+              }
+            }
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "code",
+              "message",
+              "severity"
+            ],
+            "properties": {
+              "code": {
+                "$ref": "#/$defs/text"
+              },
+              "message": {
+                "$ref": "#/$defs/text"
+              },
+              "severity": {
+                "enum": [
+                  "warning",
+                  "error"
+                ]
+              }
+            }
+          }
+        },
+        "structures": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "targetPath",
+              "targetItemId",
+              "templateId",
+              "parentPath",
+              "action"
+            ],
+            "properties": {
+              "targetPath": {
+                "$ref": "#/$defs/path"
+              },
+              "targetItemId": {
+                "$ref": "#/$defs/guid"
+              },
+              "templateId": {
+                "$ref": "#/$defs/guid"
+              },
+              "parentPath": {
+                "$ref": "#/$defs/path"
+              },
+              "action": {
+                "enum": [
+                  "create",
+                  "reuse"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "migrationInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scopeId",
+        "mappingRevision",
+        "mapping",
+        "sourceSnapshot",
+        "targetInventory",
+        "destinationPlan"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "mappingRevision": {
+          "$ref": "#/$defs/text"
+        },
+        "mapping": {
+          "$ref": "#/$defs/file"
+        },
+        "sourceSnapshot": {
+          "$ref": "#/$defs/file"
+        },
+        "targetInventory": {
+          "$ref": "#/$defs/file"
+        },
+        "destinationPlan": {
+          "$ref": "#/$defs/file"
+        },
+        "itemPlan": {
+          "$ref": "#/$defs/file"
+        },
+        "identityMap": {
+          "$ref": "#/$defs/file"
+        }
+      }
+    },
+    "snapshotHeader": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scopeId",
+        "instanceId",
+        "database",
+        "capturedAt",
+        "rootPaths",
+        "languages"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "instanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "database": {
+          "$ref": "#/$defs/text"
+        },
+        "capturedAt": {
+          "$ref": "#/$defs/text"
+        },
+        "rootPaths": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/path"
+          }
+        },
+        "languages": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        }
+      }
+    },
+    "snapshotRecord": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "data"
+          ],
+          "properties": {
+            "kind": {
+              "const": "item"
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "parentId",
+                "templateId",
+                "name",
+                "path",
+                "versions",
+                "fields",
+                "references"
+              ],
+              "properties": {
+                "id": {
+                  "$ref": "#/$defs/guid"
+                },
+                "parentId": {
+                  "$ref": "#/$defs/guid"
+                },
+                "templateId": {
+                  "$ref": "#/$defs/guid"
+                },
+                "name": {
+                  "$ref": "#/$defs/text"
+                },
+                "path": {
+                  "$ref": "#/$defs/path"
+                },
+                "versions": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "language",
+                      "version"
+                    ],
+                    "properties": {
+                      "language": {
+                        "$ref": "#/$defs/text"
+                      },
+                      "version": {
+                        "$ref": "#/$defs/versionNumber"
+                      }
+                    }
+                  }
+                },
+                "fields": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/fieldValue"
+                  }
+                },
+                "references": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/reference"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "data"
+          ],
+          "properties": {
+            "kind": {
+              "const": "renderingInstance"
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "instanceId",
+                "pageId",
+                "renderingId",
+                "language",
+                "version",
+                "deviceId",
+                "parameters"
+              ],
+              "properties": {
+                "instanceId": {
+                  "$ref": "#/$defs/guid"
+                },
+                "pageId": {
+                  "$ref": "#/$defs/guid"
+                },
+                "renderingId": {
+                  "$ref": "#/$defs/guid"
+                },
+                "language": {
+                  "$ref": "#/$defs/text"
+                },
+                "version": {
+                  "$ref": "#/$defs/versionNumber"
+                },
+                "deviceId": {
+                  "$ref": "#/$defs/guid"
+                },
+                "datasourceId": {
+                  "$ref": "#/$defs/guid"
+                },
+                "parameterTemplateId": {
+                  "$ref": "#/$defs/guid"
+                },
+                "parameters": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/fieldValue"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "snapshotPart": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "bytes",
+        "itemCount",
+        "renderingInstanceCount"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/text"
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8388608
+        },
+        "itemCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "renderingInstanceCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000
+        }
+      }
+    },
+    "snapshotManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "format",
+        "scopeId",
+        "instanceId",
+        "database",
+        "capturedAt",
+        "sourceStateId",
+        "rootPaths",
+        "languages",
+        "complete",
+        "maxPartBytes",
+        "maxRecordsPerPart",
+        "itemCount",
+        "renderingInstanceCount",
+        "parts",
+        "requestSha256",
+        "provenance",
+        "preparedAt"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "format": {
+          "const": "source-snapshot-manifest"
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "instanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "database": {
+          "$ref": "#/$defs/text"
+        },
+        "capturedAt": {
+          "$ref": "#/$defs/text"
+        },
+        "sourceStateId": {
+          "$ref": "#/$defs/text"
+        },
+        "rootPaths": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/path"
+          }
+        },
+        "languages": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        },
+        "complete": {
+          "type": "boolean"
+        },
+        "maxPartBytes": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 8388608
+        },
+        "maxRecordsPerPart": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "itemCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000000
+        },
+        "renderingInstanceCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000000
+        },
+        "parts": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/snapshotPart"
+          }
+        },
+        "requestSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "provenance": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "sha256",
+              "format",
+              "sourceStateId",
+              "status",
+              "capturedAt"
+            ],
+            "properties": {
+              "path": {
+                "$ref": "#/$defs/text"
+              },
+              "sha256": {
+                "$ref": "#/$defs/hash"
+              },
+              "format": {
+                "$ref": "#/$defs/text"
+              },
+              "sourceStateId": {
+                "$ref": "#/$defs/text"
+              },
+              "status": {
+                "enum": [
+                  "reused",
+                  "stale",
+                  "unsupported",
+                  "capture"
+                ]
+              },
+              "capturedAt": {
+                "$ref": "#/$defs/text"
+              }
+            }
+          }
+        },
+        "preparedAt": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "fieldRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fieldId",
+        "storage"
+      ],
+      "properties": {
+        "fieldId": {
+          "$ref": "#/$defs/guid"
+        },
+        "storage": {
+          "enum": [
+            "shared",
+            "unversioned",
+            "versioned"
+          ]
+        },
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "referenceKind": {
+          "enum": [
+            "link",
+            "list",
+            "media",
+            "datasource"
+          ]
+        },
+        "fieldType": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "itemRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "path",
+        "templateId",
+        "versions",
+        "fields"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/guid"
+        },
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "templateId": {
+          "$ref": "#/$defs/guid"
+        },
+        "versions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "language",
+              "version"
+            ],
+            "properties": {
+              "language": {
+                "$ref": "#/$defs/text"
+              },
+              "version": {
+                "$ref": "#/$defs/versionNumber"
+              }
+            }
+          }
+        },
+        "fields": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/fieldRequirement"
+          }
+        },
+        "parentId": {
+          "$ref": "#/$defs/guid"
+        }
+      }
+    },
+    "contextRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "instanceId",
+        "pageId",
+        "renderingId",
+        "deviceId",
+        "language",
+        "version",
+        "parameters"
+      ],
+      "properties": {
+        "instanceId": {
+          "$ref": "#/$defs/guid"
+        },
+        "pageId": {
+          "$ref": "#/$defs/guid"
+        },
+        "renderingId": {
+          "$ref": "#/$defs/guid"
+        },
+        "deviceId": {
+          "$ref": "#/$defs/guid"
+        },
+        "language": {
+          "$ref": "#/$defs/text"
+        },
+        "version": {
+          "$ref": "#/$defs/versionNumber"
+        },
+        "datasourceId": {
+          "$ref": "#/$defs/guid"
+        },
+        "parameterTemplateId": {
+          "$ref": "#/$defs/guid"
+        },
+        "parameters": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/fieldRequirement"
+          }
+        }
+      }
+    },
+    "captureScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scopeId",
+        "instanceId",
+        "database",
+        "sourceStateId",
+        "rootPaths",
+        "languages",
+        "items",
+        "renderingInstances"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "instanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "database": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+        },
+        "sourceStateId": {
+          "$ref": "#/$defs/text"
+        },
+        "rootPaths": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/path"
+          }
+        },
+        "languages": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        },
+        "items": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/itemRequirement"
+          }
+        },
+        "renderingInstances": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/contextRequirement"
+          }
+        }
+      }
+    },
+    "sourceEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "format",
+        "sourceStateId",
+        "capturedAt",
+        "scopeId",
+        "instanceId",
+        "database"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/text"
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "format": {
+          "enum": [
+            "snapshot-json",
+            "snapshot-manifest",
+            "capture-jsonl",
+            "discovery-items-jsonl",
+            "discovery-summary"
+          ]
+        },
+        "sourceStateId": {
+          "$ref": "#/$defs/text"
+        },
+        "capturedAt": {
+          "$ref": "#/$defs/text"
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "instanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "database": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "prepareSourceInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scope",
+        "evidence"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "scope": {
+          "$ref": "#/$defs/captureScope"
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/sourceEvidence"
+          }
+        },
+        "maxPartBytes": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 8388608
+        },
+        "maxRecordsPerPart": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "maxItemsPerCapture": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "maxContextsPerCapture": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      }
+    },
+    "captureRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "requestId",
+        "scope",
+        "maxResponseBytes"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "requestId": {
+          "$ref": "#/$defs/text"
+        },
+        "scope": {
+          "$ref": "#/$defs/captureScope"
+        },
+        "maxResponseBytes": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 8388608
+        }
+      }
+    },
+    "validateSnapshotInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scope",
+        "snapshot"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "scope": {
+          "$ref": "#/$defs/captureScope"
+        },
+        "snapshot": {
+          "$ref": "#/$defs/file"
+        }
+      }
+    },
+    "transformInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "migrationInput",
+        "snapshotValidation"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "migrationInput": {
+          "$ref": "#/$defs/file"
+        },
+        "snapshotValidation": {
+          "$ref": "#/$defs/file"
+        }
+      }
+    },
+    "targetObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "templateId",
+        "path",
+        "versionsComplete",
+        "versions",
+        "fields"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/guid"
+        },
+        "templateId": {
+          "$ref": "#/$defs/guid"
+        },
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "versionsComplete": {
+          "const": true
+        },
+        "versions": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "language",
+              "version"
+            ],
+            "properties": {
+              "language": {
+                "$ref": "#/$defs/text"
+              },
+              "version": {
+                "$ref": "#/$defs/versionNumber"
+              }
+            }
+          }
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "fieldId",
+              "storage",
+              "present"
+            ],
+            "properties": {
+              "fieldId": {
+                "$ref": "#/$defs/guid"
+              },
+              "storage": {
+                "enum": [
+                  "shared",
+                  "unversioned",
+                  "versioned"
+                ]
+              },
+              "language": {
+                "$ref": "#/$defs/text"
+              },
+              "version": {
+                "$ref": "#/$defs/versionNumber"
+              },
+              "present": {
+                "type": "boolean"
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "present": {
+                      "const": true
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {}
+                  }
+                },
+                "else": {
+                  "not": {
+                    "required": [
+                      "value"
+                    ],
+                    "properties": {
+                      "value": {}
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "targetState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scopeId",
+        "instanceId",
+        "database",
+        "capturedAt",
+        "targetStateId",
+        "rootPath",
+        "valueMode",
+        "queries"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "instanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "database": {
+          "$ref": "#/$defs/text"
+        },
+        "capturedAt": {
+          "$ref": "#/$defs/text"
+        },
+        "targetStateId": {
+          "$ref": "#/$defs/text"
+        },
+        "rootPath": {
+          "$ref": "#/$defs/path"
+        },
+        "valueMode": {
+          "const": "effective"
+        },
+        "queries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "lookup",
+              "value",
+              "exists"
+            ],
+            "properties": {
+              "lookup": {
+                "enum": [
+                  "id",
+                  "path"
+                ]
+              },
+              "value": {
+                "$ref": "#/$defs/text"
+              },
+              "exists": {
+                "type": "boolean"
+              },
+              "item": {
+                "$ref": "#/$defs/targetObservation"
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "exists": {
+                      "const": true
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "item"
+                  ],
+                  "properties": {
+                    "item": {}
+                  }
+                },
+                "else": {
+                  "not": {
+                    "required": [
+                      "item"
+                    ],
+                    "properties": {
+                      "item": {}
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "lookup": {
+                      "const": "id"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "value": {
+                      "$ref": "#/$defs/guid"
+                    }
+                  }
+                },
+                "else": {
+                  "properties": {
+                    "value": {
+                      "$ref": "#/$defs/path"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "planInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "transformInput",
+        "itemPlan",
+        "identityMap",
+        "transformReport",
+        "targetState"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "transformInput": {
+          "$ref": "#/$defs/file"
+        },
+        "itemPlan": {
+          "$ref": "#/$defs/file"
+        },
+        "identityMap": {
+          "$ref": "#/$defs/file"
+        },
+        "transformReport": {
+          "$ref": "#/$defs/file"
+        },
+        "targetState": {
+          "$ref": "#/$defs/file"
+        },
+        "maxItemsPerBatch": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "maxBatchBytes": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 4194304
+        }
+      }
+    },
+    "batchPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scopeId",
+        "mappingRevision",
+        "sourceInstanceId",
+        "targetInstanceId",
+        "database",
+        "targetRootPath",
+        "targetStateId",
+        "targetCapturedAt",
+        "plannerRequestSha256",
+        "inputs",
+        "ready",
+        "reviewOnly",
+        "maxItemsPerBatch",
+        "maxBatchBytes",
+        "batches",
+        "referencesPending",
+        "preconditions"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "mappingRevision": {
+          "$ref": "#/$defs/text"
+        },
+        "sourceInstanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "targetInstanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "database": {
+          "$ref": "#/$defs/text"
+        },
+        "targetRootPath": {
+          "$ref": "#/$defs/path"
+        },
+        "targetStateId": {
+          "$ref": "#/$defs/text"
+        },
+        "targetCapturedAt": {
+          "$ref": "#/$defs/text"
+        },
+        "plannerRequestSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "inputs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "transformInput",
+            "itemPlan",
+            "identityMap",
+            "transformReport",
+            "targetState"
+          ],
+          "properties": {
+            "transformInput": {
+              "$ref": "#/$defs/hash"
+            },
+            "itemPlan": {
+              "$ref": "#/$defs/hash"
+            },
+            "identityMap": {
+              "$ref": "#/$defs/hash"
+            },
+            "transformReport": {
+              "$ref": "#/$defs/hash"
+            },
+            "targetState": {
+              "$ref": "#/$defs/hash"
+            }
+          }
+        },
+        "ready": {
+          "type": "boolean"
+        },
+        "reviewOnly": {
+          "const": true
+        },
+        "maxItemsPerBatch": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "maxBatchBytes": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 4194304
+        },
+        "batches": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "batchId",
+              "operations"
+            ],
+            "properties": {
+              "batchId": {
+                "$ref": "#/$defs/text"
+              },
+              "operations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "operationId",
+                    "kind",
+                    "action",
+                    "targetItemId",
+                    "targetPath",
+                    "templateId",
+                    "parentItemId",
+                    "beforeFingerprint",
+                    "versionsToCreate",
+                    "fields",
+                    "dependsOn"
+                  ],
+                  "properties": {
+                    "operationId": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "kind": {
+                      "enum": [
+                        "content",
+                        "folder"
+                      ]
+                    },
+                    "action": {
+                      "enum": [
+                        "create",
+                        "update"
+                      ]
+                    },
+                    "targetItemId": {
+                      "$ref": "#/$defs/guid"
+                    },
+                    "targetPath": {
+                      "$ref": "#/$defs/path"
+                    },
+                    "templateId": {
+                      "$ref": "#/$defs/guid"
+                    },
+                    "parentItemId": {
+                      "$ref": "#/$defs/guid"
+                    },
+                    "beforeFingerprint": {
+                      "$ref": "#/$defs/hash"
+                    },
+                    "versionsToCreate": {
+                      "type": "array",
+                      "minItems": 0,
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "language",
+                          "version"
+                        ],
+                        "properties": {
+                          "language": {
+                            "$ref": "#/$defs/text"
+                          },
+                          "version": {
+                            "$ref": "#/$defs/versionNumber"
+                          }
+                        }
+                      }
+                    },
+                    "fields": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/fieldValue"
+                      }
+                    },
+                    "dependsOn": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/text"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "referencesPending": {
+          "type": "boolean"
+        },
+        "preconditions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "targetItemId",
+              "targetPath",
+              "parentPath",
+              "beforeFingerprint"
+            ],
+            "properties": {
+              "targetItemId": {
+                "$ref": "#/$defs/guid"
+              },
+              "targetPath": {
+                "$ref": "#/$defs/path"
+              },
+              "parentPath": {
+                "$ref": "#/$defs/path"
+              },
+              "beforeFingerprint": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/hash"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "captureHeader": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scopeId",
+        "instanceId",
+        "database",
+        "sourceStateId",
+        "requestId",
+        "capturedAt",
+        "valueMode"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "instanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "database": {
+          "$ref": "#/$defs/text"
+        },
+        "sourceStateId": {
+          "$ref": "#/$defs/text"
+        },
+        "requestId": {
+          "$ref": "#/$defs/text"
+        },
+        "capturedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d\\d-\\d\\dT.*(?:Z|[+-]\\d\\d:\\d\\d)$"
+        },
+        "valueMode": {
+          "const": "effective"
+        }
+      }
+    },
+    "captureCompletion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requestId",
+        "written",
+        "errors",
+        "partial",
+        "limited"
+      ],
+      "properties": {
+        "requestId": {
+          "$ref": "#/$defs/text"
+        },
+        "written": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "errors": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "partial": {
+          "type": "boolean"
+        },
+        "limited": {
+          "type": "boolean"
+        }
+      }
+    },
+    "executionRequestId": {
+      "type": "string",
+      "pattern": "^exec-[a-f0-9]{24}$"
+    },
+    "executionOperationId": {
+      "type": "string",
+      "pattern": "^op-[a-f0-9]{24}$"
+    },
+    "executionTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "instanceId",
+        "database",
+        "rootPath",
+        "connectorId",
+        "marker"
+      ],
+      "properties": {
+        "instanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "database": {
+          "$ref": "#/$defs/text"
+        },
+        "rootPath": {
+          "$ref": "#/$defs/path"
+        },
+        "connectorId": {
+          "$ref": "#/$defs/text"
+        },
+        "marker": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "templateId",
+            "path"
+          ],
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/guid"
+            },
+            "templateId": {
+              "$ref": "#/$defs/guid"
+            },
+            "path": {
+              "$ref": "#/$defs/path"
+            }
+          }
+        }
+      }
+    },
+    "executionScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scopeId",
+        "targetInstanceId",
+        "database",
+        "rootPath",
+        "connectorId"
+      ],
+      "properties": {
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "targetInstanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "database": {
+          "$ref": "#/$defs/text"
+        },
+        "rootPath": {
+          "$ref": "#/$defs/path"
+        },
+        "connectorId": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "executionCapabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scopeId",
+        "instanceId",
+        "database",
+        "rootPath",
+        "connectorId",
+        "marker",
+        "evidence",
+        "expiresAt",
+        "maxRequestBytes",
+        "maxBackupBytes",
+        "maxJournalBytes",
+        "speRead",
+        "speWrite",
+        "fullItemBackup",
+        "restoreValidated",
+        "exclusiveWriteWindow",
+        "fileDownload",
+        "journalContinuityVerified"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "instanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "database": {
+          "$ref": "#/$defs/text"
+        },
+        "rootPath": {
+          "$ref": "#/$defs/path"
+        },
+        "connectorId": {
+          "$ref": "#/$defs/text"
+        },
+        "marker": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "templateId",
+            "path"
+          ],
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/guid"
+            },
+            "templateId": {
+              "$ref": "#/$defs/guid"
+            },
+            "path": {
+              "$ref": "#/$defs/path"
+            }
+          }
+        },
+        "evidence": {
+          "$ref": "#/$defs/file"
+        },
+        "expiresAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "maxRequestBytes": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 8388608
+        },
+        "maxBackupBytes": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 1073741824
+        },
+        "maxJournalBytes": {
+          "type": "integer",
+          "minimum": 4096,
+          "maximum": 8388608
+        },
+        "speRead": {
+          "const": true
+        },
+        "speWrite": {
+          "const": true
+        },
+        "fullItemBackup": {
+          "const": true
+        },
+        "restoreValidated": {
+          "const": true
+        },
+        "exclusiveWriteWindow": {
+          "const": true
+        },
+        "fileDownload": {
+          "const": true
+        },
+        "journalContinuityVerified": {
+          "const": true
+        },
+        "verifiedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+        }
+      }
+    },
+    "executionInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "taskId",
+        "structuralLanguage",
+        "planInput",
+        "batchPlan",
+        "dryRun",
+        "targetState",
+        "capabilities",
+        "contentMigrationMode"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "taskId": {
+          "$ref": "#/$defs/text"
+        },
+        "batchId": {
+          "$ref": "#/$defs/text"
+        },
+        "structuralLanguage": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9-]{0,34}$"
+        },
+        "planInput": {
+          "$ref": "#/$defs/file"
+        },
+        "batchPlan": {
+          "$ref": "#/$defs/file"
+        },
+        "dryRun": {
+          "$ref": "#/$defs/file"
+        },
+        "targetState": {
+          "$ref": "#/$defs/file"
+        },
+        "capabilities": {
+          "$ref": "#/$defs/file"
+        },
+        "approval": {
+          "$ref": "#/$defs/file"
+        },
+        "review": {
+          "$ref": "#/$defs/file"
+        },
+        "contentMigrationMode": {
+          "const": "mapped-content"
+        },
+        "operationKind": {
+          "$ref": "#/$defs/executionOperationKind"
+        },
+        "existingTargetState": {
+          "$ref": "#/$defs/file"
+        }
+      },
+      "dependentRequired": {
+        "approval": [
+          "review"
+        ],
+        "review": [
+          "approval"
+        ]
+      }
+    },
+    "executionDecision": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "kind": {
+          "const": "mutation"
+        },
+        "scopeId": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "taskId": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "entityId": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "choice": {
+          "const": "approve"
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "userResponse": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "at": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "inputs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "path",
+              "sha256"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "scopeId",
+        "choice",
+        "rationale",
+        "inputs",
+        "taskId",
+        "userResponse",
+        "at"
+      ],
+      "additionalProperties": false
+    },
+    "executionRemoteFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "bytes"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^kajoo/mapped-content/executions/[^\\\\\\u0000-\\u001f]+$"
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1073741824
+        }
+      }
+    },
+    "executionResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operationId",
+        "targetItemId",
+        "targetPath",
+        "templateId",
+        "status",
+        "mutated"
+      ],
+      "properties": {
+        "operationId": {
+          "$ref": "#/$defs/executionOperationId"
+        },
+        "targetItemId": {
+          "$ref": "#/$defs/guid"
+        },
+        "targetPath": {
+          "$ref": "#/$defs/path"
+        },
+        "templateId": {
+          "$ref": "#/$defs/guid"
+        },
+        "status": {
+          "enum": [
+            "success",
+            "failed",
+            "skipped"
+          ]
+        },
+        "mutated": {
+          "type": "boolean"
+        },
+        "post": {
+          "$ref": "#/$defs/targetObservation"
+        },
+        "message": {
+          "$ref": "#/$defs/text"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "success"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "post": {}
+            },
+            "required": [
+              "post"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "skipped"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "mutated": {
+                "const": false
+              },
+              "post": false
+            }
+          }
+        }
+      ]
+    },
+    "executionReused": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operationId",
+        "targetItemId",
+        "targetPath",
+        "templateId",
+        "post"
+      ],
+      "properties": {
+        "operationId": {
+          "$ref": "#/$defs/executionOperationId"
+        },
+        "targetItemId": {
+          "$ref": "#/$defs/guid"
+        },
+        "targetPath": {
+          "$ref": "#/$defs/path"
+        },
+        "templateId": {
+          "$ref": "#/$defs/guid"
+        },
+        "post": {
+          "$ref": "#/$defs/targetObservation"
+        }
+      }
+    },
+    "executionBackup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operationId",
+        "targetItemId",
+        "files"
+      ],
+      "properties": {
+        "operationId": {
+          "$ref": "#/$defs/executionOperationId"
+        },
+        "targetItemId": {
+          "$ref": "#/$defs/guid"
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/executionRemoteFile"
+          },
+          "minItems": 1,
+          "maxItems": 1000
+        }
+      }
+    },
+    "executionReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "kind",
+        "requestId",
+        "reviewSha256",
+        "scopeId",
+        "taskId",
+        "batchPlanSha256",
+        "batchId",
+        "target",
+        "terminal",
+        "status",
+        "backups",
+        "results",
+        "reused",
+        "journal"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "mapped-content-execution"
+        },
+        "requestId": {
+          "$ref": "#/$defs/executionRequestId"
+        },
+        "reviewSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "taskId": {
+          "$ref": "#/$defs/text"
+        },
+        "batchPlanSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "batchId": {
+          "$ref": "#/$defs/text"
+        },
+        "target": {
+          "$ref": "#/$defs/executionTarget"
+        },
+        "terminal": {
+          "const": true
+        },
+        "status": {
+          "enum": [
+            "success",
+            "partial",
+            "failed",
+            "blocked"
+          ]
+        },
+        "backups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/executionBackup"
+          }
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/executionResult"
+          }
+        },
+        "reused": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/executionReused"
+          }
+        },
+        "journal": {
+          "$ref": "#/$defs/executionRemoteFile"
+        },
+        "message": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "executionCheckpointOperation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operationId",
+        "targetItemId",
+        "targetPath",
+        "templateId",
+        "status",
+        "mutated",
+        "requestId",
+        "batchPlanSha256",
+        "batchId"
+      ],
+      "properties": {
+        "operationId": {
+          "$ref": "#/$defs/executionOperationId"
+        },
+        "targetItemId": {
+          "$ref": "#/$defs/guid"
+        },
+        "targetPath": {
+          "$ref": "#/$defs/path"
+        },
+        "templateId": {
+          "$ref": "#/$defs/guid"
+        },
+        "status": {
+          "enum": [
+            "success",
+            "failed",
+            "skipped"
+          ]
+        },
+        "mutated": {
+          "type": "boolean"
+        },
+        "post": {
+          "$ref": "#/$defs/targetObservation"
+        },
+        "message": {
+          "$ref": "#/$defs/text"
+        },
+        "requestId": {
+          "$ref": "#/$defs/executionRequestId"
+        },
+        "batchPlanSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "batchId": {
+          "$ref": "#/$defs/text"
+        },
+        "operationKind": {
+          "$ref": "#/$defs/executionOperationKind"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "success"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "post": {}
+            },
+            "required": [
+              "post"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "skipped"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "mutated": {
+                "const": false
+              },
+              "post": false
+            }
+          }
+        }
+      ]
+    },
+    "executionIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity",
+        "status",
+        "requestId",
+        "batchPlanSha256",
+        "mappingRevision"
+      ],
+      "properties": {
+        "identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "status": {
+          "enum": [
+            "success",
+            "partial",
+            "reused"
+          ]
+        },
+        "requestId": {
+          "$ref": "#/$defs/executionRequestId"
+        },
+        "batchPlanSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "mappingRevision": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "executionActive": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requestId",
+        "reviewSha256",
+        "batchPlanSha256",
+        "batchId",
+        "operationIds",
+        "state",
+        "jobId",
+        "envelopeSha256"
+      ],
+      "properties": {
+        "requestId": {
+          "$ref": "#/$defs/executionRequestId"
+        },
+        "reviewSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "batchPlanSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "batchId": {
+          "$ref": "#/$defs/text"
+        },
+        "operationIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/executionOperationId"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "state": {
+          "enum": [
+            "reserved",
+            "submitted",
+            "unknown"
+          ]
+        },
+        "jobId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/text"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "envelopeSha256": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/hash"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "submitted"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "jobId": {
+                "$ref": "#/$defs/text"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "executionCheckpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scopeId",
+        "targetInstanceId",
+        "database",
+        "rootPath",
+        "connectorId",
+        "sequence",
+        "previousSha256",
+        "active",
+        "completedBatches",
+        "operations",
+        "identities"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "targetInstanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "database": {
+          "$ref": "#/$defs/text"
+        },
+        "rootPath": {
+          "$ref": "#/$defs/path"
+        },
+        "connectorId": {
+          "$ref": "#/$defs/text"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "previousSha256": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/hash"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "active": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/executionActive"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "completedBatches": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "batchPlanSha256",
+              "batchId",
+              "requestId"
+            ],
+            "properties": {
+              "batchPlanSha256": {
+                "$ref": "#/$defs/hash"
+              },
+              "batchId": {
+                "$ref": "#/$defs/text"
+              },
+              "requestId": {
+                "$ref": "#/$defs/executionRequestId"
+              }
+            }
+          }
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/executionCheckpointOperation"
+          }
+        },
+        "identities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/executionIdentity"
+          }
+        }
+      }
+    },
+    "executionEvent": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "version",
+            "action",
+            "scope"
+          ],
+          "properties": {
+            "version": {
+              "const": 1
+            },
+            "action": {
+              "const": "initialize"
+            },
+            "scope": {
+              "$ref": "#/$defs/executionScope"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "version",
+            "checkpointSha256",
+            "requestId",
+            "connectorId",
+            "jobId",
+            "action"
+          ],
+          "properties": {
+            "version": {
+              "const": 1
+            },
+            "checkpointSha256": {
+              "$ref": "#/$defs/hash"
+            },
+            "requestId": {
+              "$ref": "#/$defs/executionRequestId"
+            },
+            "connectorId": {
+              "$ref": "#/$defs/text"
+            },
+            "jobId": {
+              "$ref": "#/$defs/text"
+            },
+            "action": {
+              "const": "submitted"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "version",
+            "action",
+            "checkpointSha256",
+            "requestId",
+            "connectorId"
+          ],
+          "properties": {
+            "version": {
+              "const": 1
+            },
+            "checkpointSha256": {
+              "$ref": "#/$defs/hash"
+            },
+            "requestId": {
+              "$ref": "#/$defs/executionRequestId"
+            },
+            "connectorId": {
+              "$ref": "#/$defs/text"
+            },
+            "jobId": {
+              "$ref": "#/$defs/text"
+            },
+            "action": {
+              "const": "unknown"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "version",
+            "checkpointSha256",
+            "requestId",
+            "connectorId",
+            "jobId",
+            "action",
+            "terminal",
+            "review",
+            "receipt"
+          ],
+          "properties": {
+            "version": {
+              "const": 1
+            },
+            "checkpointSha256": {
+              "$ref": "#/$defs/hash"
+            },
+            "requestId": {
+              "$ref": "#/$defs/executionRequestId"
+            },
+            "connectorId": {
+              "$ref": "#/$defs/text"
+            },
+            "jobId": {
+              "$ref": "#/$defs/text"
+            },
+            "action": {
+              "const": "terminal"
+            },
+            "terminal": {
+              "const": true
+            },
+            "review": {
+              "$ref": "#/$defs/file"
+            },
+            "receipt": {
+              "$ref": "#/$defs/file"
+            }
+          }
+        }
+      ]
+    },
+    "executionOperation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operationId",
+        "kind",
+        "action",
+        "targetItemId",
+        "targetPath",
+        "templateId",
+        "parentItemId",
+        "beforeFingerprint",
+        "versionsToCreate",
+        "fields",
+        "dependsOn",
+        "expectedPost"
+      ],
+      "properties": {
+        "operationId": {
+          "$ref": "#/$defs/text"
+        },
+        "kind": {
+          "enum": [
+            "content",
+            "folder"
+          ]
+        },
+        "action": {
+          "enum": [
+            "create",
+            "update"
+          ]
+        },
+        "targetItemId": {
+          "$ref": "#/$defs/guid"
+        },
+        "targetPath": {
+          "$ref": "#/$defs/path"
+        },
+        "templateId": {
+          "$ref": "#/$defs/guid"
+        },
+        "parentItemId": {
+          "$ref": "#/$defs/guid"
+        },
+        "beforeFingerprint": {
+          "$ref": "#/$defs/hash"
+        },
+        "versionsToCreate": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "language",
+              "version"
+            ],
+            "properties": {
+              "language": {
+                "$ref": "#/$defs/text"
+              },
+              "version": {
+                "$ref": "#/$defs/versionNumber"
+              }
+            }
+          }
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/fieldValue"
+          }
+        },
+        "dependsOn": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        },
+        "expectedPost": {
+          "$ref": "#/$defs/targetObservation"
+        }
+      }
+    },
+    "executionTemplate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "path",
+        "kind",
+        "baseTemplateIds",
+        "fields"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/guid"
+        },
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "kind": {
+          "enum": [
+            "content",
+            "datasource",
+            "folder"
+          ]
+        },
+        "baseTemplateIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/guid"
+          }
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/targetField"
+          }
+        }
+      }
+    },
+    "executionReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "contentMigrationMode",
+        "scopeId",
+        "mappingRevision",
+        "taskId",
+        "batchPlanSha256",
+        "batchId",
+        "scriptSha256",
+        "sourceInstanceId",
+        "target",
+        "structuralLanguage",
+        "maxBackupBytes",
+        "maxJournalBytes",
+        "maxRequestBytes",
+        "capabilities",
+        "inputs",
+        "checkpointSha256",
+        "guards",
+        "operations",
+        "knownSuccess",
+        "templates",
+        "identities"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "contentMigrationMode": {
+          "const": "mapped-content"
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "mappingRevision": {
+          "$ref": "#/$defs/text"
+        },
+        "taskId": {
+          "$ref": "#/$defs/text"
+        },
+        "batchPlanSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "batchId": {
+          "$ref": "#/$defs/text"
+        },
+        "scriptSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "sourceInstanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "target": {
+          "$ref": "#/$defs/executionTarget"
+        },
+        "structuralLanguage": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9-]{0,34}$"
+        },
+        "maxBackupBytes": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 1073741824
+        },
+        "maxJournalBytes": {
+          "type": "integer",
+          "minimum": 4096,
+          "maximum": 8388608
+        },
+        "maxRequestBytes": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 8388608
+        },
+        "capabilities": {
+          "$ref": "#/$defs/executionCapabilities"
+        },
+        "inputs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "planInput",
+            "batchPlan",
+            "dryRun",
+            "targetState",
+            "capabilities"
+          ],
+          "properties": {
+            "planInput": {
+              "$ref": "#/$defs/hash"
+            },
+            "batchPlan": {
+              "$ref": "#/$defs/hash"
+            },
+            "dryRun": {
+              "$ref": "#/$defs/hash"
+            },
+            "targetState": {
+              "$ref": "#/$defs/hash"
+            },
+            "capabilities": {
+              "$ref": "#/$defs/hash"
+            },
+            "existingTargetState": {
+              "$ref": "#/$defs/hash"
+            }
+          }
+        },
+        "checkpointSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "guards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "lookup",
+              "value",
+              "exists"
+            ],
+            "properties": {
+              "lookup": {
+                "enum": [
+                  "id",
+                  "path"
+                ]
+              },
+              "value": {
+                "$ref": "#/$defs/text"
+              },
+              "exists": {
+                "type": "boolean"
+              },
+              "item": {
+                "$ref": "#/$defs/targetObservation"
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "exists": {
+                      "const": true
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "item"
+                  ],
+                  "properties": {
+                    "item": {}
+                  }
+                },
+                "else": {
+                  "not": {
+                    "required": [
+                      "item"
+                    ],
+                    "properties": {
+                      "item": {}
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "lookup": {
+                      "const": "id"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "value": {
+                      "$ref": "#/$defs/guid"
+                    }
+                  }
+                },
+                "else": {
+                  "properties": {
+                    "value": {
+                      "$ref": "#/$defs/path"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "minItems": 1
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/executionOperation"
+          },
+          "maxItems": 100
+        },
+        "knownSuccess": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/executionReused"
+          }
+        },
+        "templates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/executionTemplate"
+          }
+        },
+        "identities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identity"
+          }
+        },
+        "operationKind": {
+          "$ref": "#/$defs/executionOperationKind"
+        },
+        "referenceGuards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "lookup",
+              "value",
+              "exists"
+            ],
+            "properties": {
+              "lookup": {
+                "enum": [
+                  "id",
+                  "path"
+                ]
+              },
+              "value": {
+                "$ref": "#/$defs/text"
+              },
+              "exists": {
+                "type": "boolean"
+              },
+              "item": {
+                "$ref": "#/$defs/targetObservation"
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "exists": {
+                      "const": true
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "item"
+                  ],
+                  "properties": {
+                    "item": {}
+                  }
+                },
+                "else": {
+                  "not": {
+                    "required": [
+                      "item"
+                    ],
+                    "properties": {
+                      "item": {}
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "lookup": {
+                      "const": "id"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "value": {
+                      "$ref": "#/$defs/guid"
+                    }
+                  }
+                },
+                "else": {
+                  "properties": {
+                    "value": {
+                      "$ref": "#/$defs/path"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "referenceBindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/referenceBinding"
+          }
+        }
+      }
+    },
+    "existingReferenceTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceItemId",
+        "targetItemId",
+        "targetPath",
+        "templateId"
+      ],
+      "properties": {
+        "sourceItemId": {
+          "$ref": "#/$defs/guid"
+        },
+        "targetItemId": {
+          "$ref": "#/$defs/guid"
+        },
+        "targetPath": {
+          "$ref": "#/$defs/path"
+        },
+        "templateId": {
+          "$ref": "#/$defs/guid"
+        }
+      }
+    },
+    "referencePlanInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "contentPlanInput",
+        "checkpoint",
+        "targetState"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "contentPlanInput": {
+          "$ref": "#/$defs/file"
+        },
+        "checkpoint": {
+          "$ref": "#/$defs/file"
+        },
+        "targetState": {
+          "$ref": "#/$defs/file"
+        },
+        "existingTargetState": {
+          "$ref": "#/$defs/file"
+        },
+        "maxItemsPerBatch": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "maxBatchBytes": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 4194304
+        }
+      }
+    },
+    "executionOperationKind": {
+      "enum": [
+        "content",
+        "references"
+      ]
+    },
+    "referenceBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceItemId",
+        "targetItemId",
+        "targetPath",
+        "templateId",
+        "existing"
+      ],
+      "properties": {
+        "sourceItemId": {
+          "$ref": "#/$defs/guid"
+        },
+        "targetItemId": {
+          "$ref": "#/$defs/guid"
+        },
+        "targetPath": {
+          "$ref": "#/$defs/path"
+        },
+        "templateId": {
+          "$ref": "#/$defs/guid"
+        },
+        "identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "existing": {
+          "type": "boolean"
+        }
+      }
+    },
+    "verificationInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "contentPlanInput",
+        "checkpoint",
+        "capabilities",
+        "structuralLanguage",
+        "readbackId",
+        "readbacks"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "contentPlanInput": {
+          "$ref": "#/$defs/file"
+        },
+        "checkpoint": {
+          "$ref": "#/$defs/file"
+        },
+        "capabilities": {
+          "$ref": "#/$defs/file"
+        },
+        "structuralLanguage": {
+          "$ref": "#/$defs/text"
+        },
+        "readbackId": {
+          "$ref": "#/$defs/text"
+        },
+        "readbacks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/file"
+          }
+        },
+        "maxQueriesPerRequest": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      }
+    },
+    "verificationCapabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scopeId",
+        "instanceId",
+        "database",
+        "rootPath",
+        "connectorId",
+        "marker",
+        "speRead",
+        "fileDownload",
+        "stableReadWindow",
+        "verifiedAt",
+        "expiresAt",
+        "maxCaptureBytes",
+        "maxRequestBytes",
+        "evidence"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "instanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "database": {
+          "$ref": "#/$defs/text"
+        },
+        "rootPath": {
+          "$ref": "#/$defs/path"
+        },
+        "connectorId": {
+          "$ref": "#/$defs/text"
+        },
+        "marker": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "templateId",
+            "path"
+          ],
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/guid"
+            },
+            "templateId": {
+              "$ref": "#/$defs/guid"
+            },
+            "path": {
+              "$ref": "#/$defs/path"
+            }
+          }
+        },
+        "speRead": {
+          "const": true
+        },
+        "fileDownload": {
+          "const": true
+        },
+        "stableReadWindow": {
+          "const": true
+        },
+        "verifiedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "expiresAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "maxCaptureBytes": {
+          "type": "integer",
+          "minimum": 4096,
+          "maximum": 8388608
+        },
+        "maxRequestBytes": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 8388608
+        },
+        "evidence": {
+          "$ref": "#/$defs/file"
+        }
+      }
+    },
+    "verificationFieldRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fieldId",
+        "storage"
+      ],
+      "properties": {
+        "fieldId": {
+          "$ref": "#/$defs/guid"
+        },
+        "storage": {
+          "enum": [
+            "shared",
+            "unversioned",
+            "versioned"
+          ]
+        },
+        "language": {
+          "$ref": "#/$defs/text"
+        },
+        "version": {
+          "$ref": "#/$defs/versionNumber"
+        }
+      }
+    },
+    "verificationQuery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lookup",
+        "value",
+        "fields"
+      ],
+      "properties": {
+        "lookup": {
+          "enum": [
+            "id",
+            "path"
+          ]
+        },
+        "value": {
+          "$ref": "#/$defs/text"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/verificationFieldRequirement"
+          }
+        }
+      }
+    },
+    "verificationRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "requestId",
+        "expectedSha256",
+        "collectorSha256",
+        "readbackId",
+        "scopeId",
+        "target",
+        "capabilities",
+        "queries",
+        "maxBytes"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^verify-[a-f0-9]{24}$"
+        },
+        "expectedSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "collectorSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "readbackId": {
+          "$ref": "#/$defs/text"
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "target": {
+          "$ref": "#/$defs/executionTarget"
+        },
+        "capabilities": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "speRead",
+            "fileDownload",
+            "stableReadWindow",
+            "verifiedAt",
+            "expiresAt",
+            "maxCaptureBytes",
+            "maxRequestBytes"
+          ],
+          "properties": {
+            "speRead": {
+              "const": true
+            },
+            "fileDownload": {
+              "const": true
+            },
+            "stableReadWindow": {
+              "const": true
+            },
+            "verifiedAt": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+            },
+            "expiresAt": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+            },
+            "maxCaptureBytes": {
+              "type": "integer",
+              "minimum": 4096,
+              "maximum": 8388608
+            },
+            "maxRequestBytes": {
+              "type": "integer",
+              "minimum": 1024,
+              "maximum": 8388608
+            }
+          }
+        },
+        "queries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/verificationQuery"
+          },
+          "minItems": 1,
+          "maxItems": 100
+        },
+        "maxBytes": {
+          "type": "integer",
+          "minimum": 4096,
+          "maximum": 8388608
+        }
+      }
+    },
+    "verificationObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "templateId",
+        "path",
+        "versionsComplete",
+        "versions",
+        "fields",
+        "parentId"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/guid"
+        },
+        "templateId": {
+          "$ref": "#/$defs/guid"
+        },
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "versionsComplete": {
+          "const": true
+        },
+        "versions": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "language",
+              "version"
+            ],
+            "properties": {
+              "language": {
+                "$ref": "#/$defs/text"
+              },
+              "version": {
+                "$ref": "#/$defs/versionNumber"
+              }
+            }
+          }
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "fieldId",
+              "storage",
+              "present"
+            ],
+            "properties": {
+              "fieldId": {
+                "$ref": "#/$defs/guid"
+              },
+              "storage": {
+                "enum": [
+                  "shared",
+                  "unversioned",
+                  "versioned"
+                ]
+              },
+              "language": {
+                "$ref": "#/$defs/text"
+              },
+              "version": {
+                "$ref": "#/$defs/versionNumber"
+              },
+              "present": {
+                "type": "boolean"
+              },
+              "value": {
+                "type": "string"
+              },
+              "fieldType": {
+                "$ref": "#/$defs/text"
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "present": {
+                      "const": true
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "value",
+                    "fieldType"
+                  ],
+                  "properties": {
+                    "value": {},
+                    "fieldType": {}
+                  }
+                },
+                "else": {
+                  "not": {
+                    "required": [
+                      "value"
+                    ],
+                    "properties": {
+                      "value": {}
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "parentId": {
+          "$ref": "#/$defs/guid"
+        }
+      }
+    },
+    "verificationLookup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lookup",
+        "value",
+        "exists"
+      ],
+      "properties": {
+        "lookup": {
+          "enum": [
+            "id",
+            "path"
+          ]
+        },
+        "value": {
+          "$ref": "#/$defs/text"
+        },
+        "exists": {
+          "type": "boolean"
+        },
+        "item": {
+          "$ref": "#/$defs/verificationObservation"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "exists": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "item"
+            ],
+            "properties": {
+              "item": {}
+            }
+          },
+          "else": {
+            "not": {
+              "required": [
+                "item"
+              ],
+              "properties": {
+                "item": {}
+              }
+            }
+          }
+        }
+      ]
+    },
+    "verificationState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scopeId",
+        "instanceId",
+        "database",
+        "rootPath",
+        "targetStateId",
+        "capturedAt",
+        "valueMode",
+        "requestId",
+        "requestSha256",
+        "collectorSha256",
+        "expectedSha256",
+        "complete",
+        "errors",
+        "queries"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "instanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "database": {
+          "$ref": "#/$defs/text"
+        },
+        "rootPath": {
+          "const": "/sitecore"
+        },
+        "targetStateId": {
+          "$ref": "#/$defs/text"
+        },
+        "capturedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "valueMode": {
+          "const": "effective"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^verify-[a-f0-9]{24}$"
+        },
+        "requestSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "collectorSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "expectedSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "complete": {
+          "type": "boolean"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "lookup",
+              "value",
+              "message"
+            ],
+            "properties": {
+              "lookup": {
+                "enum": [
+                  "id",
+                  "path"
+                ]
+              },
+              "value": {
+                "$ref": "#/$defs/text"
+              },
+              "message": {
+                "$ref": "#/$defs/text"
+              }
+            }
+          }
+        },
+        "queries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/verificationLookup"
+          }
+        }
+      }
+    },
+    "verificationReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scopeId",
+        "ready",
+        "contentParity",
+        "requiresUserConfirmation",
+        "expectedSha256",
+        "verificationInputSha256",
+        "checkpointSha256",
+        "readbackId",
+        "summary",
+        "items",
+        "exclusions",
+        "executionOutcomes",
+        "issues",
+        "gaps",
+        "readRequestCount",
+        "completedRequestCount",
+        "boundaries",
+        "deferredParameters"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "ready": {
+          "type": "boolean"
+        },
+        "contentParity": {
+          "type": "boolean"
+        },
+        "requiresUserConfirmation": {
+          "const": true
+        },
+        "expectedSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "verificationInputSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "checkpointSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "readbackId": {
+          "$ref": "#/$defs/text"
+        },
+        "summary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "success",
+            "reused",
+            "failed",
+            "unverified",
+            "excluded"
+          ],
+          "properties": {
+            "success": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "reused": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "failed": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "unverified": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "excluded": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "targetItemId",
+              "targetPath",
+              "templateId",
+              "status",
+              "differences"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "content",
+                  "folder"
+                ]
+              },
+              "targetItemId": {
+                "$ref": "#/$defs/guid"
+              },
+              "targetPath": {
+                "$ref": "#/$defs/path"
+              },
+              "templateId": {
+                "$ref": "#/$defs/guid"
+              },
+              "sourceItemId": {
+                "$ref": "#/$defs/guid"
+              },
+              "status": {
+                "enum": [
+                  "success",
+                  "reused",
+                  "failed",
+                  "unverified"
+                ]
+              },
+              "differences": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "code",
+                    "message"
+                  ],
+                  "properties": {
+                    "code": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "message": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "fieldId": {
+                      "$ref": "#/$defs/guid"
+                    },
+                    "language": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "version": {
+                      "$ref": "#/$defs/versionNumber"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "exclusions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sourceItemId",
+              "reason"
+            ],
+            "properties": {
+              "sourceItemId": {
+                "$ref": "#/$defs/guid"
+              },
+              "reason": {
+                "$ref": "#/$defs/text"
+              }
+            }
+          }
+        },
+        "executionOutcomes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "operationId",
+              "targetItemId",
+              "status",
+              "mutated",
+              "requestId"
+            ],
+            "properties": {
+              "operationId": {
+                "$ref": "#/$defs/text"
+              },
+              "targetItemId": {
+                "$ref": "#/$defs/guid"
+              },
+              "status": {
+                "enum": [
+                  "success",
+                  "failed",
+                  "skipped"
+                ]
+              },
+              "mutated": {
+                "type": "boolean"
+              },
+              "operationKind": {
+                "enum": [
+                  "content",
+                  "references"
+                ]
+              },
+              "requestId": {
+                "$ref": "#/$defs/text"
+              }
+            }
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "code",
+              "message"
+            ],
+            "properties": {
+              "code": {
+                "$ref": "#/$defs/text"
+              },
+              "message": {
+                "$ref": "#/$defs/text"
+              },
+              "targetPath": {
+                "$ref": "#/$defs/path"
+              }
+            }
+          }
+        },
+        "gaps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "lookup",
+              "value",
+              "requestId"
+            ],
+            "properties": {
+              "lookup": {
+                "enum": [
+                  "id",
+                  "path"
+                ]
+              },
+              "value": {
+                "$ref": "#/$defs/text"
+              },
+              "requestId": {
+                "$ref": "#/$defs/text"
+              }
+            }
+          }
+        },
+        "readRequestCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "completedRequestCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "boundaries": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "presentationVerified",
+            "visualVerified",
+            "mediaBinariesVerified",
+            "unrelatedItemsEnumerated",
+            "workflowAdvanced"
+          ],
+          "properties": {
+            "presentationVerified": {
+              "const": false
+            },
+            "visualVerified": {
+              "const": false
+            },
+            "mediaBinariesVerified": {
+              "const": false
+            },
+            "unrelatedItemsEnumerated": {
+              "const": false
+            },
+            "workflowAdvanced": {
+              "const": false
+            }
+          }
+        },
+        "deferredParameters": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "workflowInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scopeId",
+        "activeWorkflow",
+        "inventory",
+        "mappings",
+        "planningTaskId",
+        "evidence",
+        "modeDecision",
+        "mappingDecision",
+        "mediaDecision"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "activeWorkflow": {
+          "$ref": "#/$defs/file"
+        },
+        "inventory": {
+          "$ref": "#/$defs/file"
+        },
+        "mappings": {
+          "$ref": "#/$defs/file"
+        },
+        "modeDecision": {
+          "$ref": "#/$defs/file"
+        },
+        "mappingDecision": {
+          "$ref": "#/$defs/file"
+        },
+        "mediaDecision": {
+          "$ref": "#/$defs/file"
+        },
+        "planningTaskId": {
+          "$ref": "#/$defs/text"
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/file"
+          }
+        }
+      }
+    }
+  }
+}

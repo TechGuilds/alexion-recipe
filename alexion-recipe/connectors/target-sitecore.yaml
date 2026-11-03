@@ -1,0 +1,7 @@
+name: target-sitecore
+type: mcp-kajoo-sitecore-xmc
+description: Target Sitecore instance to deploy the migrated components to
+alternatives:
+  - name: target-sitecore
+    type: mcp-kajoo-sitecore-xp
+    description: Target Sitecore XP instance (in-place Headless SXA)

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "workflowPath": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "decisionsPath": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "scopeId": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "inputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+        },
+        "required": ["path", "sha256"],
+        "additionalProperties": false
+      }
+    },
+    "taskId": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "resultPath": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "changedFilesRoot": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "requiredEvidenceKinds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "pattern": "\\S" }
+    }
+  },
+  "required": ["workflowPath", "decisionsPath", "scopeId", "inputs", "taskId", "resultPath"],
+  "additionalProperties": false
+}

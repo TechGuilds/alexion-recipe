@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kajoo.dev/contracts/sitecore/rendering-coverage-report.schema.json",
+  "title": "Sitecore rendering-coverage-report",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "captureIdentity": {
+      "const": "rendering-variant"
+    },
+    "capturePlanFingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "selection": {
+      "const": "discovery-plan"
+    },
+    "captured": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "total": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "renderingId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "renderingName": {
+            "type": "string"
+          },
+          "variantId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "alternatives": {
+            "type": "array",
+            "items": {
+              "$ref": "common.schema.json#/$defs/page"
+            }
+          },
+          "sourceOccurrences": {
+            "type": "array",
+            "items": {
+              "$ref": "common.schema.json#/$defs/occurrence"
+            }
+          },
+          "definitionOnly": {
+            "type": "boolean"
+          },
+          "status": {
+            "$ref": "common.schema.json#/$defs/coverageStatus"
+          },
+          "severity": {
+            "enum": [
+              "info",
+              "warning",
+              "error"
+            ]
+          },
+          "examples": {
+            "type": "array",
+            "items": {
+              "$ref": "common.schema.json#/$defs/example"
+            }
+          }
+        },
+        "required": [
+          "key",
+          "renderingId",
+          "renderingName",
+          "variantId",
+          "alternatives",
+          "sourceOccurrences",
+          "status",
+          "severity",
+          "examples"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "mappingOnlyDefinitions": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/rendering"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "outcomes": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/outcome"
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "captureIdentity",
+    "capturePlanFingerprint",
+    "selection",
+    "captured",
+    "total",
+    "requirements",
+    "mappingOnlyDefinitions",
+    "warnings",
+    "outcomes"
+  ],
+  "additionalProperties": false
+}

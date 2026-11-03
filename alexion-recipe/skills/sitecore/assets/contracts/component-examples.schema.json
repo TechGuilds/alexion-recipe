@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kajoo.dev/contracts/sitecore/component-examples.schema.json",
+  "title": "Sitecore component-examples",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "synthetic-component-examples"
+    },
+    "synthetic": {
+      "const": true
+    },
+    "visualValidation": {
+      "const": "pending"
+    },
+    "sourceInventory": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "fingerprint": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "path",
+        "sha256",
+        "fingerprint"
+      ],
+      "additionalProperties": false
+    },
+    "mappingPlan": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "fingerprint": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "decisionId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "path",
+        "sha256",
+        "fingerprint",
+        "decisionId"
+      ],
+      "additionalProperties": false
+    },
+    "examples": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/componentExample"
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "kind",
+    "synthetic",
+    "visualValidation",
+    "sourceInventory",
+    "mappingPlan",
+    "examples"
+  ],
+  "additionalProperties": false
+}

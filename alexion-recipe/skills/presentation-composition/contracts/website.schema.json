@@ -1,0 +1,623 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kajoo:presentation-website:v1",
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "sha": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "ref": {
+      "$ref": "urn:kajoo:presentation-composition:v1#/$defs/ref"
+    },
+    "id": {
+      "$ref": "urn:kajoo:presentation-composition:v1#/$defs/id"
+    },
+    "refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ref"
+      },
+      "maxItems": 1000
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "instanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "database": {
+          "$ref": "#/$defs/text"
+        },
+        "stateId": {
+          "$ref": "#/$defs/text"
+        },
+        "siteName": {
+          "$ref": "#/$defs/text"
+        },
+        "language": {
+          "$ref": "#/$defs/text"
+        },
+        "itemVersion": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "deviceId": {
+          "$ref": "#/$defs/id"
+        }
+      },
+      "required": [
+        "instanceId",
+        "database",
+        "stateId",
+        "siteName",
+        "language",
+        "itemVersion",
+        "deviceId"
+      ]
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "$ref": "#/$defs/text"
+          },
+          "passed": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "passed"
+        ]
+      }
+    },
+    "websiteVerificationInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "taskId": {
+          "$ref": "#/$defs/text"
+        },
+        "applicationAuditInput": {
+          "$ref": "#/$defs/ref"
+        },
+        "targetCapture": {
+          "$ref": "#/$defs/ref"
+        },
+        "minimumPages": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "requiredChecks": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        },
+        "browserEvidence": {
+          "$ref": "#/$defs/refs"
+        },
+        "decisions": {
+          "$ref": "#/$defs/refs"
+        },
+        "additionalContextInputs": {
+          "$ref": "#/$defs/refs"
+        }
+      },
+      "required": [
+        "version",
+        "scopeId",
+        "taskId",
+        "applicationAuditInput",
+        "targetCapture",
+        "minimumPages",
+        "requiredChecks",
+        "browserEvidence",
+        "decisions"
+      ]
+    },
+    "targetWebsiteCapture": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "target-website-capture"
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "target": {
+          "$ref": "#/$defs/target"
+        },
+        "capturedAt": {
+          "$ref": "#/$defs/text"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/text"
+        },
+        "applicationPlanSha256": {
+          "$ref": "#/$defs/sha"
+        },
+        "previewManifestSha256": {
+          "$ref": "#/$defs/sha"
+        },
+        "sourceBaseline": {
+          "$ref": "#/$defs/ref"
+        },
+        "pages": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1000,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "pageId": {
+                "$ref": "#/$defs/id"
+              },
+              "route": {
+                "$ref": "#/$defs/text"
+              },
+              "url": {
+                "$ref": "#/$defs/text"
+              },
+              "layout": {
+                "$ref": "#/$defs/ref"
+              },
+              "transport": {
+                "$ref": "#/$defs/ref"
+              }
+            },
+            "required": [
+              "pageId",
+              "route",
+              "url",
+              "layout",
+              "transport"
+            ]
+          }
+        }
+      },
+      "required": [
+        "version",
+        "kind",
+        "scopeId",
+        "target",
+        "capturedAt",
+        "expiresAt",
+        "applicationPlanSha256",
+        "previewManifestSha256",
+        "sourceBaseline",
+        "pages"
+      ]
+    },
+    "targetWebsiteTransport": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "target-layout-service-response"
+        },
+        "target": {
+          "$ref": "#/$defs/target"
+        },
+        "capturedAt": {
+          "$ref": "#/$defs/text"
+        },
+        "requestUrl": {
+          "$ref": "#/$defs/text"
+        },
+        "websiteOrigin": {
+          "$ref": "#/$defs/text"
+        },
+        "statusCode": {
+          "const": 200
+        },
+        "bodySha256": {
+          "$ref": "#/$defs/sha"
+        },
+        "applicationPlanSha256": {
+          "$ref": "#/$defs/sha"
+        },
+        "previewManifestSha256": {
+          "$ref": "#/$defs/sha"
+        }
+      },
+      "required": [
+        "version",
+        "kind",
+        "target",
+        "capturedAt",
+        "requestUrl",
+        "websiteOrigin",
+        "statusCode",
+        "bodySha256",
+        "applicationPlanSha256",
+        "previewManifestSha256"
+      ]
+    },
+    "sourceWebsiteBaseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "approved-source-website-baseline"
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "sourceInstanceId": {
+          "$ref": "#/$defs/text"
+        },
+        "approval": {
+          "$ref": "#/$defs/ref"
+        },
+        "pages": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1000,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "sourcePageId": {
+                "$ref": "#/$defs/id"
+              },
+              "route": {
+                "$ref": "#/$defs/text"
+              },
+              "url": {
+                "$ref": "#/$defs/text"
+              },
+              "screenshot": {
+                "$ref": "#/$defs/ref"
+              }
+            },
+            "required": [
+              "sourcePageId",
+              "route",
+              "url",
+              "screenshot"
+            ]
+          }
+        }
+      },
+      "required": [
+        "version",
+        "kind",
+        "scopeId",
+        "sourceInstanceId",
+        "approval",
+        "pages"
+      ]
+    },
+    "targetWebsiteBrowserEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "target-website-browser-evidence"
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "taskId": {
+          "$ref": "#/$defs/text"
+        },
+        "target": {
+          "$ref": "#/$defs/target"
+        },
+        "capturedAt": {
+          "$ref": "#/$defs/text"
+        },
+        "applicationPlanSha256": {
+          "$ref": "#/$defs/sha"
+        },
+        "previewManifestSha256": {
+          "$ref": "#/$defs/sha"
+        },
+        "targetCaptureSha256": {
+          "$ref": "#/$defs/sha"
+        },
+        "pageId": {
+          "$ref": "#/$defs/id"
+        },
+        "route": {
+          "$ref": "#/$defs/text"
+        },
+        "url": {
+          "$ref": "#/$defs/text"
+        },
+        "screenshot": {
+          "$ref": "#/$defs/ref"
+        },
+        "checks": {
+          "$ref": "#/$defs/checks"
+        },
+        "errors": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        },
+        "comparison": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "sourceScreenshot": {
+              "$ref": "#/$defs/ref"
+            },
+            "targetScreenshot": {
+              "$ref": "#/$defs/ref"
+            },
+            "passed": {
+              "type": "boolean"
+            },
+            "notes": {
+              "$ref": "#/$defs/text"
+            }
+          },
+          "required": [
+            "sourceScreenshot",
+            "targetScreenshot",
+            "passed",
+            "notes"
+          ]
+        },
+        "navigation": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1000,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "fromUrl": {
+                "$ref": "#/$defs/text"
+              },
+              "toUrl": {
+                "$ref": "#/$defs/text"
+              },
+              "passed": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "fromUrl",
+              "toUrl",
+              "passed"
+            ]
+          }
+        }
+      },
+      "required": [
+        "version",
+        "kind",
+        "scopeId",
+        "taskId",
+        "target",
+        "capturedAt",
+        "applicationPlanSha256",
+        "previewManifestSha256",
+        "targetCaptureSha256",
+        "pageId",
+        "route",
+        "url",
+        "screenshot",
+        "checks",
+        "errors",
+        "comparison",
+        "navigation"
+      ]
+    },
+    "websiteVerificationReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "target-website-verification"
+        },
+        "scopeId": {
+          "$ref": "#/$defs/text"
+        },
+        "taskId": {
+          "$ref": "#/$defs/text"
+        },
+        "ready": {
+          "type": "boolean"
+        },
+        "applicationPlanSha256": {
+          "$ref": "#/$defs/sha"
+        },
+        "previewManifestSha256": {
+          "$ref": "#/$defs/sha"
+        },
+        "targetCaptureSha256": {
+          "$ref": "#/$defs/sha"
+        },
+        "verifiedPageIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "untestedPageIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "covered": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        },
+        "missing": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        },
+        "targetWrites": {
+          "const": false
+        },
+        "workflowAdvanced": {
+          "const": false
+        },
+        "contexts": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1000,
+          "items": {
+            "$ref": "#/$defs/websiteContextResult"
+          }
+        },
+        "untestedContexts": {
+          "type": "array",
+          "maxItems": 1000,
+          "items": {
+            "$ref": "#/$defs/websiteContext"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "kind",
+        "scopeId",
+        "taskId",
+        "ready",
+        "applicationPlanSha256",
+        "previewManifestSha256",
+        "targetCaptureSha256",
+        "verifiedPageIds",
+        "untestedPageIds",
+        "covered",
+        "missing",
+        "issues",
+        "limitations",
+        "targetWrites",
+        "workflowAdvanced",
+        "contexts",
+        "untestedContexts"
+      ]
+    },
+    "websiteContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "previewManifestSha256": {
+          "$ref": "#/$defs/sha"
+        },
+        "target": {
+          "$ref": "#/$defs/target"
+        }
+      },
+      "required": [
+        "previewManifestSha256",
+        "target"
+      ]
+    },
+    "websiteContextResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "previewManifestSha256": {
+          "$ref": "#/$defs/sha"
+        },
+        "target": {
+          "$ref": "#/$defs/target"
+        },
+        "ready": {
+          "type": "boolean"
+        },
+        "verifiedPageIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "untestedPageIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "targetCaptureSha256": {
+          "$ref": "#/$defs/sha"
+        },
+        "covered": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        },
+        "missing": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        }
+      },
+      "required": [
+        "previewManifestSha256",
+        "target",
+        "ready",
+        "verifiedPageIds",
+        "untestedPageIds",
+        "targetCaptureSha256",
+        "covered",
+        "missing"
+      ]
+    }
+  }
+}

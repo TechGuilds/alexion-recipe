@@ -1,0 +1,6 @@
+{
+  "packages/kajoo-code-analysis/src/analyzers/layout-analyzer.ts": "f9cd98220d0a23d0c9dd5bf30df8932885045f8d39c1403bbe0d50fb964ece68",
+  "packages/kajoo-sitecore/src/code/analysis/sitecore-layout-analyzer.ts": "2ff3ab54cb6947cdff8b19b6e056b032c36f5acf85e3db90cf86eea0c58c677c",
+  "packages/kajoo-sitecore/src/code/analysis/content-sdk-layout-analyzer.ts": "610db8fdecedb7c8f239669896e57dcdc979c31ed06e53b24f1cca3b658ad5b2",
+  "packages/kajoo-runtime/src/code-analysis/layout-analysis.service.ts": "36d87a3aa2ed1faae22975de95b629f3774c326579869527a8b2822efa605e05"
+}

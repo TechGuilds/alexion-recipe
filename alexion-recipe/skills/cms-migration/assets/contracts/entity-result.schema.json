@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "version": { "const": 1 },
+    "taskId": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "entityId": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "outcome": { "enum": ["success", "failed", "blocked", "needs-redo", "skipped"] },
+    "summary": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "changedFiles": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "pattern": "\\S" },
+      "uniqueItems": true
+    },
+    "checkpoint": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "properties": {
+            "reference": { "type": "string", "minLength": 1, "pattern": "\\S" },
+            "scope": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1, "pattern": "\\S" },
+              "uniqueItems": true
+            }
+          },
+          "required": ["reference", "scope"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "passed": { "type": "boolean" },
+          "detail": { "type": "string" }
+        },
+        "required": ["name", "passed"],
+        "additionalProperties": false
+      }
+    },
+    "decisionIds": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "pattern": "\\S" },
+      "uniqueItems": true
+    },
+    "unresolved": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "pattern": "\\S" },
+      "uniqueItems": true
+    }
+  },
+  "required": ["version", "taskId", "entityId", "outcome", "summary", "changedFiles", "checkpoint", "checks", "decisionIds", "unresolved"],
+  "additionalProperties": false
+}

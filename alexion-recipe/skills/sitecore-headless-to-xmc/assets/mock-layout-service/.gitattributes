@@ -1,0 +1,2 @@
+# Preserve the manifest-verified historical template bytes, including whitespace.
+*.template.txt -whitespace

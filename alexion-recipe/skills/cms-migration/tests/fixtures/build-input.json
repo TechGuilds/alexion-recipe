@@ -1,0 +1,80 @@
+{
+  "inventory": {
+    "version": 1,
+    "scopeId": "example:en",
+    "entities": [
+      {
+        "id": "hero",
+        "kind": "mvc",
+        "source": {
+          "identity": "hero",
+          "path": "/renderings/hero"
+        },
+        "scope": "included",
+        "parentIds": [],
+        "routeIds": [
+          "/en/home"
+        ],
+        "joins": [],
+        "uncertainty": []
+      },
+      {
+        "id": "card",
+        "kind": "mvc",
+        "source": {
+          "identity": "card",
+          "path": "/renderings/card"
+        },
+        "scope": "included",
+        "parentIds": [
+          "hero"
+        ],
+        "routeIds": [
+          "/en/home"
+        ],
+        "joins": [],
+        "uncertainty": []
+      }
+    ]
+  },
+  "profile": {
+    "rules": [
+      {
+        "kind": "mvc",
+        "phaseId": "code-migration",
+        "anchorTaskId": "code.items",
+        "prefix": "mvc",
+        "agent": "frontend-developer"
+      }
+    ]
+  },
+  "workflow": {
+    "version": 1,
+    "phases": [
+      {
+        "id": "setup",
+        "title": "0 — Setup",
+        "tasks": [
+          { "id": "setup.audit", "title": "Audit Setup", "status": "done", "dependsOn": [] }
+        ]
+      },
+      {
+        "id": "discovery",
+        "title": "1 — Discovery",
+        "tasks": [
+          { "id": "discovery.audit", "title": "Audit Discovery", "status": "done", "dependsOn": ["setup.audit"] }
+        ]
+      },
+      {
+        "id": "code-migration",
+        "title": "2 — Code Migration",
+        "tasks": [
+          { "id": "code.items", "title": "Migrate approved component batches", "status": "pending", "dependsOn": ["discovery.audit"] }
+        ]
+      }
+    ]
+  },
+  "availableAgents": [
+    "frontend-developer"
+  ]
+}

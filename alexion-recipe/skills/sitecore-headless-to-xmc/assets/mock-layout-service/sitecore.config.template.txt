@@ -1,0 +1,37 @@
+import { defineConfig } from '@sitecore-content-sdk/nextjs/config';
+
+/**
+ * Sitecore Configuration with Mock Mode Support
+ * 
+ * When USE_MOCK_LAYOUT_SERVICE=true, we provide dummy API config to pass validation.
+ * The MockSitecoreClient intercepts actual API calls and serves local JSON data.
+ * 
+ * @type {import('@sitecore-content-sdk/nextjs/config').SitecoreConfig}
+ * See the documentation for `defineConfig`:
+ * https://doc.sitecore.com/xmc/en/developers/content-sdk/the-sitecore-configuration-file.html
+ */
+
+const isMockMode = process.env.USE_MOCK_LAYOUT_SERVICE === 'true';
+
+// In mock mode, we need to provide minimal config to pass validation
+// but the actual API calls won't be made - MockSitecoreClient intercepts them
+const mockModeOverrides = isMockMode ? {
+  // Provide a dummy context ID to pass validation
+  // This won't be used since MockSitecoreClient intercepts API calls
+  api: {
+    edge: {
+      contextId: process.env.SITECORE_EDGE_CONTEXT_ID || 'mock-disconnected-mode',
+    },
+  },
+  // Disable features that require live Sitecore connection
+  redirects: {
+    enabled: false,
+  },
+  personalize: {
+    enabled: false,
+  },
+} : {};
+
+export default defineConfig({
+  ...mockModeOverrides,
+});

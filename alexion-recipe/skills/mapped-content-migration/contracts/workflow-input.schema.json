@@ -1,0 +1,5 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kajoo:mapped-content:workflow-input:v1",
+  "$ref": "urn:kajoo:mapped-content:definitions:v1#/$defs/workflowInput"
+}

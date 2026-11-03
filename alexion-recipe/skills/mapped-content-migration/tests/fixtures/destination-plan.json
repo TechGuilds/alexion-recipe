@@ -1,0 +1,198 @@
+{
+  "version": 1,
+  "scopeId": "fixture-site",
+  "targetRootPath": "/sitecore/content/Site",
+  "rules": [
+    {
+      "sourceTemplateId": "{3F2A9C54-81D7-4B6E-A0C3-5E7D2B91F4A8}",
+      "targetTemplateId": "{C81E6D27-4A93-4F05-B7D2-9A3E5C0F1B64}",
+      "outputKey": "item-0",
+      "kind": "page",
+      "scope": "global",
+      "identity": "source-item",
+      "pathPattern": "/sitecore/content/Site/Migrated/Article Page/{sourceName}-0",
+      "existingItem": "create-only",
+      "collision": "block"
+    },
+    {
+      "sourceTemplateId": "{9D40B7E3-2C1A-48F6-8E55-A7B3C6D2E019}",
+      "targetTemplateId": "{5A7E1C93-D2B8-4E40-96F1-3C8D0A4B7E25}",
+      "outputKey": "item-0",
+      "kind": "page",
+      "scope": "global",
+      "identity": "source-item",
+      "pathPattern": "/sitecore/content/Site/Migrated/Product Page/{sourceName}-0",
+      "existingItem": "create-only",
+      "collision": "block"
+    },
+    {
+      "sourceTemplateId": "{9D40B7E3-2C1A-48F6-8E55-A7B3C6D2E019}",
+      "targetTemplateId": "{657E1C93-D2B8-4E40-96F1-3C8D0A4B7E25}",
+      "outputKey": "item-1",
+      "kind": "datasource",
+      "scope": "page-local",
+      "identity": "source-item-and-page",
+      "pathPattern": "{targetPagePath}/Data/Brands/{sourceName}",
+      "existingItem": "create-only",
+      "collision": "block",
+      "folderRuleKey": "brands"
+    },
+    {
+      "sourceTemplateId": "{E6B13A58-7F04-4D92-B1C7-2A9F8D3E5C60}",
+      "targetTemplateId": "{1B8D5F72-A3C6-4E19-8D04-6F2E9B7A3C51}",
+      "outputKey": "item-0",
+      "kind": "page",
+      "scope": "global",
+      "identity": "source-item",
+      "pathPattern": "/sitecore/content/Site/Migrated/Landing Page/{sourceName}-0",
+      "existingItem": "create-only",
+      "collision": "block"
+    },
+    {
+      "sourceTemplateId": "{52125DA0-B30E-4D08-B598-ED75DCB7B2BE}",
+      "targetTemplateId": "{BAAD2AC4-0F7C-4520-86B7-9D1500B75695}",
+      "outputKey": "item-0",
+      "kind": "page",
+      "scope": "global",
+      "identity": "source-item",
+      "pathPattern": "/sitecore/content/Site/Migrated/News Item/{sourceName}-0",
+      "existingItem": "create-only",
+      "collision": "block"
+    },
+    {
+      "sourceTemplateId": "{F19D02F3-8E47-4058-811A-CE68B3306EC1}",
+      "targetTemplateId": "{BAAD2AC4-0F7C-4520-86B7-9D1500B75695}",
+      "outputKey": "item-0",
+      "kind": "page",
+      "scope": "global",
+      "identity": "source-item",
+      "pathPattern": "/sitecore/content/Site/Migrated/Blog Post/{sourceName}-0",
+      "existingItem": "create-only",
+      "collision": "block"
+    },
+    {
+      "sourceTemplateId": "{B50DA24C-83ED-4BCD-9549-5E80005664CF}",
+      "targetTemplateId": "{8495DE0B-76C1-49BA-AC87-27170506BB72}",
+      "outputKey": "parameters",
+      "kind": "parameters",
+      "scope": "rendering-instance",
+      "identity": "rendering-instance",
+      "existingItem": "create-only",
+      "collision": "block"
+    },
+    {
+      "sourceTemplateId": "{B50DA24C-83ED-4BCD-9549-5E80005664CF}",
+      "targetTemplateId": "{4DDC21FD-4EE9-4F21-9915-A46D89B207DE}",
+      "outputKey": "banner-data",
+      "kind": "datasource",
+      "scope": "global",
+      "identity": "rendering-instance",
+      "pathPattern": "/sitecore/content/Site/Migrated/HeroBanner Parameters/{sourceName}-1",
+      "existingItem": "create-only",
+      "collision": "block"
+    },
+    {
+      "sourceTemplateId": "{21FDB2FD-6D8D-4C3E-A852-0E42D7A59DD1}",
+      "targetTemplateId": "{4DDC21FD-4EE9-4F21-9915-A46D89B207DE}",
+      "outputKey": "banner-data",
+      "kind": "datasource",
+      "scope": "global",
+      "identity": "source-item",
+      "pathPattern": "/sitecore/content/Site/Migrated/HeroBanner Datasource/{sourceName}-0",
+      "existingItem": "create-only",
+      "collision": "block"
+    },
+    {
+      "sourceTemplateId": "{570A9D48-1B30-4001-AF62-28DE5383F8E9}",
+      "targetTemplateId": "{8495DE0B-76C1-49BA-AC87-27170506BB72}",
+      "outputKey": "parameters",
+      "kind": "parameters",
+      "scope": "rendering-instance",
+      "identity": "rendering-instance",
+      "existingItem": "create-only",
+      "collision": "block"
+    },
+    {
+      "sourceTemplateId": "{570A9D48-1B30-4001-AF62-28DE5383F8E9}",
+      "targetTemplateId": "{4DDC21FD-4EE9-4F21-9915-A46D89B207DE}",
+      "outputKey": "banner-data",
+      "kind": "datasource",
+      "scope": "global",
+      "identity": "rendering-instance",
+      "pathPattern": "/sitecore/content/Site/Migrated/PromoBanner Parameters/{sourceName}-1",
+      "existingItem": "create-only",
+      "collision": "block"
+    },
+    {
+      "sourceTemplateId": "{B4301E08-5CB5-49E7-A6F3-68C4C2706D7C}",
+      "targetTemplateId": "{4DDC21FD-4EE9-4F21-9915-A46D89B207DE}",
+      "outputKey": "banner-data",
+      "kind": "datasource",
+      "scope": "global",
+      "identity": "source-item",
+      "pathPattern": "/sitecore/content/Site/Migrated/PromoBanner Datasource/{sourceName}-0",
+      "existingItem": "create-only",
+      "collision": "block"
+    },
+    {
+      "sourceTemplateId": "{B084D129-1044-4E8D-8B4E-CFC7B2831E8E}",
+      "targetTemplateId": "{8495DE0B-76C1-49BA-AC87-27170506BB72}",
+      "outputKey": "parameters",
+      "kind": "parameters",
+      "scope": "rendering-instance",
+      "identity": "rendering-instance",
+      "existingItem": "create-only",
+      "collision": "block"
+    },
+    {
+      "sourceTemplateId": "{0980304E-1A3D-4FB4-9282-27C669E1293D}",
+      "targetTemplateId": "{4DDC21FD-4EE9-4F21-9915-A46D89B207DE}",
+      "outputKey": "banner-data",
+      "kind": "datasource",
+      "scope": "global",
+      "identity": "source-item",
+      "pathPattern": "/sitecore/content/Site/Migrated/CampaignBanner Datasource/{sourceName}-0",
+      "existingItem": "create-only",
+      "collision": "block"
+    },
+    {
+      "sourceTemplateId": "{A3B67F7C-70C5-4481-BB17-F5D17A71042A}",
+      "targetTemplateId": "{B4AE6060-4217-4916-B80D-3AAD3E07BBAD}",
+      "outputKey": "banner-data",
+      "kind": "datasource",
+      "scope": "global",
+      "identity": "source-item",
+      "pathPattern": "/sitecore/content/Site/Migrated/ArticleTeaser Datasource/{sourceName}-0",
+      "existingItem": "create-only",
+      "collision": "block"
+    },
+    {
+      "sourceTemplateId": "{70F710AD-FEAD-4AEC-95D1-3439F7A3ACE7}",
+      "targetTemplateId": "{B4AE6060-4217-4916-B80D-3AAD3E07BBAD}",
+      "outputKey": "banner-data",
+      "kind": "datasource",
+      "scope": "global",
+      "identity": "source-item",
+      "pathPattern": "/sitecore/content/Site/Migrated/NewsTeaser Datasource/{sourceName}-0",
+      "existingItem": "create-only",
+      "collision": "block"
+    }
+  ],
+  "folders": [
+    {
+      "key": "brands",
+      "segments": [
+        {
+          "name": "Data",
+          "templateId": "{00000000-0000-4000-8000-000000000001}"
+        },
+        {
+          "name": "Brands",
+          "templateId": "{00000000-0000-4000-8000-000000000001}"
+        }
+      ]
+    }
+  ],
+  "referenceRules": [],
+  "exclusions": []
+}

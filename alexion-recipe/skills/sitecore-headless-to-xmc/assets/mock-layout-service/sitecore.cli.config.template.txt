@@ -1,0 +1,42 @@
+import { defineCliConfig } from '@sitecore-content-sdk/nextjs/config-cli';
+import {
+  generateSites,
+  generateMetadata,
+  extractFiles,
+  writeImportMap,
+} from '@sitecore-content-sdk/nextjs/tools';
+import { generateMockSites } from './src/lib/generate-mock-sites';
+import scConfig from './sitecore.config';
+
+// Check if running in mock/disconnected mode
+const isMockMode = process.env.USE_MOCK_LAYOUT_SERVICE === 'true';
+
+// Build commands - use generateMockSites() in mock mode instead of generateSites()
+const buildCommands = isMockMode
+  ? [
+      generateMetadata(),
+      generateMockSites(),
+      extractFiles(),
+      writeImportMap({
+        paths: ['src/components'],
+      }),
+    ]
+  : [
+      generateMetadata(),
+      generateSites(),
+      extractFiles(),
+      writeImportMap({
+        paths: ['src/components'],
+      }),
+    ];
+
+export default defineCliConfig({
+  config: scConfig,
+  build: {
+    commands: buildCommands,
+  },
+  componentMap: {
+    paths: ['src/components'],
+    exclude: ['src/components/content-sdk/*'],
+  },
+});

@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "description": "Optional skills that supply canonical workflow operations for this profile. Shared cms-migration scripts read this registry; each provider skill exports the hooks named below from its own module.",
+  "contentModes": ["mapped-content", "native-serialization"],
+  "providers": [
+    {
+      "id": "presentation",
+      "label": "Presentation",
+      "skill": "presentation-composition",
+      "module": "scripts/workflow-provider.mjs",
+      "evidenceKind": "presentation-operation",
+      "packetKey": "presentation",
+      "inputsField": "presentationInputs",
+      "entityKindPrefix": "presentation:",
+      "phaseSelectors": [
+        { "phaseId": "presentation-composition" },
+        { "phaseId": "verification", "anyTaskId": ["verification.website", "verification.approve"] }
+      ],
+      "replayTaskIds": [
+        "presentation.compose",
+        "presentation.preview",
+        "presentation.review",
+        "presentation.apply",
+        "presentation.audit",
+        "presentation.approve",
+        "verification.website",
+        "verification.approve"
+      ]
+    },
+    {
+      "id": "mapped-content",
+      "label": "Mapped-content",
+      "skill": "mapped-content-migration",
+      "module": "scripts/workflow-provider.mjs",
+      "evidenceKind": "mapped-content-operation",
+      "packetKey": "mappedContent",
+      "inputsField": "mappedContentInputs",
+      "contentMode": "mapped-content",
+      "entityKindPrefix": "mapped-content:",
+      "priorAttemptsError": "priorTaskAttempts requires an explicit content transfer method decision for mapped-content",
+      "entityGuardError": "Mapped-content operation entities require their approved mapped-content workflow; native dispatch cannot substitute for it"
+    }
+  ]
+}

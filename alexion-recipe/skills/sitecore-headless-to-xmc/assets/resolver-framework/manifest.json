@@ -1,0 +1,49 @@
+{
+  "files": [
+    {
+      "target": "src/lib/layout-normalizer.ts",
+      "asset": "layout-normalizer.template.txt",
+      "sha256": "aaf9393fc5adcb43864e743acefe827a1ea962df2b8dc4bf831a7da4c9a716f2"
+    },
+    {
+      "target": "src/lib/normalizing-sitecore-client.ts",
+      "asset": "normalizing-sitecore-client.template.txt",
+      "sha256": "5a1fa88f82c21686c98c227ef8c5a29452bb51aedbc9ec3fda5e00570701038a"
+    },
+    {
+      "target": "src/lib/media/bynder-asset-normalizer.ts",
+      "asset": "bynder-asset-normalizer.template.txt",
+      "sha256": "54a8ed50d0f234d0e541afd334d73e027578b1a8f806ad7172b6757506a1ee92"
+    },
+    {
+      "target": "src/lib/server/resolver-adapter.types.ts",
+      "asset": "resolver-adapter.types.template.txt",
+      "sha256": "84d21cf954546733a67e8e7878f6279708b394e7966051305b8146de4d9b25f4"
+    },
+    {
+      "target": "src/lib/server/resolver-registry.ts",
+      "asset": "resolver-registry.template.txt",
+      "sha256": "5f83dae96a4b52db9f53bc9b9e472901518babfaa6daa75d0d76105783f056ca"
+    },
+    {
+      "target": "src/lib/server/resolver-strategy.ts",
+      "asset": "resolver-strategy.template.txt",
+      "sha256": "712eec92ddb33f5c41b926358c50cf6ef0f5fceca8c62573dbcbbdadf2fb4b16"
+    },
+    {
+      "target": "src/lib/server/resolver-adapter.stub.ts.template",
+      "asset": "resolver-adapter-stub.template.txt",
+      "sha256": "51342e52274ba93c4b8f483a65461b453d9ff8b47b0db496848a14417d733215"
+    },
+    {
+      "target": "src/lib/server/resolvers/README.md",
+      "asset": "resolver-folder-readme.template.txt",
+      "sha256": "8b25f6b0f60ca953a587e7cf58bc62e0f0dc0eeb70296aad58518d0454b7ed90"
+    },
+    {
+      "target": "src/lib/sitecore-client.ts",
+      "asset": "sitecore-client.template.txt",
+      "sha256": "2ec1998faf1689e091eda67d82f832f645c92324d11de540e1f66f23bf2ca6c4"
+    }
+  ]
+}

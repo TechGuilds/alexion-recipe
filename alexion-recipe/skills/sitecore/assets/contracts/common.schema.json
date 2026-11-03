@@ -1,0 +1,1830 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kajoo.dev/contracts/sitecore/common.schema.json",
+  "title": "Sitecore common",
+  "$defs": {
+    "json": {
+      "anyOf": [
+        {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "null"
+          ]
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/json"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "common.schema.json#/$defs/json"
+          }
+        }
+      ]
+    },
+    "fields": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "common.schema.json#/$defs/json"
+      }
+    },
+    "parameters": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "ruleMap": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "fileRef": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "inputFile": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "enum": [
+            "source",
+            "target",
+            "manifest",
+            "coverage"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "role",
+        "path",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "page": {
+      "type": "object",
+      "properties": {
+        "route": {
+          "type": "string",
+          "minLength": 1
+        },
+        "itemId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "itemPath": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "route"
+      ],
+      "additionalProperties": false
+    },
+    "selectedPage": {
+      "type": "object",
+      "properties": {
+        "route": {
+          "type": "string",
+          "minLength": 1
+        },
+        "itemId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "itemPath": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "requirementKeys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "route",
+        "requirementKeys"
+      ],
+      "additionalProperties": false
+    },
+    "occurrence": {
+      "type": "object",
+      "properties": {
+        "itemId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "itemPath": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "instanceId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "deviceId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "placeholder": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "datasource": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "route": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "routeIssue": {
+          "enum": [
+            "shared-design-requires-page",
+            "route-conflict",
+            "route-unresolved"
+          ]
+        },
+        "parameters": {
+          "$ref": "common.schema.json#/$defs/parameters"
+        }
+      },
+      "required": [
+        "itemId",
+        "itemPath",
+        "language",
+        "instanceId",
+        "deviceId",
+        "placeholder",
+        "datasource",
+        "route"
+      ],
+      "additionalProperties": false
+    },
+    "requirement": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "renderingId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "renderingName": {
+          "type": "string"
+        },
+        "configurationKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "variantId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "parameters": {
+          "$ref": "common.schema.json#/$defs/parameters"
+        },
+        "sourceOccurrences": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/occurrence"
+          }
+        },
+        "instanceIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "definitionOnly": {
+          "type": "boolean"
+        },
+        "routes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourceUsage": {
+          "enum": [
+            "used",
+            "unused",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "key",
+        "renderingId",
+        "renderingName",
+        "configurationKey",
+        "variantId",
+        "parameters"
+      ],
+      "additionalProperties": false
+    },
+    "captureRequirement": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "renderingId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "renderingName": {
+          "type": "string"
+        },
+        "variantId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "alternatives": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/page"
+          }
+        },
+        "sourceOccurrences": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/occurrence"
+          }
+        },
+        "definitionOnly": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "key",
+        "renderingId",
+        "renderingName",
+        "variantId",
+        "alternatives"
+      ],
+      "additionalProperties": false
+    },
+    "usageExample": {
+      "type": "object",
+      "properties": {
+        "itemId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "itemPath": {
+          "type": "string"
+        },
+        "route": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "language": {
+          "type": "string"
+        },
+        "placeholder": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "itemId",
+        "itemPath",
+        "route",
+        "language",
+        "placeholder"
+      ],
+      "additionalProperties": false
+    },
+    "renderingVariant": {
+      "type": "object",
+      "properties": {
+        "variantId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "observed": {
+          "type": "boolean"
+        },
+        "usageStatus": {
+          "enum": [
+            "used",
+            "unused",
+            "unknown"
+          ]
+        },
+        "pageCount": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "variantId",
+        "name",
+        "path",
+        "observed",
+        "usageStatus",
+        "pageCount"
+      ],
+      "additionalProperties": false
+    },
+    "rendering": {
+      "type": "object",
+      "properties": {
+        "renderingId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "componentName": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "discoverySources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "usage": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "used",
+                "unused",
+                "unknown"
+              ]
+            },
+            "pageCount": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "instanceCount": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "countsComplete": {
+              "type": "boolean"
+            },
+            "examples": {
+              "type": "array",
+              "items": {
+                "$ref": "common.schema.json#/$defs/usageExample"
+              }
+            }
+          },
+          "required": [
+            "status",
+            "pageCount",
+            "instanceCount",
+            "countsComplete",
+            "examples"
+          ],
+          "additionalProperties": false
+        },
+        "implementation": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "found",
+                "unknown"
+              ]
+            },
+            "filePath": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "registeredName": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "status",
+            "filePath",
+            "registeredName",
+            "evidence"
+          ],
+          "additionalProperties": false
+        },
+        "dependencies": {
+          "type": "object",
+          "properties": {
+            "datasourceTemplateId": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "parametersTemplateId": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "datasourceTemplateReference": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "parametersTemplateReference": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "datasourceLocation": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "resolverReference": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "placeholderSettingsReferences": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "layoutServicePlaceholders": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "controller": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "controllerAction": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "viewPath": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "componentQuery": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "datasourceTemplateIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "placeholderKeys": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "datasourceTemplateId",
+            "parametersTemplateId",
+            "datasourceTemplateReference",
+            "parametersTemplateReference",
+            "datasourceLocation",
+            "resolverReference",
+            "placeholderSettingsReferences",
+            "layoutServicePlaceholders",
+            "controller",
+            "controllerAction",
+            "viewPath",
+            "componentQuery",
+            "datasourceTemplateIds",
+            "placeholderKeys"
+          ],
+          "additionalProperties": false
+        },
+        "variants": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/renderingVariant"
+          }
+        },
+        "configurations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "configurationKey": {
+                "type": "string",
+                "minLength": 1
+              },
+              "variantId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "parameters": {
+                "$ref": "common.schema.json#/$defs/parameters"
+              },
+              "pageCount": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "configurationKey",
+              "variantId",
+              "parameters",
+              "pageCount"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "evidence": {
+          "type": "object",
+          "properties": {
+            "occurrencesFile": {
+              "type": "string",
+              "minLength": 1
+            },
+            "definitionsFile": {
+              "type": "string",
+              "minLength": 1
+            },
+            "variantsFile": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "occurrencesFile",
+            "definitionsFile",
+            "variantsFile"
+          ],
+          "additionalProperties": false
+        },
+        "status": {
+          "const": "mapping-only"
+        }
+      },
+      "required": [
+        "renderingId",
+        "name",
+        "path",
+        "componentName",
+        "discoverySources",
+        "usage",
+        "implementation",
+        "dependencies",
+        "variants",
+        "configurations",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    "variant": {
+      "type": "object",
+      "properties": {
+        "variantId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "renderingIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fields": {
+          "$ref": "common.schema.json#/$defs/parameters"
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "template": {
+                "type": "string"
+              },
+              "fields": {
+                "$ref": "common.schema.json#/$defs/parameters"
+              }
+            },
+            "required": [
+              "path",
+              "template",
+              "fields"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "observed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "variantId",
+        "name",
+        "path",
+        "renderingIds",
+        "fields",
+        "nodes",
+        "observed"
+      ],
+      "additionalProperties": false
+    },
+    "renderingRef": {
+      "type": "object",
+      "properties": {
+        "renderingId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "renderingId",
+        "name",
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "template": {
+      "type": "object",
+      "properties": {
+        "templateId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "baseTemplateIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "type": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "path": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "section": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "standardValue": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "source": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "shared": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "unversioned": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "fieldId",
+              "name",
+              "type",
+              "path",
+              "section",
+              "standardValue",
+              "source",
+              "shared",
+              "unversioned"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "templateId",
+        "name",
+        "path",
+        "baseTemplateIds",
+        "fields"
+      ],
+      "additionalProperties": false
+    },
+    "unresolvedReference": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "renderingId": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "rendering_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source_item_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "rendering_path": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source_item_path": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "discovery_source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "database": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "reference": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "reason": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "field": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "kind": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "path": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "targetId": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "targetPath": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "reference_type": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "reference_value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source_field": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "message": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "placement": {
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string"
+        },
+        "renderingId": {
+          "type": "string"
+        },
+        "componentName": {
+          "type": "string"
+        },
+        "variantIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "params": {
+          "$ref": "common.schema.json#/$defs/parameters"
+        },
+        "placeholder": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "datasource": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "variantIds",
+        "params",
+        "placeholder"
+      ],
+      "additionalProperties": false
+    },
+    "differences": {
+      "type": "object",
+      "properties": {
+        "placeholder": {
+          "type": "object",
+          "properties": {
+            "expected": {
+              "type": "string"
+            },
+            "actual": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "expected",
+            "actual"
+          ],
+          "additionalProperties": false
+        },
+        "datasource": {
+          "type": "object",
+          "properties": {
+            "expected": {
+              "type": "string"
+            },
+            "actual": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "expected",
+            "actual"
+          ],
+          "additionalProperties": false
+        },
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "expected": {
+              "$ref": "common.schema.json#/$defs/parameters"
+            },
+            "actual": {
+              "$ref": "common.schema.json#/$defs/parameters"
+            }
+          },
+          "required": [
+            "expected",
+            "actual"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "coverageStatus": {
+      "enum": [
+        "captured",
+        "mapping-only",
+        "target-absent",
+        "target-unverified",
+        "capture-failed",
+        "not-captured"
+      ]
+    },
+    "example": {
+      "type": "object",
+      "properties": {
+        "route": {
+          "type": "string",
+          "minLength": 1
+        },
+        "itemId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "itemPath": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "requirementKeys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "$ref": "common.schema.json#/$defs/coverageStatus"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ]
+        },
+        "consistencyStatus": {
+          "enum": [
+            "consistent",
+            "warning",
+            "not-evaluated"
+          ]
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "expectedPlacement": {
+          "$ref": "common.schema.json#/$defs/occurrence"
+        },
+        "differences": {
+          "$ref": "common.schema.json#/$defs/differences"
+        },
+        "capturedPlacement": {
+          "$ref": "common.schema.json#/$defs/placement"
+        },
+        "capturedCandidates": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/placement"
+          }
+        }
+      },
+      "required": [
+        "route",
+        "status",
+        "severity"
+      ],
+      "additionalProperties": false
+    },
+    "outcome": {
+      "type": "object",
+      "properties": {
+        "route": {
+          "type": "string",
+          "minLength": 1
+        },
+        "itemId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "itemPath": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "enum": [
+            "captured",
+            "failed",
+            "skipped"
+          ]
+        },
+        "layoutFile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "rawHashesVerified": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "route",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "decision": {
+      "type": "object",
+      "properties": {
+        "sourceRenderingId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "configurationKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action": {
+          "enum": [
+            "reuse-target",
+            "implement-missing",
+            "disregard"
+          ]
+        },
+        "confirmed": {
+          "type": "boolean"
+        },
+        "targetRenderingId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "targetComponent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "targetVariant": {
+          "type": "string",
+          "minLength": 1
+        },
+        "targetDatasourceTemplateId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fieldMap": {
+          "$ref": "common.schema.json#/$defs/ruleMap"
+        },
+        "parameterMap": {
+          "$ref": "common.schema.json#/$defs/ruleMap"
+        },
+        "placeholderMap": {
+          "$ref": "common.schema.json#/$defs/ruleMap"
+        },
+        "datasourceMap": {
+          "$ref": "common.schema.json#/$defs/ruleMap"
+        }
+      },
+      "required": [
+        "sourceRenderingId",
+        "action",
+        "confirmed"
+      ],
+      "additionalProperties": false
+    },
+    "keyedDecision": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "const": "mapping"
+        },
+        "scopeId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "choice": {
+          "const": "approve"
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        },
+        "userResponse": {
+          "type": "string",
+          "minLength": 1
+        },
+        "at": {
+          "type": "string",
+          "minLength": 1
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/fileRef"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "scopeId",
+        "choice",
+        "rationale",
+        "userResponse",
+        "at",
+        "inputs"
+      ],
+      "additionalProperties": false
+    },
+    "approval": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "approved",
+            "unresolved"
+          ]
+        },
+        "scopeId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "decisionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "decision": {
+          "$ref": "common.schema.json#/$defs/keyedDecision"
+        }
+      },
+      "required": [
+        "status",
+        "scopeId",
+        "reasons"
+      ],
+      "additionalProperties": false
+    },
+    "planEntry": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceRenderingId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceComponent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "configurationKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "variantId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "parameters": {
+          "$ref": "common.schema.json#/$defs/parameters"
+        },
+        "definitionOnly": {
+          "type": "boolean"
+        },
+        "action": {
+          "enum": [
+            "reuse-target",
+            "implement-missing",
+            "disregard",
+            "mapping-required"
+          ]
+        },
+        "proposedAction": {
+          "enum": [
+            "reuse-target",
+            "implement-missing",
+            "disregard",
+            null
+          ]
+        },
+        "confirmed": {
+          "type": "boolean"
+        },
+        "targetRenderingId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "targetComponent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "targetVariant": {
+          "type": "string",
+          "minLength": 1
+        },
+        "targetDatasourceTemplateId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fieldMap": {
+          "$ref": "common.schema.json#/$defs/ruleMap"
+        },
+        "parameterMap": {
+          "$ref": "common.schema.json#/$defs/ruleMap"
+        },
+        "placeholderMap": {
+          "$ref": "common.schema.json#/$defs/ruleMap"
+        },
+        "datasourceMap": {
+          "$ref": "common.schema.json#/$defs/ruleMap"
+        },
+        "sourceUsage": {
+          "enum": [
+            "used",
+            "unused",
+            "unknown"
+          ]
+        },
+        "sourceCoverageStatus": {
+          "$ref": "common.schema.json#/$defs/coverageStatus"
+        },
+        "sourceOccurrences": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/occurrence"
+          }
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/example"
+          }
+        },
+        "routes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "key",
+        "sourceRenderingId",
+        "sourceComponent",
+        "configurationKey",
+        "variantId",
+        "parameters",
+        "definitionOnly",
+        "action",
+        "proposedAction",
+        "confirmed",
+        "fieldMap",
+        "parameterMap",
+        "placeholderMap",
+        "datasourceMap",
+        "sourceUsage",
+        "sourceCoverageStatus",
+        "sourceOccurrences",
+        "examples",
+        "routes",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    "sourceConfiguration": {
+      "type": "object",
+      "properties": {
+        "renderingId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "componentName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "configurationKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fields": {
+          "$ref": "common.schema.json#/$defs/fields"
+        },
+        "parameters": {
+          "$ref": "common.schema.json#/$defs/parameters"
+        },
+        "placeholder": {
+          "type": "string",
+          "minLength": 1
+        },
+        "datasource": {
+          "type": "string"
+        },
+        "variantId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "renderingId",
+        "componentName",
+        "configurationKey",
+        "fields",
+        "parameters",
+        "placeholder",
+        "datasource",
+        "variantId"
+      ],
+      "additionalProperties": false
+    },
+    "layoutRendering": {
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1
+        },
+        "renderingId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "componentName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dataSource": {
+          "type": "string"
+        },
+        "params": {
+          "$ref": "common.schema.json#/$defs/parameters"
+        },
+        "fields": {
+          "$ref": "common.schema.json#/$defs/fields"
+        }
+      },
+      "required": [
+        "uid",
+        "renderingId",
+        "componentName",
+        "dataSource",
+        "params",
+        "fields"
+      ],
+      "additionalProperties": false
+    },
+    "syntheticLayout": {
+      "type": "object",
+      "properties": {
+        "_migrationExample": {
+          "type": "object",
+          "properties": {
+            "synthetic": {
+              "const": true
+            },
+            "requirementKey": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sourceFingerprint": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "visualValidation": {
+              "const": "pending"
+            }
+          },
+          "required": [
+            "synthetic",
+            "requirementKey",
+            "sourceFingerprint",
+            "visualValidation"
+          ],
+          "additionalProperties": false
+        },
+        "sitecore": {
+          "type": "object",
+          "properties": {
+            "context": {
+              "type": "object",
+              "properties": {
+                "pageEditing": {
+                  "const": false
+                },
+                "language": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "pageEditing",
+                "language"
+              ],
+              "additionalProperties": false
+            },
+            "route": {
+              "type": "object",
+              "properties": {
+                "itemId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "fields": {
+                  "$ref": "common.schema.json#/$defs/fields"
+                },
+                "placeholders": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "common.schema.json#/$defs/layoutRendering"
+                    }
+                  }
+                }
+              },
+              "required": [
+                "itemId",
+                "name",
+                "fields",
+                "placeholders"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "context",
+            "route"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "_migrationExample",
+        "sitecore"
+      ],
+      "additionalProperties": false
+    },
+    "componentExample": {
+      "type": "object",
+      "properties": {
+        "requirementKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceRenderingId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "variantId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sourceConfiguration": {
+          "$ref": "common.schema.json#/$defs/sourceConfiguration"
+        },
+        "mappingAction": {
+          "enum": [
+            "reuse-target",
+            "implement-missing"
+          ]
+        },
+        "route": {
+          "type": "string",
+          "minLength": 1
+        },
+        "relativeFile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "fixture-required",
+            "dependency-required",
+            "layout-ready"
+          ]
+        },
+        "synthetic": {
+          "const": true
+        },
+        "visualValidation": {
+          "const": "pending"
+        },
+        "unresolvedDependencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "layout": {
+          "$ref": "common.schema.json#/$defs/syntheticLayout"
+        }
+      },
+      "required": [
+        "requirementKey",
+        "sourceRenderingId",
+        "variantId",
+        "sourceConfiguration",
+        "mappingAction",
+        "route",
+        "relativeFile",
+        "status",
+        "synthetic",
+        "visualValidation",
+        "unresolvedDependencies",
+        "reason",
+        "layout"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

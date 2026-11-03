@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "version": { "const": 1 },
+    "proposal": { "$ref": "file-fingerprint.schema.json" },
+    "activeWorkflow": { "$ref": "file-fingerprint.schema.json" },
+    "bindings": { "$ref": "file-fingerprint.schema.json" },
+    "artifactPhaseIds": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "pattern": "\\S" },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  },
+  "required": ["version", "proposal", "activeWorkflow", "bindings", "artifactPhaseIds"],
+  "additionalProperties": false
+}

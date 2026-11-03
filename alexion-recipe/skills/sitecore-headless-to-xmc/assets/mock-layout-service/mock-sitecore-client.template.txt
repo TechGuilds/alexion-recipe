@@ -1,0 +1,273 @@
+/**
+ * Mock Sitecore Client for Local Development
+ * 
+ * Intercepts getPage(), getErrorPage(), and getDictionary() calls and serves 
+ * data from local JSON files instead of making requests to XM Cloud Edge API.
+ * 
+ * Environment variables:
+ * - MOCK_LAYOUT_DATA_PATH: Path to mock layout JSON files (default: '/mock-layouts')
+ * - MOCK_DICTIONARY_DATA_PATH: Path to mock dictionary JSON files (default: '/mock-dictionary')
+ * - MOCK_LAYOUT_DEBUG: Set to 'true' to enable debug logging
+ */
+
+import { SitecoreClient } from '@sitecore-content-sdk/nextjs/client';
+import { LayoutServicePageState } from '@sitecore-content-sdk/core/layout';
+import { ErrorPage } from '@sitecore-content-sdk/nextjs';
+import type { Page, PageOptions, PageMode } from '@sitecore-content-sdk/core/client';
+
+// Track concurrent fetches at module level to handle parallel requests
+const activeFetches = new Map<string, Promise<Page | null>>();
+
+// Load Node builtins without putting them in the universal module's import graph.
+// This file is imported by both server and browser entrypoints; any import of
+// `fs/promises` is still resolved by Next/Turbopack for the browser graph
+// even when it sits behind `typeof window === 'undefined'`.
+type NodeBuiltinProcess = {
+  getBuiltinModule?: (id: string) => unknown;
+};
+
+function getNodeBuiltin<T>(id: string): T | undefined {
+  const nodeProcess = (globalThis as typeof globalThis & { process?: NodeBuiltinProcess }).process;
+  return nodeProcess?.getBuiltinModule?.(id) as T | undefined;
+}
+
+// Debug logging helper
+const debug = (...args: unknown[]) => {
+  if (process.env.MOCK_LAYOUT_DEBUG === 'true') {
+    console.log('[MockClient]', ...args);
+  }
+};
+
+/**
+ * Creates a PageMode object matching SDK's internal getPageMode() pattern
+ * @see packages/core/src/client/sitecore-client.ts#L699-L740
+ */
+function createPageMode(mode: LayoutServicePageState = LayoutServicePageState.Normal): PageMode {
+  return {
+    name: mode,
+    isNormal: mode === LayoutServicePageState.Normal,
+    isPreview: mode === LayoutServicePageState.Preview,
+    isEditing: mode === LayoutServicePageState.Edit,
+    isDesignLibrary: false,
+    designLibrary: { isVariantGeneration: false },
+  };
+}
+
+export class MockSitecoreClient extends SitecoreClient {
+
+  async getPage(
+    path: string | string[],
+    pageOptions?: PageOptions
+  ): Promise<Page | null> {
+    // Normalize path
+    const pathStr = Array.isArray(path) ? path.join('/') : path;
+    let normalizedPath = pathStr.replace(/^\/+|\/+$/g, '');
+    
+    // Route suffixes and casing are part of the captured page identity.
+    // Keep the exact captured route casing; normalize URL encoding and spaces only.
+    normalizedPath = decodeURIComponent(normalizedPath).replace(/ /g, '-');
+    
+    // Handle empty path as home
+    if (!normalizedPath) {
+      normalizedPath = 'home';
+    }
+    
+    debug('getPage called:', normalizedPath, pageOptions ? `(locale: ${pageOptions.locale}, site: ${pageOptions.site})` : '');
+    
+    // If there's already a fetch in progress for this path, return that promise
+    // This handles concurrent requests for the same page (e.g., page + metadata)
+    const existingFetch = activeFetches.get(normalizedPath);
+    if (existingFetch) {
+      debug('🔄 Reusing in-flight request for:', normalizedPath);
+      return existingFetch;
+    }
+    
+    // Resolve the layout JSON source. On the server, read straight off disk —
+    // fetching our own dev-server HTTP endpoint from inside SSR deadlocks under
+    // concurrent placeholder fan-out (UND_ERR_HEADERS_TIMEOUT → null → 404/hang).
+    // On the client, fetch over HTTP as before.
+    const mockDataPath = process.env.MOCK_LAYOUT_DATA_PATH || '/mock-layouts';
+    const isServer = typeof window === 'undefined';
+
+    // Create the fetch promise
+    const fetchPromise = (async (): Promise<Page | null> => {
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let layoutData: any;
+
+        if (isServer) {
+          // Read the layout JSON directly from public/ on disk. Resolve Node
+          // builtins at runtime so the browser bundle never sees Node imports.
+          const fs = getNodeBuiltin<{ readFile: (filePath: string, encoding: 'utf-8') => Promise<string> }>(
+            'fs/promises',
+          );
+          const path = getNodeBuiltin<{ join: (...segments: string[]) => string }>('path');
+          if (!fs?.readFile || !path?.join) {
+            throw new Error('Server-side mock loading requires Node.js with process.getBuiltinModule');
+          }
+          const filePath = path.join(
+            process.cwd(),
+            'public',
+            mockDataPath.replace(/^\/+/, ''),
+            normalizedPath,
+            'index.json',
+          );
+          debug('Reading from disk:', filePath);
+          try {
+            const fileContents = await fs.readFile(filePath, 'utf-8');
+            layoutData = JSON.parse(fileContents);
+          } catch (readError) {
+            if ((readError as NodeJS.ErrnoException)?.code === 'ENOENT') {
+              console.error('❌ [MockClient] Layout not found on disk:', filePath);
+              return null;
+            }
+            // Re-throw real read failures rather than masking them as a 404.
+            throw readError;
+          }
+        } else {
+          const url = `${mockDataPath}/${normalizedPath}/index.json`;
+          debug('Fetching:', url);
+          const response = await fetch(url);
+
+          if (!response.ok) {
+            console.error('❌ [MockClient] Fetch failed:', response.status, response.statusText, url);
+            return null;
+          }
+
+          layoutData = await response.json();
+        }
+
+        debug('✅ Loaded layout:', layoutData?.sitecore?.route?.name);
+        
+        // Normalize component names (remove spaces)
+        this.normalizeComponentNames(layoutData);
+        
+        // Use pageOptions if provided, otherwise extract from layoutData
+        const siteName = pageOptions?.site || layoutData?.sitecore?.context?.site?.name;
+        const locale = pageOptions?.locale || layoutData?.sitecore?.context?.language || 'en';
+        
+        // Return structure matching SDK Page type
+        return {
+          layout: layoutData,
+          siteName,
+          locale,
+          mode: createPageMode(LayoutServicePageState.Normal),
+        } satisfies Page;
+      } catch (error) {
+        console.error('❌ [MockClient] Error fetching layout:', error);
+        return null;
+      } finally {
+        // Clear from active fetches after a short delay to handle race conditions
+        setTimeout(() => {
+          activeFetches.delete(normalizedPath);
+        }, 100);
+      }
+    })();
+    
+    // Store the promise for deduplication
+    activeFetches.set(normalizedPath, fetchPromise);
+    
+    return fetchPromise;
+  }
+
+  private normalizeComponentNames(obj: unknown): void {
+    if (typeof obj !== 'object' || obj === null) return;
+
+    const record = obj as Record<string, unknown>;
+    
+    if (record.componentName && typeof record.componentName === 'string') {
+      record.componentName = record.componentName.replace(/\s+/g, '');
+    }
+
+    // Recursively traverse
+    Object.values(record).forEach(value => {
+      if (typeof value === 'object') {
+        this.normalizeComponentNames(value);
+      }
+    });
+  }
+
+  /**
+   * Mock getErrorPage - returns null in mock mode since we don't have error page data
+   * The calling code should handle null gracefully and show a default error page
+   */
+  async getErrorPage(
+    errorType: ErrorPage,
+    options?: PageOptions
+  ): Promise<Page | null> {
+    debug('getErrorPage called:', errorType, options);
+    debug('⚠️ Returning null - error pages not available in mock mode');
+    return null;
+  }
+
+  /**
+   * Mock getDictionary - serves translated phrases from local JSON so the
+   * migrated UI renders the phrase, not the raw dictionary key.
+   *
+   * Reads `public/<MOCK_DICTIONARY_DATA_PATH>/<site>/<locale>.json` — a flat
+   * { key: phrase } map keyed by dictionary key only (never site-prefixed
+   * inside the file; the site is the next-intl namespace, applied by
+   * request.ts as `messages[site]`). On the server it reads straight off disk
+   * (avoids the SSR self-fetch deadlock that bites getPage); on the client it
+   * fetches over HTTP. Returns {} on any miss — never throws — so components
+   * fall back to rendering the key gracefully.
+   *
+   * Environment variable:
+   * - MOCK_DICTIONARY_DATA_PATH: Path to mock dictionary JSON files (default: '/mock-dictionary')
+   */
+  async getDictionary(
+    options?: { site?: string; locale?: string }
+  ): Promise<Record<string, string>> {
+    debug('getDictionary called:', options);
+
+    const site = options?.site;
+    const locale = options?.locale || 'en';
+    if (!site) {
+      debug('⚠️ getDictionary: no site in options — returning empty dictionary');
+      return {};
+    }
+
+    const mockDictPath = process.env.MOCK_DICTIONARY_DATA_PATH || '/mock-dictionary';
+    const isServer = typeof window === 'undefined';
+    const relative = `${mockDictPath.replace(/^\/+/, '').replace(/\/+$/, '')}/${site}/${locale}.json`;
+
+    try {
+      if (isServer) {
+        // Read straight off disk on the server. Resolve Node builtins at runtime
+        // so the browser bundle never sees Node imports.
+        const fs = getNodeBuiltin<{ readFile: (filePath: string, encoding: 'utf-8') => Promise<string> }>(
+          'fs/promises',
+        );
+        const path = getNodeBuiltin<{ join: (...segments: string[]) => string }>('path');
+        if (!fs?.readFile || !path?.join) {
+          throw new Error('Server-side mock loading requires Node.js with process.getBuiltinModule');
+        }
+        const filePath = path.join(process.cwd(), 'public', relative);
+        debug('Reading dictionary from disk:', filePath);
+        try {
+          const contents = await fs.readFile(filePath, 'utf-8');
+          return JSON.parse(contents) as Record<string, string>;
+        } catch (readError) {
+          if ((readError as NodeJS.ErrnoException)?.code === 'ENOENT') {
+            debug('⚠️ Dictionary not found on disk (rendering keys):', filePath);
+            return {};
+          }
+          // Re-throw real read failures rather than masking them as a miss.
+          throw readError;
+        }
+      } else {
+        const url = `/${relative}`;
+        debug('Fetching dictionary:', url);
+        const response = await fetch(url);
+        if (!response.ok) {
+          debug('⚠️ Dictionary fetch failed (rendering keys):', response.status, url);
+          return {};
+        }
+        return (await response.json()) as Record<string, string>;
+      }
+    } catch (error) {
+      console.error('❌ [MockClient] Error loading dictionary:', error);
+      return {};
+    }
+  }
+}

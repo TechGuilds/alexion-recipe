@@ -1,0 +1,61 @@
+# Media migration packages
+
+## Confirm scope before media work
+
+Before any media read, package generation, transfer or installation, the coordinator asks: “Do you want to migrate media to the target?” Record the actual answer in the existing decision contract: `kind: scope`, `choice: migrate-media` or `skip-media`, current `planningTaskId` as `taskId`, `scopeId`, timestamp `at`, `userResponse` and exact evidence `inputs` with path/SHA-256. Supply its descriptor as `mediaDecision` to workflow preparation. A missing answer blocks planning; content-transfer or mapping approval does not answer this question.
+
+For `migrate-media`, propose these two tasks before the original eight content tasks:
+
+| Task | Name | Owner |
+| --- | --- | --- |
+| `content.media-prepare` | Prepare media migration packages | Sitecore developer |
+| `content.media-install` | Install and verify media migration packages | Sitecore developer, with independent tester readback |
+
+For `skip-media`, keep the original eight tasks and retain the skip decision. Skipping transfer does not establish that target media exists: reference planning still requires fresh exact target media observations. Never silently clear references or assume source IDs work on the target.
+
+Ask the user to confirm exact Media Library paths and whether each includes descendants. Suggest only paths supported by retained Discovery/dependency evidence; do not invent folder names, enumerate unrelated media or silently select the entire library. Explain any required ancestor folders in the reviewed capture scope. Save the version 1 `media-scope` artifact with `kind: media-scope`, `scopeId`, `source`, `target`, `selectors: [{path,includeDescendants}]` and `maxPackageBytes: 100000000`. Each role tuple contains `instanceId`, `connectorId`, `database: master`, `rootPath: /sitecore/media library`, `deployment: XP` or `XM` and `marker: {id,path,templateId}`. Obtain a separate existing `scope` / `approve` decision for `content.media-prepare`, bound to this exact artifact. Both decisions remain required.
+
+## Verify the package adapter
+
+The bundled `.update` adapter is restricted to verified XP/XM SPE runtimes. SitecoreAI is blocked until a different supported package adapter exists. File extension or an available SPE command is not compatibility proof. Before package creation or target installation, retain a current bounded live pilot proving package creation, exact exported membership (`exportScopeVerified`), original binary round trip (`binaryRoundTripVerified`) and tested scoped restore (`restoreVerified`). The server-owned `media-package-v1` pilot attestation is hash-bound by `pilotSha256`, identifies the exact role tuple, expires, and confirms `installMode: Update`. A source pilot does not prove the target runtime. Missing original-blob, export-scope or restore proof blocks the corresponding operation.
+
+The authorized server operator places the actual pilot record at `<DataFolder>/alexion-media/pilots/<SHA256>.json`. Its properties are `target` (the exact source or target role tuple being verified), `expiresAt`, `adapterVersion: media-package-v1`, `installMode: Update`, and true `binaryRoundTripVerified`, `restoreVerified`, `exportScopeVerified` flags supported by retained real pilot evidence. Supply its exact byte hash as `capabilities.pilotSha256`. Creating this attestation or setting flags is not a pilot; the recipe never manufactures it. Package transport must place files under the target `<DataFolder>/alexion-media/` staging directory.
+
+All remote operations use the selected role's Sitecore connector. Read operations require current `speRead`, `fileTransfer` and `stableReadWindow` evidence; package generation also requires verified `updatePackages` and binary support. Target mutation additionally requires verified restore, an exclusive write window and recoverable scoped backups. Run Node locally for files only. Never run the PowerShell adapter locally, put credentials in files, invent endpoints or embed package binary data in JSON.
+
+## Prepare source packages
+
+Use the staged skill path and a fresh assigned output directory:
+
+```sh
+node media-migration.mjs --input /workspace/media-input.json --output /workspace/new-media-output
+```
+
+Input version 1 selects `action: capture`, `prepare`, `install` or `verify`, `scopeId`, assigned `taskId`, an `attemptId`, hash-bound `scopeArtifact`, `mediaDecision`, `scopeDecision` and current `capabilities`. All artifact descriptors are `{path,sha256}` relative to the input boundary. Use the [typed media contracts](../contracts/media-contracts.ts) and bundled CLI for action-specific descriptors; do not invent flags or hand-edit generated requests. Input GUIDs use lowercase canonical GUIDs without braces. Each source or target capability window covers its own operation; renewed target capabilities do not rewrite completed source artifacts.
+
+Choose an explicit 1–100-character alphanumeric/dash/underscore `attemptId` for each new connector read/export attempt. Keep it unchanged while collecting and validating that attempt's outputs. A new inspection before the next package needs a new attempt ID so it cannot reuse an earlier immutable remote request directory. Never use a new attempt ID to retry an uncertain mutation; reconcile its existing job and durable operation history instead. Source preparation replay retains its original attempt ID. Historical postflight checks the original capture/package windows, while every new remote operation still requires current capabilities.
+
+1. Under `content.media-prepare`, `capture` generates the exact approved source read. Submit `media-connector-request.json` through its declared source connector with the bundled `media-package.ps1` script and the actual `parameters.RequestJson` string and `RequestSha256`. Preserve script/request hashes, terminal job evidence and downloaded source inventory. The capture is bounded to 5000 items, including required ancestors; unsupported or incomplete scope is blocked.
+2. Select `sourceInventory` and the exact `sourceCaptureRequest`. Run `prepare` to emit a local grouping plan and source package request. Submit that exact request through the source connector. Generate packages containing the original IDs, paths, templates, agreed metadata, language/version contexts and original media blobs. This is independent of mapped content transformation; it does not add all media to content snapshots or change mappings.
+3. The server measures each completed `.update` archive in bytes. The hard cap is decimal 100 MB, exactly **100000000 bytes** per package. Oversized groups are recursively split at complete-item boundaries. Keep every item's versions and blobs together. An indivisible complete item that remains too large blocks preparation; estimates, compressed source sizes and PowerShell `100MB` are not the limit check.
+4. Retain the actual `media-package-manifest`: source inventory hash, exact package item membership, filenames, SHA-256, actual byte size and dependency order. Download every source `.update` through the connector. Add `packageManifest` and `packageFiles` descriptors (`packageId`, `path`, `sha256`) and rerun `prepare` so actual downloaded bytes and full membership are verified. A grouping plan or generated export request is not prepared-package success.
+
+## Review and install on the target
+
+Transfer the verified packages through the supported connector to the approved target server staging location. Supply `packageTransports` with each manifest package's `id`, `serverPath`, `sha256`, `bytes`, `itemIds` and `order`. Preserve transfer evidence; source server paths are not target paths. Inspect staged bytes again before use.
+
+Under `content.media-install`, `install` first emits an exact target `inspect` request. Retain fresh `targetInventory` and `inspectionRequest` descriptors. Resolve global ID, path or template collisions before installation; a same-path different ID or same-ID different path/template blocks. This transfer preserves IDs and never applies content-template remapping or automatic renaming.
+
+Select one `packageId` to generate `media-installation-review.json`, containing exact target, package, item actions, before-state and plan hashes. Obtain a separate existing `mutation` / `approve` decision bound to that exact review and task. Source scope approval, workflow approval and the opt-in cannot authorize installation. Rerun with `review` and `approval` descriptors to generate the install connector envelope.
+
+Install packages one at a time in manifest dependency order. Reinspect target state before each package and prove earlier packages are present and identical. Retain remote item backups, restore references, preview, exact request/script hashes, job identity and terminal receipt. Package preview warnings or contingencies block installation and require separate investigation/review; do not accept them automatically. Drift, expired capability or changed package bytes returns to review. Reconcile any unknown/interrupted job before further writes; never blindly resubmit or remove a server claim/lock to retry. Preserve partial effects and recovery evidence. No publishing occurs.
+
+## Independently verify and hand off
+
+After all packages are installed, assign a separate fresh target read using `action: verify`. The tester verifies exact scope/request provenance and uses the selected target connector; installer receipts are not independent observations. Retain the original `targetInventory` and `inspectionRequest` and select `verificationRequest`, actual `verificationInventory` and `receipts: [{request,receipt}]` descriptors. Every package that changed the original target requires a successful approved installation receipt; the independent read must follow those receipts. Compare every agreed media ID, path, template, parent, metadata field context, language/version and original binary byte length/SHA-256 against immutable source evidence. Missing items, collisions, unresolved installation history, unsupported checks or any required difference block parity. Inspect/verify report durable unknown operations even if a later target happens to match. Operator reconciliation is separate; deleting claims or replacing the original baseline is not recovery.
+
+The adapter compares raw metadata and original blobs. It excludes only volatile `__Revision`, `__Updated`, `__Updated by` and `__Lock` fields; stable fields such as `__Display name`, `__Sortorder` and `__Created` remain in parity checks. `Blob` is compared through original binary observations rather than its storage identifier. Do not promise byte-for-byte preservation of excluded audit/lock fields, internal blob IDs, publication state, website delivery, visuals or presentation parity. File-based media without a captured original Blob context is unsupported and must block, not be treated as a folder. Report required unsupported metadata as a gap rather than silently claiming it preserved.
+
+The CLI emits `media-preparation-report.json` for capture/prepare/install and `media-verification-report.json` for verify; optional outputs are `media-plan.json`, `media-installation-review.json`, `media-request.json` and `media-connector-request.json`. Exit 2 means not ready (often a request awaiting actual evidence), exit 1 means an error; neither completes a task. Validate actual domain outputs through `validate-mapped-outcome.mjs` and native postflight before normal human review/continuation.
+
+The final verified report hands unchanged source/target media IDs to content reference planning through current approved `destinationPlan.existingReferenceTargets` bindings and fresh dependency observations. Before content transformation, prepare and review a new target-inventory/destination-plan revision containing the verified migrated media metadata and bindings; retain the old artifacts and approval history. Preserve content checkpoint/history; a media report never replaces it or proves content-reference completion. Persist the existing seven-field task result and immutable evidence under the assigned attempt. Full live connector/package/blob/restore testing remains pending until actually performed; authoring unit tests are not live migration proof.

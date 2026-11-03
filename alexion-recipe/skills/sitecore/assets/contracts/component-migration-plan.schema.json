@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kajoo.dev/contracts/sitecore/component-migration-plan.schema.json",
+  "title": "Sitecore component-migration-plan",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "sourceFingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "targetInventoryFingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "inputFiles": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/inputFile"
+      }
+    },
+    "approvalEvidence": {
+      "$ref": "common.schema.json#/$defs/fileRef"
+    },
+    "approval": {
+      "$ref": "common.schema.json#/$defs/approval"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/planEntry"
+      }
+    },
+    "fingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "sourceFingerprint",
+    "targetInventoryFingerprint",
+    "inputFiles",
+    "approval",
+    "warnings",
+    "entries",
+    "fingerprint"
+  ],
+  "additionalProperties": false
+}

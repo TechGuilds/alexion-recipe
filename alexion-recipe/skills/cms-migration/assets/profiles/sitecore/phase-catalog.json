@@ -1,0 +1,241 @@
+{
+  "version": 1,
+  "activeByDefault": [
+    "setup",
+    "discovery"
+  ],
+  "description": "Non-exhaustive golden examples only. Determine later-phase applicability and dependencies from Discovery evidence and user scope; propose additional phases when findings justify them. Do not treat example ordering as a required sequence or demand implementation proof before proposing scoped work. Native and mapped content examples are mutually exclusive implementations of one content-transfer phase per scope.",
+  "goldenExamples": [
+    {
+      "key": "code-migration",
+      "name": "Code Migration",
+      "appliesWhen": "Discovery confirms source code is in scope and a code transformation is required.",
+      "evidenceSignals": [
+        "Included Sitecore rendering IDs and route usage identify code work, even when exact React/controller/view matching remains a preparation task",
+        "Discovery identifies code, style, layout, dependency or data-contract work not already equivalent in an adopted target"
+      ],
+      "notApplicableWhen": [
+        "Code is outside approved scope",
+        "Adopted-target reconciliation proves all included code work equivalent and no validation-only deliverable is requested"
+      ],
+      "taskPatterns": [
+        "one task per included Sitecore rendering for high-risk or independently verifiable units",
+        "feature or route batches of renderings with their supporting React modules",
+        "separate shared style/layout/framework milestones where dependencies justify them",
+        "mandatory preview-foundation readiness task for every rendering scope, for new and adopted apps; make rendering tasks depend on it; conditionally prepare mock-layout-scaffold \u2192 shared-styles-shell \u2192 preview-foundation for Headless/JSS targets needing disconnected preview, reusing equivalent mock/style foundations without omitting readiness"
+      ],
+      "tasks": [
+        "Prepare approved code inventory and mappings",
+        "Complete one mandatory preview-foundation task before rendering work: reuse or configure the launch entry, start or reuse the server, inspect errors and verify the agreed route; add Headless/JSS mock scaffolding and shared-styles-shell only when needed",
+        "Convert approved component batches and shared concerns after their applicable prerequisite evidence is current",
+        "Validate route-level rendered output",
+        "Independently audit per-rendering coverage, current evidence and user attestations"
+      ],
+      "acceptanceEvidence": [
+        "Changed-file and checkpoint references",
+        "Build/static validation output",
+        "Representative route render comparison with unresolved gaps",
+        "Tester reconciliation of every included rendering against its approved task mapping, evidence and separate user attestation"
+      ]
+    },
+    {
+      "key": "content-migration",
+      "name": "Content Migration",
+      "appliesWhen": "Explicit approved contentMigrationMode: native-serialization after evidence-bound source/target compatibility checks; content transfer is in scope.",
+      "evidenceSignals": [
+        "Serialization evidence contains included content/template namespaces",
+        "Discovery identifies content, media, datasource or dictionary transfer work"
+      ],
+      "notApplicableWhen": [
+        "Content is outside approved scope",
+        "No included source content remains after evidence-backed scope decisions",
+        "Mapping or structural transformation is required",
+        "Explicit mapped-content transfer method",
+        "Direct-transfer compatibility is missing or fails"
+      ],
+      "taskPatterns": [
+        "namespace or dependency-ordered batches",
+        "site-section batches",
+        "milestone tasks when one reviewed transfer is safely bounded",
+        "one phase-level shared capture foundation that reuses current target-adoption, connector-capability and Discovery-scope evidence; run only the missing or stale check",
+        "keep target mutation and parity audit separate when their approvals or owners differ"
+      ],
+      "tasks": [
+        "Prepare one shared validated transfer from the complete approved Discovery scope, reusing current target-adoption and connector-capability evidence",
+        "Run duplicate health only when current qualifying evidence is absent or stale; pull and locally validate the exact approved scope once, then prepare approved remaps and global batches",
+        "Dry-run, push and read back approved dependency-ordered batches at the user-chosen review boundary",
+        "Independently audit target parity and representative content usage"
+      ],
+      "acceptanceEvidence": [
+        "Fresh CLI project/module manifest and role-specific capability evidence",
+        "Validated serialization manifests and explicit exclusion/remap decisions",
+        "Approved preview and requested/pulled/pushed/already-present/skipped/failed counts",
+        "Target read-back by stable item IDs, templates, selected fields, languages/versions and dependency references with partial failures reconciled"
+      ]
+    },
+    {
+      "key": "mapped-content-migration",
+      "name": "Mapped Content Migration",
+      "appliesWhen": "Explicit approved contentMigrationMode: mapped-content with existing target definitions and approved mapping/destination evidence.",
+      "evidenceSignals": [
+        "Current source/target scope and capability evidence",
+        "Approved mapping/destination artifacts and explicit mapped-content decision"
+      ],
+      "notApplicableWhen": [
+        "Content outside approved scope",
+        "Explicit native-serialization transfer method"
+      ],
+      "taskPatterns": [
+        "Use immutable mapped-content-migration/assets/workflow-operations.json operation contracts via prepare-content-workflow.mjs",
+        "Preserve existing active work and Discovery inventory; add logical mapped-content:<step> entities, never content counts",
+        "Existing workflow-plan approval, validation, materialization, Kajoo synchronization and separate phase-continuation are required",
+        "Ask whether to migrate media; record evidence-bound migrate-media or skip-media before media work",
+        "For migrate-media only: content.media-prepare — Prepare media migration packages; then content.media-install — Install and verify media migration packages, before the original eight tasks",
+        "For skip-media: retain the original eight tasks and skip evidence; verify target media references independently"
+      ],
+      "tasks": [
+        "Prepare and validate source snapshot",
+        "Transform mapped content",
+        "Plan content changes and batches",
+        "Apply approved content batches",
+        "Plan reference updates",
+        "Apply approved reference updates",
+        "Audit target content parity",
+        "Review content migration outcome and handoff"
+      ],
+      "acceptanceEvidence": [
+        "Generated packet.mappedContent from supported mappedContentInputs role/path/hash descriptors",
+        "Domain-valid actual outputs with mapped-content-operation evidence and existing seven-field task result",
+        "Current immutable checkpoint, actual bound mutation receipts or verified no-op/resume evidence, and independent whole-scope content audit",
+        "Opt-in media: confirmed paths/descendants, verified XP/XM pilot and scoped restore, actual .update package bytes <= 100000000, manifest membership/hashes/order, separate exact mutation review and independent original-binary/metadata target verification",
+        "Existing next-work user attestations and final content.approve phase-continuation decision"
+      ]
+    },
+    {
+      "key": "sxa-conversion",
+      "name": "SXA Conversion",
+      "appliesWhen": "Source presentation or target requirements establish SXA conversion/provisioning work within scope.",
+      "evidenceSignals": [
+        "Source page/partial design relationships require conversion; full expansion can be a scoped preparation task",
+        "Target site, module, placeholder or rendering-registration requirements establish SXA work even for a non-SXA source"
+      ],
+      "notApplicableWhen": [
+        "Reviewed source and target requirements establish no SXA conversion or provisioning work in scope",
+        "SXA work is outside the approved migration scope",
+        "Existing Headless SXA target needs presentation composition using existing definitions without approved provisioning/conversion"
+      ],
+      "taskPatterns": [
+        "foundation followed by adoption and conversion milestones",
+        "module-oriented work may run beside tenant preparation only when writes are independent",
+        "one reviewed presentation-design milestone containing the two required plan gates",
+        "one bounded presentation-migration milestone containing backup, dry-run, execute/rollback and read-back",
+        "a single-site design set may be grouped when its evidence and approvals remain independently reviewable"
+      ],
+      "tasks": [
+        "Reconcile current target SXA state, discovery inputs, tenant choice and approved site/prefix scope",
+        "Provision the approved tenant and rendering modules, then adopt and re-read the target site",
+        "Convert the adopted site, apply modules and verify shared-data safety",
+        "Analyze presentation and approve Partial Design/Page Design/TemplateMapping composition",
+        "Back up, dry-run, execute or roll back approved presentation migration scope",
+        "Independently audit target identity, modules, design assignments, signature outcomes, language/version coverage and representative pages"
+      ],
+      "acceptanceEvidence": [
+        "Current target tenant/site IDs, approved mutation decisions and exact read-back paths",
+        "Registered module/parameter results and shared-data safety evidence",
+        "Approved presentation plan with stable design/template IDs and explicit exceptions",
+        "Dry-run and execution evidence that distinguishes stripped, preserved, skipped and failed signatures",
+        "Scoped backup/rollback results, language/version coverage and independent representative-page audit"
+      ]
+    },
+    {
+      "key": "resolver-adapters",
+      "name": "Resolver Adapters",
+      "appliesWhen": "Discovery identifies resolver or enriched-data gaps that require adapters.",
+      "evidenceSignals": [
+        "Source resolver references, enriched payload fields or integration consumers require target adaptation assessment",
+        "Captured source layouts and target contracts show an evidence-backed data-shape gap; implementation strategy can remain a first task"
+      ],
+      "notApplicableWhen": [
+        "No included rendering has a resolver/data-shape gap",
+        "The target SDK natively satisfies every reviewed resolver contract"
+      ],
+      "taskPatterns": [
+        "one task per distinct resolver contract",
+        "batches for resolvers sharing one adapter strategy",
+        "one phase-entry framework-plan/apply milestone whose hash-bound result is reused by bounded adapter batches"
+      ],
+      "tasks": [
+        "Reconcile phase prerequisites, explicit target-site identity and approved resolver-contract inventory",
+        "Plan or apply the resolver framework with hash-bound conflict handling",
+        "Implement approved adapter contracts or batches in complexity order",
+        "Validate source-expanded versus target-enriched fields and visible output",
+        "Independently audit coverage, explicit skips and current user verification decisions"
+      ],
+      "acceptanceEvidence": [
+        "Resolver classification with stable source IDs, source fields, consumers, routes and target-site provenance",
+        "Framework plan/apply evidence with exact changed-file hashes and preserved registrations",
+        "Adapter registration/build evidence plus defensive/cache behavior",
+        "Source-versus-raw-target payload delta, successful focused queries, resolver-debug field change and enrichment-specific visible marker",
+        "Tester reconciliation of every approved contract, current verification decision and explicit reduced-acceptance exclusions"
+      ]
+    },
+    {
+      "key": "presentation-composition",
+      "name": "Presentation Composition",
+      "appliesWhen": "Approved no-code migration uses an existing Headless SXA target and requires mapped virtual presentation and guarded application.",
+      "evidenceSignals": [
+        "Approved source/target presentation definitions, mappings and verified content identities",
+        "Current preview foundation and selected connector/read capabilities"
+      ],
+      "notApplicableWhen": [
+        "Outside approved scope"
+      ],
+      "taskPatterns": [
+        "Use presentation-composition/assets/workflow-operations.json through the local proposal builder",
+        "Retain existing workflow-plan approval, synchronization, phase continuation and user attestations"
+      ],
+      "tasks": [
+        "Compose virtual presentation",
+        "Generate target-data mock layouts for preview",
+        "Navigate preview pages and review rendering coverage",
+        "Apply Target Presentation",
+        "Verify applied target presentation",
+        "Review presentation composition outcome"
+      ],
+      "acceptanceEvidence": [
+        "Generated packet.presentation with exact role/path/hash inputs",
+        "Canonical domain outcomes plus native postflight and actual human decisions",
+        "Fresh target captures and independent read-back; preview evidence alone cannot prove final parity"
+      ]
+    },
+    {
+      "key": "verification",
+      "name": "Verification",
+      "appliesWhen": "Approved no-code migration uses an existing Headless SXA target and requires final target website visual and functional acceptance.",
+      "evidenceSignals": [
+        "Approved target presentation application with independent read-back",
+        "Reachable target website and the agreed pages, devices and rendering variants",
+        "Approved source screenshot baseline and agreed functional checks"
+      ],
+      "notApplicableWhen": [
+        "Outside approved scope",
+        "Target presentation has not been applied and read back",
+        "No approved source baseline exists for the agreed pages"
+      ],
+      "taskPatterns": [
+        "Use the verification.* operations in presentation-composition/assets/workflow-operations.json through the local proposal builder",
+        "Retain existing workflow-plan approval, synchronization, phase continuation and user attestations"
+      ],
+      "tasks": [
+        "Verify target website appearance and functionality",
+        "Review final migration outcome"
+      ],
+      "acceptanceEvidence": [
+        "Generated packet.presentation with exact role/path/hash inputs",
+        "Actual target Layout Service payloads and browser screenshots compared with the approved source baseline",
+        "Functional check results and an actual human decision for each required page",
+        "Separate final acceptance; preview evidence cannot substitute for target evidence"
+      ]
+    }
+  ]
+}

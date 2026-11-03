@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "migrationTypes": {
+    "xpheadless2sai": {
+      "headlessServices": { "installed": "required", "licensed": "required" },
+      "layoutService": "required",
+      "spe": { "scriptExecution": "required", "fileDownload": "required" },
+      "managementServices": "required",
+      "contentRead": "either"
+    },
+    "xpmvc2sai": {
+      "headlessServices": {
+        "installed": "required",
+        "licensed": "n/a",
+        "discoveryOnlyInstalled": "optional"
+      },
+      "layoutService": "mock-replaceable",
+      "spe": { "scriptExecution": "required", "fileDownload": "required" },
+      "managementServices": "required",
+      "contentRead": "either"
+    },
+    "xpmvc2xpheadless": {
+      "headlessServices": {
+        "installed": "required",
+        "licensed": "n/a",
+        "discoveryOnlyInstalled": "optional"
+      },
+      "layoutService": "mock-replaceable",
+      "spe": { "scriptExecution": "required", "fileDownload": "required" },
+      "managementServices": "required",
+      "contentRead": "either"
+    }
+  }
+}

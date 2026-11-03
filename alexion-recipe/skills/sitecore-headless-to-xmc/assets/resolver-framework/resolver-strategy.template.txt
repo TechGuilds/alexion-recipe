@@ -1,0 +1,157 @@
+import type { Page } from '@sitecore-content-sdk/core/client';
+import type { EnrichmentContext, RenderingNode } from './resolver-adapter.types';
+import { getAdapters } from './resolver-registry';
+
+export type { EnrichmentContext } from './resolver-adapter.types';
+
+type ResolverDebugStats = {
+  enabled: boolean;
+  renderingsScanned: number;
+  adapterMatches: number;
+  enrichCalls: number;
+  changedFieldSets: number;
+};
+
+function isResolverDebugEnabled(context: EnrichmentContext): boolean {
+  return context.resolverDebug === true || process.env.RESOLVER_DEBUG === 'true';
+}
+
+function safeFieldsSnapshot(rendering: RenderingNode): string {
+  try {
+    return JSON.stringify(rendering.fields ?? null);
+  } catch {
+    return '[unserializable-fields]';
+  }
+}
+
+function renderingLabel(rendering: RenderingNode): string {
+  const component = rendering.componentName ?? 'unknown-component';
+  const datasource = rendering.dataSource ?? rendering.itemId ?? 'no-datasource';
+  return `${component} (${datasource})`;
+}
+
+/**
+ * Recursively collect all rendering nodes from the layout data tree.
+ */
+function collectRenderings(node: unknown): RenderingNode[] {
+  const renderings: RenderingNode[] = [];
+
+  if (typeof node !== 'object' || node === null) return renderings;
+
+  const record = node as Record<string, unknown>;
+
+  if (record.componentName) {
+    renderings.push(record as unknown as RenderingNode);
+  }
+
+  if (record.placeholders && typeof record.placeholders === 'object') {
+    const placeholders = record.placeholders as Record<string, unknown[]>;
+    for (const items of Object.values(placeholders)) {
+      if (Array.isArray(items)) {
+        for (const item of items) {
+          renderings.push(...collectRenderings(item));
+        }
+      }
+    }
+  }
+
+  return renderings;
+}
+
+/**
+ * Attach resolver mode metadata to the page context so components
+ * can detect that page-enrichment resolvers are active.
+ */
+function attachResolverMode(page: Page, stats?: ResolverDebugStats): void {
+  const sitecoreContext =
+    (page.layout?.sitecore?.context as Record<string, unknown> | undefined) ||
+    ({} as Record<string, unknown>);
+
+  sitecoreContext.resolverMode = 'page-enrichment';
+
+  if (stats?.enabled) {
+    sitecoreContext.resolverDebug = {
+      renderingsScanned: stats.renderingsScanned,
+      adapterMatches: stats.adapterMatches,
+      enrichCalls: stats.enrichCalls,
+      changedFieldSets: stats.changedFieldSets,
+    };
+  }
+
+  if (page.layout?.sitecore) {
+    page.layout.sitecore.context = sitecoreContext as typeof page.layout.sitecore.context;
+  }
+}
+
+/**
+ * Apply all registered resolver adapters to the page layout data.
+ *
+ * Walks the rendering tree, finds matching adapters from the registry,
+ * and applies their enrichment sequentially. When the registry is empty
+ * (no adapters registered yet), this is a no-op passthrough.
+ */
+export async function applyResolverStrategy(
+  page: Page,
+  context: EnrichmentContext
+): Promise<Page> {
+  const adapters = getAdapters();
+  const debugEnabled = isResolverDebugEnabled(context);
+  const stats: ResolverDebugStats = {
+    enabled: debugEnabled,
+    renderingsScanned: 0,
+    adapterMatches: 0,
+    enrichCalls: 0,
+    changedFieldSets: 0,
+  };
+
+  if (adapters.length === 0) {
+    attachResolverMode(page, stats);
+    return page;
+  }
+
+  const renderings = collectRenderings(page.layout?.sitecore?.route);
+  stats.renderingsScanned = renderings.length;
+
+  let enriched = page;
+
+  for (const rendering of renderings) {
+    for (const adapter of adapters) {
+      if (adapter.matches(rendering)) {
+        stats.adapterMatches += 1;
+        const beforeFields = safeFieldsSnapshot(rendering);
+
+        if (debugEnabled) {
+          console.log(
+            `[resolver-debug] match: ${adapter.componentName} -> ${renderingLabel(rendering)}`
+          );
+        }
+
+        stats.enrichCalls += 1;
+        enriched = await adapter.enrich(enriched, rendering, context);
+
+        const afterFields = safeFieldsSnapshot(rendering);
+        const changed = beforeFields !== afterFields;
+        if (changed) {
+          stats.changedFieldSets += 1;
+        }
+
+        if (debugEnabled) {
+          console.log(
+            `[resolver-debug] enrich: ${adapter.componentName} changedFields=${changed ? 'yes' : 'no'}`
+          );
+        }
+      }
+    }
+  }
+
+  if (debugEnabled) {
+    console.log(
+      `[resolver-debug] summary route=${context.routePath} site=${context.site} ` +
+        `renderings=${stats.renderingsScanned} matches=${stats.adapterMatches} ` +
+        `enrichCalls=${stats.enrichCalls} changedFieldSets=${stats.changedFieldSets}`
+    );
+  }
+
+  attachResolverMode(enriched, stats);
+  return enriched;
+}

@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "inventory": {
+      "$ref": "inventory.schema.json"
+    },
+    "workflow": {
+      "$ref": "workflow.schema.json"
+    },
+    "mappings": {
+      "type": "array",
+      "items": {
+        "$ref": "mapping.schema.json"
+      }
+    },
+    "inputs": {
+      "$ref": "input-files.schema.json"
+    },
+    "validation": {
+      "type": "object",
+      "properties": {
+        "valid": {
+          "type": "boolean"
+        },
+        "inputs": {
+          "$ref": "input-files.schema.json"
+        },
+        "inputFingerprint": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "entityAttestations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "entityId": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "taskId": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "status": {
+                "enum": [
+                  "attested",
+                  "verified",
+                  "not-verified",
+                  "paused",
+                  "unattested",
+                  "stale",
+                  "ambiguous"
+                ]
+              },
+              "fingerprint": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "entityId",
+              "taskId",
+              "status",
+              "fingerprint"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "verifiedTaskIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "uniqueItems": true
+        },
+        "verifiedEntityMappings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "entityId": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "taskId": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              }
+            },
+            "required": [
+              "entityId",
+              "taskId"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        },
+        "summary": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "required": [
+        "valid",
+        "inputs",
+        "inputFingerprint",
+        "entityAttestations"
+      ],
+      "additionalProperties": false
+    },
+    "proceedWithoutHost": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      },
+      "uniqueItems": true
+    },
+    "validationByTask": {
+      "items": {
+        "$ref": "task-frontier-validation.schema.json"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "inventory",
+    "workflow",
+    "mappings"
+  ],
+  "additionalProperties": false
+}

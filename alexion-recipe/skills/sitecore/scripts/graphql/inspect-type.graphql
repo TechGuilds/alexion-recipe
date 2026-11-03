@@ -1,0 +1,60 @@
+query InspectType($typeName: String!) {
+  __type(name: $typeName) {
+    name
+    kind
+    description
+    fields(includeDeprecated: true) {
+      name
+      description
+      isDeprecated
+      deprecationReason
+      args {
+        name
+        description
+        defaultValue
+        type { ...TypeReference }
+      }
+      type { ...TypeReference }
+    }
+    inputFields {
+      name
+      description
+      defaultValue
+      type { ...TypeReference }
+    }
+    enumValues(includeDeprecated: true) {
+      name
+      description
+      isDeprecated
+      deprecationReason
+    }
+    interfaces { name kind }
+    possibleTypes { name kind }
+  }
+}
+
+fragment TypeReference on __Type {
+  kind
+  name
+  ofType {
+    kind
+    name
+    ofType {
+      kind
+      name
+      ofType {
+        kind
+        name
+        ofType {
+          kind
+          name
+          ofType {
+            kind
+            name
+            ofType { kind name }
+          }
+        }
+      }
+    }
+  }
+}

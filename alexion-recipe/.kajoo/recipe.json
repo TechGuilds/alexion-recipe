@@ -1,0 +1,4 @@
+{
+  "name": "Alexion Recipe",
+  "description": "Skills-driven Sitecore migration into existing Headless SXA definitions using approved mappings. Includes guarded content/reference transfer, optional XP/XM media update packages capped at 100 MB, virtual presentation, target-data preview, approved design/page association writes, task workflow integration and independent target website verification with human approval. Media packages require a verified live runtime and binary/restore pilot. Requires current evidence and verified capabilities. Component code migration and publishing remain separate."
+}

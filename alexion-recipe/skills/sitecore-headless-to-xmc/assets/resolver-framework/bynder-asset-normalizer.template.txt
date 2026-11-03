@@ -1,0 +1,104 @@
+/**
+ * Bynder Asset Normalizer
+ *
+ * Parses Bynder DAM asset values from the CDATA-wrapped JSON format
+ * returned by XM Cloud Edge into standard image objects with src/alt/title.
+ *
+ * Input format:  <asset><![CDATA[{...JSON...}]]></asset>
+ * Output format: { src, alt, title, width?, height? }
+ *
+ * Auto-detecting: returns null if the value is not a Bynder asset string.
+ * Safe to call on any field value — zero cost for non-Bynder data.
+ */
+
+export interface NormalizedAssetImage {
+  src: string;
+  alt: string;
+  title: string;
+  width?: number;
+  height?: number;
+}
+
+type AssetFile = {
+  name?: string;
+  url?: string;
+  width?: number;
+  height?: number;
+};
+
+type AssetPayload = {
+  assets?: Array<{
+    name?: string;
+    description?: string;
+    files?: AssetFile[];
+  }>;
+  file?: AssetFile | null;
+  overrideAltText?: string | null;
+};
+
+export function normalizeBynderAssetUnknown(raw: unknown): NormalizedAssetImage | null {
+  if (typeof raw !== 'string' || raw.trim() === '') {
+    return null;
+  }
+
+  return normalizeBynderAssetValue(raw);
+}
+
+export function normalizeBynderAssetValue(raw: string): NormalizedAssetImage | null {
+  if (!raw.includes('<asset>') && !raw.includes('<![CDATA[')) {
+    return null;
+  }
+
+  const payload = parseAssetPayload(raw);
+  if (!payload) {
+    return null;
+  }
+
+  const firstAsset = Array.isArray(payload.assets) ? payload.assets[0] : null;
+  const files = Array.isArray(firstAsset?.files) ? firstAsset.files : [];
+  const preferredFile = (payload.file && payload.file.url ? payload.file : null) || pickPreferredFile(files);
+  const src = preferredFile?.url;
+
+  if (!src) {
+    return null;
+  }
+
+  return {
+    src,
+    alt: payload.overrideAltText || firstAsset?.description || firstAsset?.name || '',
+    title: firstAsset?.name || '',
+    width: preferredFile?.width,
+    height: preferredFile?.height,
+  };
+}
+
+function parseAssetPayload(raw: string): AssetPayload | null {
+  const cdataStart = '<![CDATA[';
+  const cdataEnd = ']]>';
+  const start = raw.indexOf(cdataStart);
+  const end = raw.lastIndexOf(cdataEnd);
+  const jsonText = start >= 0 && end > start ? raw.slice(start + cdataStart.length, end) : raw;
+
+  try {
+    const parsed = JSON.parse(jsonText);
+    if (parsed && typeof parsed === 'object') {
+      return parsed as AssetPayload;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+function pickPreferredFile(files: AssetFile[]): AssetFile | null {
+  const preferredNames = ['original', 'webImage', 'Hero_banner_landscape', 'Hero_banner_mobile', 'thumbnail', 'mini'];
+
+  for (const candidate of preferredNames) {
+    const found = files.find((file) => file?.url && file.name?.toLowerCase() === candidate.toLowerCase());
+    if (found) {
+      return found;
+    }
+  }
+
+  return files.find((file) => file?.url) || null;
+}

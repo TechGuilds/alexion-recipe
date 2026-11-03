@@ -1,0 +1,163 @@
+{
+  "version": 1,
+  "phases": [
+    {
+      "id": "presentation-composition",
+      "title": "Presentation Composition"
+    },
+    {
+      "id": "verification",
+      "title": "Verification"
+    }
+  ],
+  "tasks": [
+    {
+      "operation": "compose",
+      "id": "presentation.compose",
+      "phaseId": "presentation-composition",
+      "title": "Compose virtual presentation",
+      "agent": "sitecore-developer",
+      "inputRoles": [
+        "compositionInput"
+      ],
+      "outputRoles": [
+        "compositionPlan"
+      ],
+      "entryPoints": [
+        "compose-presentation.mjs"
+      ],
+      "procedure": "references/composition.md"
+    },
+    {
+      "operation": "preview",
+      "id": "presentation.preview",
+      "phaseId": "presentation-composition",
+      "title": "Generate target-data mock layouts for preview",
+      "agent": "frontend-developer",
+      "inputRoles": [
+        "previewInput"
+      ],
+      "outputRoles": [
+        "previewManifest",
+        "previewInstallInput"
+      ],
+      "entryPoints": [
+        "prepare-presentation-preview.mjs",
+        "install-presentation-preview.mjs"
+      ],
+      "procedure": "references/preview.md"
+    },
+    {
+      "operation": "review",
+      "id": "presentation.review",
+      "phaseId": "presentation-composition",
+      "title": "Navigate preview pages and review rendering coverage",
+      "agent": "tester",
+      "inputRoles": [
+        "reviewInput"
+      ],
+      "outputRoles": [
+        "previewReview"
+      ],
+      "entryPoints": [
+        "review-presentation-preview.mjs"
+      ],
+      "procedure": "references/preview.md"
+    },
+    {
+      "operation": "apply",
+      "id": "presentation.apply",
+      "phaseId": "presentation-composition",
+      "title": "Apply Target Presentation",
+      "agent": "sitecore-developer",
+      "inputRoles": [
+        "applicationInput",
+        "applicationPlan",
+        "checkpoint"
+      ],
+      "outputRoles": [
+        "checkpoint",
+        "applicationAuditInput",
+        "applicationAudit"
+      ],
+      "entryPoints": [
+        "plan-presentation-application.mjs",
+        "prepare-presentation-write.mjs",
+        "execute-presentation.ps1",
+        "record-presentation-execution.mjs",
+        "audit-presentation-application.mjs"
+      ],
+      "procedure": "references/application.md"
+    },
+    {
+      "operation": "audit",
+      "id": "presentation.audit",
+      "phaseId": "presentation-composition",
+      "title": "Verify applied target presentation",
+      "agent": "tester",
+      "inputRoles": [
+        "applicationAuditInput"
+      ],
+      "outputRoles": [
+        "applicationAudit"
+      ],
+      "entryPoints": [
+        "audit-presentation-application.mjs"
+      ],
+      "procedure": "references/application.md"
+    },
+    {
+      "operation": "approve",
+      "id": "presentation.approve",
+      "phaseId": "presentation-composition",
+      "title": "Review presentation composition outcome",
+      "agent": "orchestrator",
+      "inputRoles": [
+        "applicationAuditInput"
+      ],
+      "outputRoles": [
+        "applicationAudit",
+        "phaseDecision"
+      ],
+      "entryPoints": [
+        "audit-presentation-application.mjs"
+      ],
+      "procedure": "references/workflow-integration.md"
+    },
+    {
+      "operation": "website",
+      "id": "verification.website",
+      "phaseId": "verification",
+      "title": "Verify target website appearance and functionality",
+      "agent": "tester",
+      "inputRoles": [
+        "websiteVerificationInput"
+      ],
+      "outputRoles": [
+        "websiteVerificationReport"
+      ],
+      "entryPoints": [
+        "verify-target-website.mjs"
+      ],
+      "procedure": "references/verification.md"
+    },
+    {
+      "operation": "final-approve",
+      "id": "verification.approve",
+      "phaseId": "verification",
+      "title": "Review final migration outcome",
+      "agent": "orchestrator",
+      "inputRoles": [
+        "websiteVerificationInput"
+      ],
+      "outputRoles": [
+        "websiteVerificationReport",
+        "phaseDecision"
+      ],
+      "entryPoints": [
+        "verify-target-website.mjs"
+      ],
+      "procedure": "references/workflow-integration.md"
+    }
+  ]
+}

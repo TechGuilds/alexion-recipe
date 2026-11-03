@@ -1,0 +1,59 @@
+// ──────────────────────────────────────────────────────────────────────
+// Resolver Adapter Stub: {{COMPONENT_NAME}}
+//
+// This is a TEMPLATE for generating per-component adapter stubs.
+// The Phase B agent (Code Migration - Resolver Adapters) uses this as a
+// starting point, replacing {{COMPONENT_NAME}} and {{COMPONENT_NAME_CAMEL}}
+// with the actual component name from rendering-resolver-details.json.
+// ──────────────────────────────────────────────────────────────────────
+
+import 'server-only';
+import type { Page } from '@sitecore-content-sdk/core/client';
+import type { ResolverAdapter, RenderingNode, EnrichmentContext } from './resolver-adapter.types';
+
+/**
+ * Resolver adapter stub for {{COMPONENT_NAME}}
+ *
+ * TODO: Implement real enrichment logic
+ * 1. Read the C# resolver source to understand the ViewModel fields
+ * 2. Compare XP layout (resolver-expanded) vs XMC layout (raw Edge) to identify the gap
+ * 3. Build GraphQL queries to fetch missing data from Edge
+ * 4. Implement field mapping and data transformation
+ * 5. Add unstable_cache + React cache() for caching/dedupe
+ * 6. Use existing app GraphQL client wrapper (import from sitecore-client)
+ * 7. Derive dynamic context from route/layout data (avoid hardcoded Home IDs/tenant paths)
+ * 8. Match the React component's field contract exactly (key names + nested shapes)
+ *
+ * GraphQL access pattern:
+ *   import client from '../../sitecore-client';
+ *   const result = await client.getData<MyQueryType>(MY_QUERY, { language, path: datasource });
+ *   // client.getData() is provided by SitecoreClient base class —
+ *   // it calls graphQLClient.request() using the pre-configured Edge endpoint.
+ *   // Do NOT construct endpoint URLs yourself.
+ *
+ * ComponentName normalization:
+ *   The NormalizingSitecoreClient strips whitespace from componentName in layout data.
+ *   "Corporate Navigation" becomes "CorporateNavigation" after normalization.
+ *   Always match on the NORMALIZED (no-space) name in matches().
+ *
+ * Guardrails:
+ * - Do NOT construct GraphQL endpoint URLs in adapter code.
+ * - Do NOT probe SDK internals or node_modules to infer endpoint behavior.
+ * - Do NOT rename field keys expected by component UI (for example Link.value/Icon.value/TextField.value).
+ * - Provide safe defaults for optional collections (for example childNavigation: []).
+ * - Validate with layout before/after deltas + render markers before claiming success.
+ */
+export const {{COMPONENT_NAME_CAMEL}}Adapter: ResolverAdapter = {
+  componentName: '{{COMPONENT_NAME}}',
+
+  matches(rendering: RenderingNode): boolean {
+    return rendering.componentName === '{{COMPONENT_NAME}}';
+  },
+
+  async enrich(page: Page, _rendering: RenderingNode, _context: EnrichmentContext): Promise<Page> {
+    // TODO: Replace with real enrichment logic
+    // Reference pattern: dynamic page-enrichment style used in Playground corporate navigation/footer.
+    // Keep behavior data-driven (datasource + route context), not endpoint-driven.
+    return page;
+  },
+};

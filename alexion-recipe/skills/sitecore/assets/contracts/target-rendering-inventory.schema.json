@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kajoo.dev/contracts/sitecore/target-rendering-inventory.schema.json",
+  "title": "Sitecore target-rendering-inventory",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "targetInstance": {
+      "type": "string",
+      "minLength": 1
+    },
+    "siteName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "renderings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "renderingId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "componentName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "datasourceTemplateId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "parameters": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "placeholders": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "renderingId",
+          "componentName",
+          "path",
+          "fields",
+          "parameters",
+          "placeholders"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "fingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "targetInstance",
+    "renderings",
+    "fingerprint"
+  ],
+  "additionalProperties": false
+}

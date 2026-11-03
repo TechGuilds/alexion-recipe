@@ -1,0 +1,4 @@
+# Fixture manifests hash exact bytes. Preserve those bytes on every platform.
+tests/fixtures/** -text
+# Preserve the supplied mapping interface exactly as distributed.
+contracts/sitecore-mapping.ts -text

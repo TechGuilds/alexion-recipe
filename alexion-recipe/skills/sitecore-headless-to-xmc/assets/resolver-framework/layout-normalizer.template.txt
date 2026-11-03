@@ -1,0 +1,77 @@
+/**
+ * Layout Data Normalizer
+ *
+ * Normalizes XM Cloud Edge layout data for compatibility with components
+ * migrated from Sitecore XP JSS. Handles four key transformations:
+ *
+ * 1. Wildcard placeholder keys: Copies {*} suffixed placeholder entries
+ *    to bare name keys so components using static placeholder names can resolve.
+ *
+ * 2. DynamicPlaceholderId: When a rendering has a DynamicPlaceholderId param,
+ *    creates a numeric-keyed alias (e.g., "content-1") alongside the bare key.
+ *
+ * 3. Component name whitespace: Strips whitespace from componentName to match
+ *    the space-free keys used in the component map.
+ *
+ * 4. Bynder DAM assets: Parses <asset><![CDATA[{JSON}]]></asset> wrapped values
+ *    into standard { src, alt, title, width, height } image objects.
+ */
+import { normalizeBynderAssetUnknown } from './media/bynder-asset-normalizer';
+
+export function normalizeLayoutData(obj: unknown): void {
+  if (typeof obj !== 'object' || obj === null) {
+    return;
+  }
+
+  const record = obj as Record<string, unknown>;
+
+  if (record.placeholders && typeof record.placeholders === 'object') {
+    const placeholders = record.placeholders as Record<string, unknown>;
+
+    Object.entries(placeholders).forEach(([key, value]) => {
+      if (!key.endsWith('-{*}') || !Array.isArray(value) || value.length === 0) {
+        return;
+      }
+
+      const baseName = key.slice(0, -4);
+      const staticValue = placeholders[baseName];
+      const hasStaticItems = Array.isArray(staticValue) && staticValue.length > 0;
+
+      // Keep wildcard key intact for edit metadata mode, but provide static alias
+      // so bare placeholder names can resolve in normal runtime mode.
+      if (!hasStaticItems) {
+        placeholders[baseName] = value;
+      }
+
+      const dynamicPlaceholderId =
+        record.params && typeof record.params === 'object'
+          ? (record.params as Record<string, unknown>).DynamicPlaceholderId
+          : undefined;
+
+      if (typeof dynamicPlaceholderId === 'string' && dynamicPlaceholderId.trim() !== '') {
+        const numericKey = `${baseName}-${dynamicPlaceholderId}`;
+        if (!Array.isArray(placeholders[numericKey]) || (placeholders[numericKey] as unknown[]).length === 0) {
+          placeholders[numericKey] = value;
+        }
+      }
+    });
+  }
+
+  if (typeof record.componentName === 'string') {
+    record.componentName = record.componentName.replace(/\s+/g, '');
+  }
+
+  // Normalize Bynder DAM asset values (auto-detecting, no-op for non-Bynder data)
+  if (typeof record.value === 'string') {
+    const normalizedImageValue = normalizeBynderAssetUnknown(record.value);
+    if (normalizedImageValue) {
+      record.value = normalizedImageValue;
+    }
+  }
+
+  Object.values(record).forEach((value) => {
+    if (typeof value === 'object' && value !== null) {
+      normalizeLayoutData(value);
+    }
+  });
+}
